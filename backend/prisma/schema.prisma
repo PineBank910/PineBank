@@ -1,54 +1,86 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-
-model Bank {
-  id       Int      @id @default(autoincrement())
-  name     String
-  accounts Account[]
-}
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
+  id        String    @id @default(uuid())
   email     String    @unique
-  accounts  Account[]
+  name      String
+  passwordUser  String
   createdAt DateTime  @default(now())
+  accounts  Account[]
+  loans     Loan[]
 }
 
 model Account {
-  id         Int          @id @default(autoincrement())
-  number     String       @unique
-  balance    Float        @default(0)
-  userId     Int
-  bankId     Int
-  user       User         @relation(fields: [userId], references: [id])
-  bank       Bank         @relation(fields: [bankId], references: [id])
+  id               String        @id @default(uuid())
+  accountNumber    String        @unique
+  type             AccountType
+  balance          Float         @default(0.0)
+  userId           String
+  user             User          @relation(fields: [userId], references: [id])
   transactionsFrom Transaction[] @relation("FromAccount")
   transactionsTo   Transaction[] @relation("ToAccount")
-  createdAt  DateTime      @default(now())
+  createdAt        DateTime      @default(now())
+  loans            Loan[]        @relation("LoanAccount")
 }
 
 model Transaction {
-  id           Int       @id @default(autoincrement())
-  fromAccountId Int
-  toAccountId   Int
-  amount       Float
-  timestamp    DateTime  @default(now())
+  id            String            @id @default(uuid())
+  fromAccountId String
+  toAccountId   String
+  amount        Float
+  timestamp     DateTime          @default(now())
+  fromAccount   Account           @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     Account           @relation("ToAccount", fields: [toAccountId], references: [id])
+  status        TransactionStatus @default(PENDING)
+  reference     String?
+}
 
-  fromAccount Account @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount   Account @relation("ToAccount", fields: [toAccountId], references: [id])
+model Loan {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  accountId    String?
+  account      Account?   @relation("LoanAccount", fields: [accountId], references: [id])
+  amount       Float
+  interestRate Float
+  termMonths   Int
+  startDate    DateTime
+  endDate      DateTime
+  status       LoanStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+}
+
+enum AccountType {
+  SAVINGS
+  CHECKING
+  BUSINESS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  CLOSED
+  DEFAULTED
 }
