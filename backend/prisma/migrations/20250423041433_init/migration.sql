@@ -7,6 +7,9 @@ CREATE TYPE "TransactionStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
 -- CreateEnum
 CREATE TYPE "LoanStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'ACTIVE', 'CLOSED', 'DEFAULTED');
 
+-- CreateEnum
+CREATE TYPE "CardType" AS ENUM ('DEBIT', 'CREDIT');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -17,6 +20,18 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserProfile" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+
+    CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -48,7 +63,7 @@ CREATE TABLE "Transaction" (
 CREATE TABLE "Loan" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "accountId" TEXT,
+    "accountId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "interestRate" DOUBLE PRECISION NOT NULL,
     "termMonths" INTEGER NOT NULL,
@@ -64,7 +79,7 @@ CREATE TABLE "Loan" (
 CREATE TABLE "Card" (
     "id" TEXT NOT NULL,
     "cardNumber" TEXT NOT NULL,
-    "cardType" TEXT NOT NULL,
+    "cardType" "CardType" NOT NULL,
     "expiration" TIMESTAMP(3) NOT NULL,
     "cvv" TEXT NOT NULL,
     "bankAccountId" TEXT NOT NULL,
@@ -77,6 +92,9 @@ CREATE TABLE "Card" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "BankAccount_accountNumber_key" ON "BankAccount"("accountNumber");
 
 -- CreateIndex
@@ -84,6 +102,9 @@ CREATE UNIQUE INDEX "Card_cardNumber_key" ON "Card"("cardNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Card_cvv_key" ON "Card"("cvv");
+
+-- AddForeignKey
+ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BankAccount" ADD CONSTRAINT "BankAccount_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -98,7 +119,7 @@ ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_toAccountId_fkey" FOREIGN 
 ALTER TABLE "Loan" ADD CONSTRAINT "Loan_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Loan" ADD CONSTRAINT "Loan_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "BankAccount"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Loan" ADD CONSTRAINT "Loan_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "BankAccount"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Card" ADD CONSTRAINT "Card_bankAccountId_fkey" FOREIGN KEY ("bankAccountId") REFERENCES "BankAccount"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
