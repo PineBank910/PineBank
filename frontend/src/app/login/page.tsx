@@ -1,14 +1,15 @@
-
-import React from 'react';
-import WorldMap from '@/components/ui/world-map';
-import { WorldMapDemo } from './_components/worldmap';
+import React from "react";
+import { WorldMapDemo } from "./_components/worldmap";
 
 const LoginPage = () => {
-  return <div>
-    <div className='h-[500px] w-[1275px] flex items-center justify-center'>
-    <WorldMapDemo/>
-    </div>
-  </div>;
+  return (
+    <>
+      <div className="h-full w-full flex items-center justify-center">
+        <WorldMapDemo />
+        <div className=" z-10 absolute m-7 opacity-90"></div>
+      </div>
+    </>
+  );
 };
 
 export default LoginPage;
