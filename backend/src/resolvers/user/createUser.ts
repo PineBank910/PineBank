@@ -1,20 +1,25 @@
+import { PrismaClient } from "@prisma/client";
 
-import { PrismaClient } from '@prisma/client';
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, passwordUser } = req.body;
+  const { username, email, password, transactionPassword } = req.body;
 
   try {
-    const encryptedPassword = await bcrypt.hash(passwordUser, 10);
+    const encryptedPasswordForUser = await bcrypt.hash(password, 10);
+    const encryptedPasswordForTransaction = await bcrypt.hash(
+      transactionPassword,
+      10
+    );
 
     const user = {
       email,
-      name,
-      password: encryptedPassword,
+      username,
+      password: encryptedPasswordForUser,
+      transactionPassword: encryptedPasswordForTransaction,
     };
 
     const createdUser = await prisma.user.create({ data: user });
@@ -28,4 +33,3 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(403).json({ message: "Error occurred" });
   }
 };
-
