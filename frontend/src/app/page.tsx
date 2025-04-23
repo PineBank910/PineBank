@@ -1,8 +1,12 @@
-
+import DarkModeToggle from "@/components/darkmode";
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      home page
-    </div>
+    <>
+      <header className="w-full h-14 flex bg-amber-500 dark:bg-blue-600">
+        <DarkModeToggle />
+        <p>Example text to check font</p>
+      </header>
+      <div className="w-full "></div>
+    </>
   );
 }
