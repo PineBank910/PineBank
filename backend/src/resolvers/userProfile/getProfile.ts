@@ -1,0 +1,27 @@
+// import { PrismaClient } from "@prisma/client";
+// import { Request, Response } from "express";
+
+// const prisma = new PrismaClient();
+
+// export const viewProfile = async (req:Request, res: Response) : Promise<any>=> {
+//   try {
+//     const {accountNumber} = req.body;
+//     const userID = await prisma.bankAccount.findUnique({
+//       where: {
+//         accountNumber:accountNumber
+//       },
+//       select:{
+//         userId:true
+//       }
+//     });
+
+//     // if (!userInfo) {
+//     //   return res.status(404).json({ message: "User not found" });
+//     // }
+
+//     // res.json({ message: "User data fetched successfully", userInfo });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Error occurred while fetching user data" });
+//   }
+// };
