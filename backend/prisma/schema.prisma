@@ -15,19 +15,30 @@ datasource db {
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
-  name         String
-  passwordUser String
-  createdAt    DateTime  @default(now())
-  accounts     Account[]
-  loans        Loan[]
+  id                  String        @id @default(uuid())
+  email               String        @unique
+  username            String
+  password            String
+  transactionPassword String
+  createdAt           DateTime      @default(now())
+  userProfile         UserProfile?
+  accounts            BankAccount[]
+  loans               Loan[]
 }
 
-model Account {
+model UserProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  firstName String
+  lastName  String
+  address   String
+  phone     String
+  user      User     @relation(fields: [userId], references: [id])
+}
+model BankAccount {
   id               String        @id @default(uuid())
   accountNumber    String        @unique
-  type             AccountType
+  type             AccountType   @default(BUSINESS)
   balance          Float         @default(0.0)
   userId           String
   user             User          @relation(fields: [userId], references: [id])
@@ -35,6 +46,7 @@ model Account {
   transactionsTo   Transaction[] @relation("ToAccount")
   createdAt        DateTime      @default(now())
   loans            Loan[]        @relation("LoanAccount")
+  Card             Card[]        @relation("BankAccount")
 }
 
 model Transaction {
@@ -43,30 +55,40 @@ model Transaction {
   toAccountId   String
   amount        Float
   timestamp     DateTime          @default(now())
-  fromAccount   Account           @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount     Account           @relation("ToAccount", fields: [toAccountId], references: [id])
+  fromAccount   BankAccount       @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     BankAccount       @relation("ToAccount", fields: [toAccountId], references: [id])
   status        TransactionStatus @default(PENDING)
   reference     String?
 }
 
 model Loan {
-  id           String     @id @default(uuid())
+  id           String      @id @default(uuid())
   userId       String
-  user         User       @relation(fields: [userId], references: [id])
-  accountId    String?
-  account      Account?   @relation("LoanAccount", fields: [accountId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
+  accountId    String
+  account      BankAccount @relation("LoanAccount", fields: [accountId], references: [id])
   amount       Float
   interestRate Float
   termMonths   Int
   startDate    DateTime
   endDate      DateTime
-  status       LoanStatus @default(PENDING)
-  createdAt    DateTime   @default(now())
+  status       LoanStatus  @default(PENDING)
+  createdAt    DateTime    @default(now())
+}
+
+model Card {
+  id            String      @id @default(uuid())
+  cardNumber    String      @unique
+  cardType      CardType
+  expiration    DateTime
+  cvv           String      @unique
+  bankAccountId String
+  bankAccount   BankAccount @relation("BankAccount", fields: [bankAccountId], references: [id])
+  createdAt     DateTime    @default(now())
 }
 
 enum AccountType {
   SAVINGS
-  CHECKING
   BUSINESS
 }
 
@@ -84,3 +106,7 @@ enum LoanStatus {
   CLOSED
   DEFAULTED
 }
+ enum CardType {
+  DEBIT
+  CREDIT
+  }
