@@ -16,7 +16,7 @@ datasource db {
 model User {
   id                  String        @id @default(uuid())
   email               String        @unique
-  username            String
+  username            String        @unique
   password            String
   transactionPassword String
   createdAt           DateTime      @default(now())
@@ -51,16 +51,15 @@ model BankAccount {
 }
 
 model Transaction {
-  id              String                @id @default(uuid())
-  fromAccountId   String
-  toAccountId     String
-  amount          Float
-  timestamp       DateTime              @default(now())
-  fromAccount     BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount       BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
-  status          TransactionStatusEnum @default(PENDING)
-  reference       String?
-  transactionType TransactionEnum
+  id            String                @id @default(uuid())
+  fromAccountId String
+  toAccountId   String
+  amount        Float
+  timestamp     DateTime              @default(now())
+  fromAccount   BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
+  status        TransactionStatusEnum @default(PENDING)
+  reference     String?
 }
 
 model Loan {
@@ -112,9 +111,4 @@ enum LoanStatusEnum {
 enum CardEnum {
   DEBIT
   CREDIT
-}
-
-enum TransactionEnum {
-  INCOME
-  OUTCOME
 }
