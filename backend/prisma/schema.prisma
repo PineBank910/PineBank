@@ -26,18 +26,20 @@ model User {
 }
 
 model UserProfile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
+  id        String @id @default(uuid())
+  userId    String @unique
   firstName String
   lastName  String
   address   String
   phone     String
-  user      User     @relation(fields: [userId], references: [id])
+  image     String
+  user      User   @relation(fields: [userId], references: [id])
 }
+
 model BankAccount {
   id               String        @id @default(uuid())
   accountNumber    String        @unique
-  type             AccountType   @default(BUSINESS)
+  type             AccountEnum   @default(BUSINESS)
   balance          Float         @default(0.0)
   userId           String
   user             User          @relation(fields: [userId], references: [id])
@@ -49,36 +51,37 @@ model BankAccount {
 }
 
 model Transaction {
-  id            String            @id @default(uuid())
-  fromAccountId String
-  toAccountId   String
-  amount        Float
-  timestamp     DateTime          @default(now())
-  fromAccount   BankAccount       @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount     BankAccount       @relation("ToAccount", fields: [toAccountId], references: [id])
-  status        TransactionStatus @default(PENDING)
-  reference     String?
+  id              String                @id @default(uuid())
+  fromAccountId   String
+  toAccountId     String
+  amount          Float
+  timestamp       DateTime              @default(now())
+  fromAccount     BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount       BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
+  status          TransactionStatusEnum @default(PENDING)
+  reference       String?
+  transactionType TransactionEnum
 }
 
 model Loan {
-  id           String      @id @default(uuid())
+  id           String         @id @default(uuid())
   userId       String
-  user         User        @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
   accountId    String
-  account      BankAccount @relation("LoanAccount", fields: [accountId], references: [id])
+  account      BankAccount    @relation("LoanAccount", fields: [accountId], references: [id])
   amount       Float
   interestRate Float
   termMonths   Int
   startDate    DateTime
   endDate      DateTime
-  status       LoanStatus  @default(PENDING)
-  createdAt    DateTime    @default(now())
+  status       LoanStatusEnum @default(PENDING)
+  createdAt    DateTime       @default(now())
 }
 
 model Card {
   id            String      @id @default(uuid())
   cardNumber    String      @unique
-  cardType      CardType
+  cardType      CardEnum
   expiration    DateTime
   cvv           String      @unique
   bankAccountId String
@@ -86,18 +89,18 @@ model Card {
   createdAt     DateTime    @default(now())
 }
 
-enum AccountType {
+enum AccountEnum {
   SAVINGS
   BUSINESS
 }
 
-enum TransactionStatus {
+enum TransactionStatusEnum {
   PENDING
   COMPLETED
   FAILED
 }
 
-enum LoanStatus {
+enum LoanStatusEnum {
   PENDING
   APPROVED
   REJECTED
@@ -105,7 +108,13 @@ enum LoanStatus {
   CLOSED
   DEFAULTED
 }
- enum CardType {
+
+enum CardEnum {
   DEBIT
   CREDIT
-  }
+}
+
+enum TransactionEnum {
+  INCOME
+  OUTCOME
+}
