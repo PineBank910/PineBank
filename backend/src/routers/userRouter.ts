@@ -4,9 +4,8 @@ import { createUser } from "../resolvers/user/createUser";
 import { login } from "../resolvers/user/loginUser";
 import { authorizationMiddleware } from "../middlewares/authorization";
 import { getUser } from "../resolvers/user/getUser";
-
 import { validate } from "../middlewares/validate";
-import { userSignupSchema, loginSchema } from "../validators/userSchemas";
+import { userSignupSchema, loginSchema } from "../validators/userSchema";
 
 export const userRouter = express.Router();
 
