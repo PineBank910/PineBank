@@ -1,10 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-// import { userRouter } from "./routers/userRouter";
-// import { profileRouter } from "./routers/profileRouter";
 import { PrismaClient } from "@prisma/client";
 import { userRouter } from "./routers/userRouter";
+import { accountRouter } from "./routers/bankAccountRouter";
 // import { donationRouter } from "./routers/donationRouter";
 
 const app = express();
@@ -21,7 +20,7 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/users", userRouter);
-// app.use("/profile", profileRouter);
+app.use("/account", accountRouter);
 // app.use("/donation", donationRouter)
 
 app.listen(port, () => {

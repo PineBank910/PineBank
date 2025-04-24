@@ -1,36 +1,40 @@
-
-function generateBankAccountNumber(): string {
-  const bankCode = '321';
-  const branchCode = Math.floor(1000 + Math.random() * 9000);
-  const accountBase = Math.floor(10000000 + Math.random() * 90000000);
-  return `${bankCode}${branchCode}${accountBase}`;
-}
-
-import { PrismaClient } from '@prisma/client';
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-
+import { AccountType, PrismaClient } from "@prisma/client";
+import { generateBankAccountNumber } from "../../utils/generateBankAccount";;
 const prisma = new PrismaClient();
 
-export const createAccount = async (req: Request, res: Response) => {
-  const { userId } = req.body;
+export const createAccount = async (
+  req: Request<{}, {}, BankAccountType>,
+  res: Response
+) => {
+  const { type, userId, balance } = req.body;
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
 
-    const account = {
-      accountNumber:generateBankAccountNumber(),
-      type:"BUSINESS",
-    };
+    if (!user) {
+       res.status(404).json({ error: "User not found" });
+    }
 
-    const createdUser = await prisma.user.create({ data: account });
+    const createdAccount = await prisma.bankAccount.create({
+      data: {
+        accountNumber: generateBankAccountNumber(),
+        type: type as AccountType,
+        balance,
+        user: {
+          connect: { id: userId },
+        },
+      },
+    });
 
-    res.json({
-      message: "success",
-      user: createdUser,
+     res.status(201).json({
+      message: "Account created successfully",
+      account: createdAccount,
     });
   } catch (error) {
-    console.error(error);
-    res.status(403).json({ message: "Error occurred" });
+    console.error("Error creating account:", error);
+     res.status(500).json({ message: "An error occurred while creating the account" });
   }
 };
-
