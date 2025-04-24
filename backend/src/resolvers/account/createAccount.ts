@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AccountEnum, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { generateBankAccountNumber } from "../../utils/generateBankAccount";;
 const prisma = new PrismaClient();
  
@@ -21,7 +21,7 @@ export const createAccount = async (
     const createdAccount = await prisma.bankAccount.create({
       data: {
         accountNumber: generateBankAccountNumber(),
-        type: type as AccountEnum,
+        type,
         balance,
         user: {
           connect: { id: userId },

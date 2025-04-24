@@ -6,7 +6,7 @@ export const createProfile = async (
   res: Response
 ): Promise<any> => {
   try {
-    const { firstName, lastName, userId, address, phone } = req.body;
+    const { firstName, lastName, userId, address, phone, image } = req.body;
     const prisma = new PrismaClient();
 
     const user = await prisma.user.findUnique({
@@ -33,6 +33,7 @@ export const createProfile = async (
         lastName,
         address,
         phone,
+        image,
         user: {
           connect: { id: userId }, // Connect the profile to the user
         },
