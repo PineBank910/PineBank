@@ -1,4 +1,11 @@
 import DarkModeToggle from "@/components/darkmode";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 export default function Home() {
   return (
     <>
@@ -6,7 +13,15 @@ export default function Home() {
         <DarkModeToggle />
         <p>Example text to check font</p>
       </header>
-      <div className="w-full "></div>
+      <div className="w-full ">
+        <SignedOut>
+          <SignInButton />
+          <SignUpButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </div>
     </>
   );
 }
