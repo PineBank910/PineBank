@@ -6,14 +6,13 @@ const prisma = new PrismaClient();
 export const CreateUserV2 = async (req: Request, res: Response) => {
   const password = "Clerk_deer_baigaa";
 
-  const { id, email, username } = req.body;
+  const { id, email_addresses, username } = req.body.data;
   try {
     const user = await prisma.user.create({
       data: {
-        email: email,
-         username: username,
-        password: password,
-
+        email: email_addresses[0].email_address,
+        username: username || null,
+        password: password || null,
         clerkId: id,
       },
     });
