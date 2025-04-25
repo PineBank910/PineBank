@@ -4,14 +4,13 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { axiosInstance } from "@/lib/addedAxiosInstance";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 
-// import { useCurrent } from "@/utils/currentUserContext";
+import { useCurrent } from "@/utils/currentUserContext";
 
 const Page = () => {
   const [firstName, setFirstName] = useState("");
@@ -26,8 +25,8 @@ const Page = () => {
   const [adressError, setAdressError] = useState("");
   const [image, setImage] = useState("");
   const { push } = useRouter();
-  // const { currentUserData, token } = useCurrent();
-
+  const { currentUserData, token } = useCurrent();
+  const axiosInstance = axios.create({ baseURL: "http://localhost:8000" });
   const handleContinue = () => {
     const result = profileSchema.safeParse({
       firstName,
@@ -39,13 +38,14 @@ const Page = () => {
 
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
+
       setFirstNameError(fieldErrors.firstName?.[0] || "");
       setLastNameError(fieldErrors.lastName?.[0] || "");
       setPhoneError(fieldErrors.phone?.[0] || "");
       setAdressError(fieldErrors.adress?.[0] || "");
+
       return false;
     }
-
     setFirstNameError("");
     setLastNameError("");
     setPhoneError("");
@@ -179,12 +179,12 @@ const Page = () => {
             </span>
 
             <input
-              type="text"
+              type="tel"
               id="floating-phone-number"
               className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
             />
 
             <label
