@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import Cloudinary from "@/components/ui/cloudinaryWidget";
+import { profileSchema } from "@/validation/profileSchema";
 
 // import { useCurrent } from "@/utils/currentUserContext";
 
@@ -23,41 +24,42 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [adressError, setAdressError] = useState("");
-  const [avatarImage, setAvatarImage] = useState("");
+  const [image, setImage] = useState("");
   const { push } = useRouter();
-  //   const { currentUserData, token } = useCurrent();
+  // const { currentUserData, token } = useCurrent();
 
   const handleContinue = () => {
-    let hasError = false;
+    const result = profileSchema.safeParse({
+      firstName,
+      lastName,
+      phone,
+      adress,
+      image,
+    });
 
-    if (!firstName) {
-      setFirstNameError("Овогоо оруулна уу");
-      hasError = true;
-    } else setFirstNameError("");
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setFirstNameError(fieldErrors.firstName?.[0] || "");
+      setLastNameError(fieldErrors.lastName?.[0] || "");
+      setPhoneError(fieldErrors.phone?.[0] || "");
+      setAdressError(fieldErrors.adress?.[0] || "");
+      return false;
+    }
 
-    if (!lastName) {
-      setLastNameError("Нэрээ оруулна уу");
-      hasError = true;
-    } else setLastNameError("");
+    setFirstNameError("");
+    setLastNameError("");
+    setPhoneError("");
+    setAdressError("");
 
-    if (!phone) {
-      setPhoneError("Утасны дугаараа оруулна уу");
-      hasError = true;
-    } else if (phone.length < 8) {
-      setPhoneError("Утасны дугаар 8 оронтой байна");
-      hasError = true;
-    } else setPhoneError("");
-
-    if (!adress) {
-      setAdressError("Хаягаа оруулна уу");
-      hasError = true;
-    } else setAdressError("");
-
-    if (hasError) return;
+    return true;
   };
 
   const CreateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const isValid = handleContinue();
+    if (!isValid) return;
+
     if (!currentUserData && !token) {
       setError("User is not authenticated. Please log in.");
       return;
@@ -67,7 +69,7 @@ const Page = () => {
       setLoading(true);
 
       const profileData = {
-        avatarImage,
+        image,
         firstName,
         lastName,
         phone,
@@ -82,12 +84,7 @@ const Page = () => {
       });
 
       if (res.status === 200) {
-        const { profileExists } = res.data;
-        if (!profileExists) {
-          push("/");
-        } else {
-          push("/");
-        }
+        push("/");
       }
     } catch (err) {
       console.error("Error while creating profile:", err);
@@ -113,10 +110,7 @@ const Page = () => {
 
         <div className="flex justify-center mb-8">
           <div className="flex justify-center items-center w-40 h-40 rounded-full bg-white mt-6 border-2 border-gray-400 border-dotted relative">
-            <Cloudinary
-              avatarImage={avatarImage}
-              setAvatarImage={setAvatarImage}
-            />
+            <Cloudinary image={image} setImage={setImage} />
           </div>
         </div>
 
@@ -155,7 +149,6 @@ const Page = () => {
             )}
           </div>
 
-          {/* Address */}
           <div>
             <label className="block text-sm font-medium mb-1">Хаяг</label>
             <Input
@@ -172,48 +165,42 @@ const Page = () => {
               </p>
             )}
           </div>
-          <form className="max-w">
-            <div className="relative">
-              {/* Icon */}
-              <span className="absolute start-0 bottom-3 text-gray-500 dark:text-gray-400">
-                <svg
-                  className="w-4 h-4 rtl:rotate-[270deg]"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 19 18"
-                >
-                  <path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
-                </svg>
-              </span>
-
-              {/* Input field */}
-              <input
-                type="text"
-                id="floating-phone-number"
-                className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-
-       
-              <label
-                htmlFor="floating-phone-number"
-                className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+          <div className="relative">
+            <span className="absolute start-0 bottom-3 text-gray-500 dark:text-gray-400">
+              <svg
+                className="w-4 h-4 rtl:rotate-[270deg]"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 19 18"
               >
-                Утасны дугаар
-              </label>
-            </div>
+                <path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
+              </svg>
+            </span>
 
-    
-            {phoneError && (
-              <p className="text-red-500 text-sm mt-2 flex items-center">
-                <X className="mr-1 h-4 w-4" />
-                {phoneError}
-              </p>
-            )}
-          </form>
+            <input
+              type="text"
+              id="floating-phone-number"
+              className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              placeholder=" "
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+
+            <label
+              htmlFor="floating-phone-number"
+              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            >
+              Утасны дугаар
+            </label>
+          </div>
+
+          {phoneError && (
+            <p className="text-red-500 text-sm mt-2 flex items-center">
+              <X className="mr-1 h-4 w-4" />
+              {phoneError}
+            </p>
+          )}
 
           <div className="flex justify-center">
             <Button

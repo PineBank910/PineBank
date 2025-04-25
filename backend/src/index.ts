@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { userRouter } from "./routers/userRouter";
 import { accountRouter } from "./routers/bankAccountRouter";
 import { userProfileRouter } from "./routers/userProfileRouter";
+import { transactionRouter } from "./routers/transactionRouter";
 
 const app = express();
 app.use(cors());
@@ -22,6 +23,7 @@ app.get("/", async (req, res) => {
 app.use("/users", userRouter);
 app.use("/account", accountRouter);
 app.use("/profile", userProfileRouter)
+app.use("/transaction", transactionRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

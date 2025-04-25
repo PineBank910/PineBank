@@ -6,34 +6,31 @@ import type {
 } from "@cloudinary-util/types";
 
 type CloudinaryProps = {
-  avatarImage: string;
-  setAvatarImage: React.Dispatch<React.SetStateAction<string>>;
+  image: string;
+  setImage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Cloudinary = ({ avatarImage, setAvatarImage }: CloudinaryProps) => {
+const Cloudinary = ({ image, setImage }: CloudinaryProps) => {
   const handleSuccess = (results: CloudinaryUploadWidgetResults) => {
     if (results.event === "success" && typeof results.info !== "string") {
       const info = results.info as CloudinaryUploadWidgetInfo;
-      setAvatarImage(info.secure_url);
+      setImage(info.secure_url);
     }
   };
 
   return (
     <div>
-      <CldUploadWidget
-        uploadPreset="ml_default" // Ensure this is the correct preset
-        onSuccess={handleSuccess}
-      >
+      <CldUploadWidget uploadPreset="ml_default" onSuccess={handleSuccess}>
         {({ open }) => (
           <button type="button" onClick={() => open()}>
             Зураг оруулах
           </button>
         )}
       </CldUploadWidget>
-      {avatarImage && (
+      {image && (
         <div className="mt-4">
           <Image
-            src={avatarImage}
+            src={image}
             alt="Uploaded Avatar"
             width={160}
             height={160}
