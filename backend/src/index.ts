@@ -6,6 +6,7 @@ import { userRouter } from "./routers/userRouter";
 import { accountRouter } from "./routers/bankAccountRouter";
 import { userProfileRouter } from "./routers/userProfileRouter";
 import { transactionRouter } from "./routers/transactionRouter";
+import { cardRouter } from "./routers/cardRouter";
 
 const app = express();
 app.use(cors());
@@ -24,6 +25,7 @@ app.use("/users", userRouter);
 app.use("/account", accountRouter);
 app.use("/profile", userProfileRouter)
 app.use("/transaction", transactionRouter)
+app.use("/card", cardRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

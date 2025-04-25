@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { generateBankAccountNumber } from "../../utils/generateBankAccount";;
+import { generateBankAccountNumber } from "../../utils/generateBankAccount";
 const prisma = new PrismaClient();
  
 export const createAccount = async (

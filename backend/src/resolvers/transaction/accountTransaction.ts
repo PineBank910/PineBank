@@ -3,25 +3,22 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET the income and outcome for a specific account
 export const getAccountIncomeOutcome = async (req: Request, res: Response) => {
-  const { accountId } = req.params; // accountId from URL
+  const { accountId } = req.params;
 
   try {
-    // Total income (where the account is receiving money)
     const totalIncome = await prisma.transaction.aggregate({
       _sum: {
-        amount: true, // Sum up the amount for income transactions
+        amount: true,
       },
       where: {
         toAccountId: accountId,
       },
     });
 
-    // Total outcome (where the account is sending money)
     const totalOutcome = await prisma.transaction.aggregate({
       _sum: {
-        amount: true, // Sum up the amount for outcome transactions
+        amount: true,
       },
       where: {
         fromAccountId: accountId,

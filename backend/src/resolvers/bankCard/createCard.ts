@@ -1,24 +1,27 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { generateRandomNumber } from "../../utils/generateBankAccount";
 
 const prisma = new PrismaClient();
 
-export const createBankCard = async (req: Request, res: Response) => {
-  const { cardNumber, cardType, expiration, cvv, bankAccountId } = req.body;
 
-  if (!cardNumber || !cardType || !expiration || !cvv || !bankAccountId) {
-    return res.status(400).json({ message: "Missing required fields" });
+export const createBankCard = async (req: Request, res: Response)=> {
+  const { cardType } = req.body;
+  const { bankAccountId } = req.params;
+
+  if (!cardType || !bankAccountId) {
+     res.status(400).json({ message: "Missing required fields" });
   }
 
   const validCardTypes = ["DEBIT", "CREDIT"];
   if (!validCardTypes.includes(cardType)) {
-    return res.status(400).json({ message: "Invalid card type" });
+     res.status(400).json({ message: "Invalid card type" });
   }
 
-  const expirationDate = new Date(expiration);
-  if (isNaN(expirationDate.getTime())) {
-    return res.status(400).json({ message: "Invalid expiration date" });
-  }
+  const cardNumber = generateRandomNumber(16);
+  const cvv = generateRandomNumber(3);                
+  const expirationDate = new Date();
+  expirationDate.setFullYear(expirationDate.getFullYear() + 2);
 
   try {
     const bankAccount = await prisma.bankAccount.findUnique({
@@ -26,7 +29,7 @@ export const createBankCard = async (req: Request, res: Response) => {
     });
 
     if (!bankAccount) {
-      return res.status(404).json({ message: "Bank account not found" });
+       res.status(404).json({ message: "Bank account not found" });
     }
 
     const newCard = await prisma.card.create({
@@ -41,12 +44,12 @@ export const createBankCard = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json({
+     res.status(201).json({
       message: "Bank card created successfully",
       card: newCard,
     });
   } catch (error) {
     console.error("Error creating card:", error);
-    res.status(500).json({ message: "Error creating bank card" });
+     res.status(500).json({ message: "Error creating bank card" });
   }
 };

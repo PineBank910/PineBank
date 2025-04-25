@@ -11,7 +11,6 @@ export const createTransaction = async (req: Request, res: Response) => {
   }
 
   try {
-    // Validate accounts
     const fromAccount = await prisma.bankAccount.findUnique({
       where: { id: fromAccountId },
     });
@@ -24,24 +23,21 @@ export const createTransaction = async (req: Request, res: Response) => {
        res.status(404).json({ message: "One or both accounts not found" });
     }
 
-    // Ensure sufficient balance in the fromAccount for outcome (debit)
     if (fromAccount && fromAccount.balance < amount) {
        res.status(400).json({ message: "Insufficient balance" });
     }
     else{
         const transaction = await prisma.$transaction(async (tx) => {
-            // Create the transaction record
             const createdTransaction = await tx.transaction.create({
               data: {
                 fromAccountId,
                 toAccountId,
                 amount,
                 reference,
-                status: "PENDING", // Start as pending, update after balance update
+                status: "PENDING",
               },
             });
-      
-            // Debit from the sender account (OUTCOME)
+
             if (fromAccountId) {
               await tx.bankAccount.update({
                 where: { id: fromAccountId },
@@ -52,8 +48,7 @@ export const createTransaction = async (req: Request, res: Response) => {
                 },
               });
             }
-      
-            // Credit to the receiver account (INCOME)
+
             if (toAccountId) {
               await tx.bankAccount.update({
                 where: { id: toAccountId },
@@ -64,8 +59,7 @@ export const createTransaction = async (req: Request, res: Response) => {
                 },
               });
             }
-      
-            // Update transaction to COMPLETED
+
             await tx.transaction.update({
               where: { id: createdTransaction.id },
               data: {
@@ -82,7 +76,6 @@ export const createTransaction = async (req: Request, res: Response) => {
           });
     }
 
-    // Start the transaction: debit and credit
     
   } catch (error) {
     console.error("Transaction error:", error);
