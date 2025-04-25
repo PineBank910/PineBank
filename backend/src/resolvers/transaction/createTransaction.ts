@@ -4,9 +4,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createTransaction = async (req: Request, res: Response) => {
-  const { fromAccountId, toAccountId, amount, reference, transactionType } = req.body;
+  const { fromAccountId, toAccountId, amount, reference, } = req.body;
 
-  if (!fromAccountId || !toAccountId || !amount || isNaN(amount) || !transactionType) {
+  if (!fromAccountId || !toAccountId || !amount || isNaN(amount) ){
      res.status(400).json({ message: "Invalid transaction data" });
   }
 
@@ -25,63 +25,65 @@ export const createTransaction = async (req: Request, res: Response) => {
     }
 
     // Ensure sufficient balance in the fromAccount for outcome (debit)
-    if (transactionType === "OUTCOME" && fromAccount && fromAccount.balance < amount) {
+    if (fromAccount && fromAccount.balance < amount) {
        res.status(400).json({ message: "Insufficient balance" });
+    }
+    else{
+        const transaction = await prisma.$transaction(async (tx) => {
+            // Create the transaction record
+            const createdTransaction = await tx.transaction.create({
+              data: {
+                fromAccountId,
+                toAccountId,
+                amount,
+                reference,
+                status: "PENDING", // Start as pending, update after balance update
+              },
+            });
+      
+            // Debit from the sender account (OUTCOME)
+            if (fromAccountId) {
+              await tx.bankAccount.update({
+                where: { id: fromAccountId },
+                data: {
+                  balance: {
+                    decrement: amount,
+                  },
+                },
+              });
+            }
+      
+            // Credit to the receiver account (INCOME)
+            if (toAccountId) {
+              await tx.bankAccount.update({
+                where: { id: toAccountId },
+                data: {
+                  balance: {
+                    increment: amount,
+                  },
+                },
+              });
+            }
+      
+            // Update transaction to COMPLETED
+            await tx.transaction.update({
+              where: { id: createdTransaction.id },
+              data: {
+                status: "COMPLETED",
+              },
+            });
+      
+            return createdTransaction;
+          });
+      
+          res.status(201).json({
+            message: "Transaction successful",
+            transaction,
+          });
     }
 
     // Start the transaction: debit and credit
-    const transaction = await prisma.$transaction(async (tx) => {
-      // Create the transaction record
-      const createdTransaction = await tx.transaction.create({
-        data: {
-          fromAccountId,
-          toAccountId,
-          amount,
-          reference,
-          transactionType,
-          status: "PENDING", // Start as pending, update after balance update
-        },
-      });
-
-      // Debit from the sender account (OUTCOME)
-      if (transactionType === "OUTCOME") {
-        await tx.bankAccount.update({
-          where: { id: fromAccountId },
-          data: {
-            balance: {
-              decrement: amount,
-            },
-          },
-        });
-      }
-
-      // Credit to the receiver account (INCOME)
-      if (transactionType === "INCOME") {
-        await tx.bankAccount.update({
-          where: { id: toAccountId },
-          data: {
-            balance: {
-              increment: amount,
-            },
-          },
-        });
-      }
-
-      // Update transaction to COMPLETED
-      await tx.transaction.update({
-        where: { id: createdTransaction.id },
-        data: {
-          status: "COMPLETED",
-        },
-      });
-
-      return createdTransaction;
-    });
-
-    res.status(201).json({
-      message: "Transaction successful",
-      transaction,
-    });
+    
   } catch (error) {
     console.error("Transaction error:", error);
     res.status(500).json({ message: "Transaction failed" });

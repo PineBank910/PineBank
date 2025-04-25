@@ -15,7 +15,6 @@ export const getAccountIncomeOutcome = async (req: Request, res: Response) => {
       },
       where: {
         toAccountId: accountId,
-        transactionType: "INCOME",
       },
     });
 
@@ -26,7 +25,6 @@ export const getAccountIncomeOutcome = async (req: Request, res: Response) => {
       },
       where: {
         fromAccountId: accountId,
-        transactionType: "OUTCOME",
       },
     });
 
