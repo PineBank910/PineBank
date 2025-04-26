@@ -14,6 +14,8 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       },
         include: {
             userProfile: true,
+            loans: true,
+            accounts: true,
         },
     });
     if (!user) {
