@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/UI/input";
+import { Button } from "@/components/UI/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import Cloudinary from "@/components/ui/cloudinaryWidget";
+import { BackgroundBeams } from "@/components/UI/background-beams";
+import Cloudinary from "@/components/UI/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 
 import { useCurrent } from "@/utils/currentUserContext";
