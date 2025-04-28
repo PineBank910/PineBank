@@ -7,6 +7,6 @@ export const paragraphPhrases = [
 // For mobile
 export const mobilePhrases = ['Ирээдүйг бүтээх', 'PineBank'];
 export const mobileParagraphPhrases = [
-  "Танд зориулсан шинэ үеийн банк",
+  "Танд зориулсан шинэ үеийн банк.",
 ];
 

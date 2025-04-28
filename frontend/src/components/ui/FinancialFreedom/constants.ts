@@ -22,7 +22,7 @@ export const desktopBriefNotePhrase = [
 export const mobileHeaderPhrase = ['Таны санхүүгийн эрх чөлөө'];
 export const mobileParagraphPhrase = [
   'Санхүүгээ удирдах нь хүчин чармайлтгүй, зардал багатай байх ёстой гэдэгт бид итгэдэг.',
-  "Тиймээс бид таны хүрэх ёстой эрх чөлөөг санал болгож байна.",
+  "Тиймээс бид таны хүрэх ёстой эрх чөлөөг санал болгож байна",
 ];
 
 export const mobileBriefNotePhrase = [
