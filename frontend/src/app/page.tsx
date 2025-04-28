@@ -1,5 +1,6 @@
-"use client";
 
+"use client";
+import { redirect } from "next/navigation";
 import DarkModeToggle from "@/components/darkmode";
 import {
   SignInButton,
@@ -50,7 +51,7 @@ export default function Home() {
       Cookies.remove("token", { path: "/" });
     }
   }, [session, isLoaded]);
-
+redirect(`/home`);
   return (
     <>
       <header className="w-full h-14 flex bg-amber-500 dark:bg-blue-600">
@@ -68,4 +69,5 @@ export default function Home() {
       </div>
     </>
   );
+
 }
