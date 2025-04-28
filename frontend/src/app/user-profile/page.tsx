@@ -45,7 +45,9 @@ const Page = () => {
 
         const data = await res.json();
         if (data.user && data.user.id) {
-          setUserId(data.user.id); // Set the ID in context
+          setUserId(data.user.id);
+          console.log(data.user.id);
+
         } else {
           console.error("User ID not found in response", data);
         }
@@ -125,7 +127,7 @@ const Page = () => {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(
           errorData.message ||
-            `Failed to create profile: ${response.status} ${response.statusText}`
+          `Failed to create profile: ${response.status} ${response.statusText}`
         );
       }
 

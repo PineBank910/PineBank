@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
-import { CurrentUserProvider } from "@/utils/currentUserContext";
 import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
@@ -39,7 +38,7 @@ export default function RootLayout({
               defaultTheme="light"
               enableSystem={false}
             >
-              <CurrentUserProvider>{children}</CurrentUserProvider>
+              {children}
             </ThemeProvider>
           </UserProvider>
         </body>

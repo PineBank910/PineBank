@@ -8,14 +8,17 @@ import { userProfileRouter } from "./routers/userProfileRouter";
 import { transactionRouter } from "./routers/transactionRouter";
 import { cardRouter } from "./routers/cardRouter";
 import { loanRouter } from "./routers/loanRouter";
+import { clerkMiddleware } from '@clerk/express'
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 const port = process.env.PORT
-dotenv.config();
 
 const prisma =new PrismaClient()
+console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+app.use(clerkMiddleware())
 
 app.get("/", async (req, res) => {
   const users = await prisma.user.findMany();
