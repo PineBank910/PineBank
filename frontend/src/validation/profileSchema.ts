@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const profileSchema = z.object({
@@ -8,7 +7,7 @@ export const profileSchema = z.object({
     .string()
     .nonempty("Утасны дугаараа оруулна уу")
     .min(8, "Утасны дугаар 8 оронтой байна"),
-  adress: z.string().nonempty("Хаягаа оруулна уу"),
+  address: z.string().nonempty("Хаягаа оруулна уу"),
   image: z.string().optional(),
 });
 
