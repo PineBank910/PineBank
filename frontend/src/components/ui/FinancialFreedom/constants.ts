@@ -4,24 +4,25 @@ import ic_circle_stack from '../../../../public/svgs/ic_circle_stack.svg';
 import ic_arrows_left_right from '../../../../public/svgs/ic_arrows_right_left.svg';
 
 // For desktop
-export const desktopHeaderPhrase = ['Your Financial Freedom,', 'Your Way'];
+export const desktopHeaderPhrase = ['Таны санхүүгийн эрх чөлөө'];
+
 export const desktopParagraphPhrase = [
-  'We believe that managing your finances should be effortless and cost-effective.',
-  "That's why we offer you the freedom you deserve.",
+  'Санхүүгээ удирдах нь хүчин чармайлтгүй, зардал багатай байх ёстой гэдэгт бид итгэдэг.',
+  "Тиймээс бид таны хүрэх ёстой эрх чөлөөг санал болгож байна.",
 ];
 export const desktopBriefNotePhrase = [
-  'Smart investments,',
-  'secure payments, and',
-  'expert guidance, all in',
-  'one place.',
+  'Хөрөнгө оруулалт,',
+  'Үргэлжлүүл, өргөжүүл',
+  'Санхүүгийн аяллаа',
+  'Хамт эхлүүлье.',
 ];
 
+
 // For mobile
-export const mobileHeaderPhrase = ['Your Financial', 'Freedom, Your Way'];
+export const mobileHeaderPhrase = ['Таны санхүүгийн эрх чөлөө'];
 export const mobileParagraphPhrase = [
-  'We believe that managing your finances should be',
-  "effortless and cost-effective. That's why we offer",
-  ' you the freedom you deserve.',
+  'Санхүүгээ удирдах нь хүчин чармайлтгүй, зардал багатай байх ёстой гэдэгт бид итгэдэг.',
+  "Тиймээс бид таны хүрэх ёстой эрх чөлөөг санал болгож байна.",
 ];
 
 export const mobileBriefNotePhrase = [

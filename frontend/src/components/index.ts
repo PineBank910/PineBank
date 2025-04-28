@@ -9,5 +9,4 @@ export { default as IntroSection } from './ui/IntroSection';
 export { default as JoinSection } from './ui/JoinSection';
 export { default as FAQ } from './ui/FAQ';
 export { default as Footer } from './ui/Footer';
-export { default as Preloader } from './ui/Preloader';
 export { default as MaskText } from './Common/MaskText';

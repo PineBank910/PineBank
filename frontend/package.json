@@ -15,7 +15,10 @@
     "@motionone/utils": "^10.18.0",
     "@mui/material": "^7.0.2",
     "@radix-ui/react-slot": "^1.2.0",
+    "@react-three/drei": "^10.0.7",
+    "@react-three/fiber": "^9.1.2",
     "@toolpad/core": "^0.14.0",
+    "@types/three": "^0.176.0",
     "axios": "^1.8.4",
     "badge": "^1.0.3",
     "bcrypt": "^5.1.1",
@@ -39,6 +42,7 @@
     "react-scroll": "^1.9.3",
     "styled-components": "^6.1.17",
     "tailwind-merge": "^3.2.0",
+    "three": "^0.176.0",
     "yup": "^1.6.1",
     "zod": "^3.24.3"
   },

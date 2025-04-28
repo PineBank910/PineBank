@@ -2,17 +2,14 @@
 
 import StyledComponentsRegistry from '../../../libs/registry';
 import { GlobalStyles } from './GlobalStyles';
-import { Footer, Header, Preloader } from '..';
-import { useState } from 'react';
+import { Footer, Header } from '..';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [complete, setComplete] = useState(false);
 
   return (
     <StyledComponentsRegistry>
       <GlobalStyles />
-      <Preloader setComplete={setComplete} />
-      <div className={complete ? 'complete' : 'not_complete'}>
+      <div>
         <Header />
 
         {children}
