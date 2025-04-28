@@ -5,7 +5,6 @@ import featured_mobile_banner from "../../../../public/images/featured_mobile_ba
 import { Wrapper, Inner, ImageContainer, Div } from "./styles";
 import RevealCover from "@/components/Common/RevealCover";
 import { useIsMobile } from "../../../../libs/useIsMobile";
-import { CursorTrailDemo } from "../CursorTrailDemo";
 export const imageVariants = {
   hidden: {
     scale: 1.6,
@@ -24,7 +23,7 @@ const Featured = () => {
   const isMobile = useIsMobile();
   return (
     <Wrapper>
-      <Inner>
+      <Inner >
         <ImageContainer>
           <RevealCover />
           <Div
@@ -44,10 +43,6 @@ const Featured = () => {
             )}
           </Div>
         </ImageContainer>
-
-        <div className="mt-[100px] flex w-full items-center justify-center">
-          <CursorTrailDemo />
-        </div>
       </Inner>
     </Wrapper>
   );
