@@ -23,14 +23,14 @@ export const menu = {
 export const links = [
   {
     url: '/',
-    linkTo: 'Solutions',
+    linkTo: 'Танд',
   },
   {
     url: '/',
-    linkTo: 'Learn',
+    linkTo: 'Таны бизнесд',
   },
   {
     url: '/',
-    linkTo: 'About',
+    linkTo: 'Таны хөрөнгө оруулалт',
   },
 ];
