@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { LinkTo } from './styles';
+import Link from "next/link";
+import { LinkTo } from "./styles";
 
 const GetStartedButton = ({ padding }: { padding: string }) => {
   return (
@@ -7,9 +7,9 @@ const GetStartedButton = ({ padding }: { padding: string }) => {
       style={{
         padding: padding,
       }}
-      href="/"
+      href="/sign-up"
     >
-      Get Started
+      Бүртгүүлэх
     </LinkTo>
   );
 };

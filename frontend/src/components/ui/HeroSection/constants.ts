@@ -1,13 +1,12 @@
 // For desktop
-export const phrases = ['Building the future of', 'banking.'];
+export const phrases = ['Ирээдүйг бүтээх', 'PineBank'];
 export const paragraphPhrases = [
-  "Experience the future of banking with RAFT. We're here to",
-  'empower your financial journey.',
+  "Бид таны санхүүгийн аялалыг хүчирхэгжүүлэхийн тулд энд байна.",
 ];
 
 // For mobile
-export const mobilePhrases = ['Building the future', 'of banking'];
+export const mobilePhrases = ['Ирээдүйг бүтээх', 'PineBank'];
 export const mobileParagraphPhrases = [
-  "Experience the future of banking with RAFT. We're",
-  'here to empower your financial journey.',
+  "Бид таны санхүүгийн аялалыг хүчирхэгжүүлэхийн тулд энд байна.",
 ];
+

@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
+import Link from "next/link";
 import {
   Wrapper,
   Inner,
@@ -9,14 +10,14 @@ import {
   CallToActions,
   AbsoluteLinks,
   BurgerMenu,
-} from './styles';
-import raft_logo from '../../../../public/svgs/raft_logo.svg';
-import ic_bars from '../../../../public/svgs/ic_bars.svg';
-import { GetStartedButton } from '@/components';
-import AnimatedLink from '@/components/Common/AnimatedLink';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { links, menu } from './constants';
+} from "./styles";
+import raft_logo from "../../../../public/svgs/raft_logo.svg";
+import ic_bars from "../../../../public/svgs/ic_bars.svg";
+import { GetStartedButton } from "@/components";
+import AnimatedLink from "@/components/Common/AnimatedLink";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { links, menu } from "./constants";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,19 +29,21 @@ const Header = () => {
           <BurgerMenu onClick={() => setIsOpen(!isOpen)}>
             <motion.div
               variants={menu}
-              animate={isOpen ? 'open' : 'closed'}
+              animate={isOpen ? "open" : "closed"}
               initial="closed"
             ></motion.div>
             <Image src={ic_bars} alt="bars" />
           </BurgerMenu>
         </LogoContainer>
-        <Nav className={isOpen ? 'active' : ''}>
+        <Nav className={isOpen ? "active" : ""}>
           {links.map((link, i) => (
             <AnimatedLink key={i} title={link.linkTo} />
           ))}
         </Nav>
-        <CallToActions className={isOpen ? 'active' : ''}>
-          <AnimatedLink title="Login" />
+        <CallToActions className={isOpen ? "active" : ""}>
+          <Link href="/sign-in" passHref>
+            <AnimatedLink title="Нэвтрэх" />
+          </Link>
           <GetStartedButton padding="0.5rem 0.75rem" />
         </CallToActions>
       </Inner>
