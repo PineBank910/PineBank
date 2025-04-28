@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { Input } from "@/components/UI/input";
-import { Button } from "@/components/UI/button";
+import React, { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { BackgroundBeams } from "@/components/UI/background-beams";
-import Cloudinary from "@/components/UI/cloudinaryWidget";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
-
-import { useCurrent } from "@/utils/currentUserContext";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@/context/userContext";
 
 const Page = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,81 +18,148 @@ const Page = () => {
   const [lastNameError, setLastNameError] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [adress, setAdress] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [adressError, setAdressError] = useState("");
-  const [image, setImage] = useState("");
-  const { push } = useRouter();
-  const { currentUserData, token } = useCurrent();
-  const axiosInstance = axios.create({ baseURL: "http://localhost:8000" });
+
+  const router = useRouter();
+  const { getToken } = useAuth();
+  const { userId, setUserId } = useUser();
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const token = await getToken();
+        const res = await fetch("http://localhost:8000/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          console.error("Failed to fetch backend user");
+          return;
+        }
+
+        const data = await res.json();
+        if (data.user && data.user.id) {
+          setUserId(data.user.id); // Set the ID in context
+        } else {
+          console.error("User ID not found in response", data);
+        }
+      } catch (error) {
+        console.error("Error fetching backend user:", error);
+      }
+    };
+
+    fetchUserId();
+  }, [setUserId, getToken]);
+
   const handleContinue = () => {
     const result = profileSchema.safeParse({
       firstName,
       lastName,
       phone,
-      adress,
+      address,
       image,
     });
 
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
-
       setFirstNameError(fieldErrors.firstName?.[0] || "");
       setLastNameError(fieldErrors.lastName?.[0] || "");
       setPhoneError(fieldErrors.phone?.[0] || "");
-      setAdressError(fieldErrors.adress?.[0] || "");
-
+      setAddressError(fieldErrors.address?.[0] || "");
       return false;
     }
+
     setFirstNameError("");
     setLastNameError("");
     setPhoneError("");
-    setAdressError("");
-
+    setAddressError("");
     return true;
   };
 
-  const CreateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createProfile = async (userProfile: {
+    image: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    address: string;
+  }) => {
+    if (!userId) {
+      console.error("User ID is missing");
+      return;
+    }
+    try {
+      const token = await getToken();
+      console.log("Token:", token);
+      if (!token) {
+        setError("No authentication token found");
+        router.push("/");
+        throw new Error("No authentication token found");
+      }
+
+      const API_URL = "http://localhost:8000";
+      console.log("API URL:", `${API_URL}/profile`);
+      console.log("Request payload:", {
+        ...userProfile,
+        userId,
+      });
+
+      const response = await fetch(`${API_URL}/profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...userProfile,
+          userId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message ||
+            `Failed to create profile: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (err) {
+      console.error("API Error:", err);
+      throw new Error(
+        err instanceof Error
+          ? err.message
+          : "Failed to create profile due to network error"
+      );
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValid = handleContinue();
     if (!isValid) return;
 
-    if (!currentUserData && !token) {
-      setError("User is not authenticated. Please log in.");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      const profileData = {
+      await createProfile({
         image,
         firstName,
         lastName,
         phone,
-        adress,
-        userId: currentUserData?.id,
-      };
-
-      const res = await axiosInstance.post("users/profile", profileData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        address,
       });
 
-      if (res.status === 200) {
-        push("/");
-      }
+      router.push("/home");
     } catch (err) {
-      console.error("Error while creating profile:", err);
-      setLoading(false);
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || "Something went wrong");
-      } else {
-        setError("Unexpected error occurred");
-      }
+      setError(err instanceof Error ? err.message : "Failed to create profile");
     } finally {
       setLoading(false);
     }
@@ -114,11 +180,13 @@ const Page = () => {
           </div>
         </div>
 
-        <form onSubmit={CreateProfile} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Овог</label>
+            <label className="block text-sm font-medium mb-1 text-black">
+              Овог
+            </label>
             <Input
-              className="w-full"
+              className="w-full text-black"
               type="text"
               placeholder="Овог оруулна уу"
               value={firstName}
@@ -133,9 +201,11 @@ const Page = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Нэр</label>
+            <label className="block text-sm font-medium mb-1 text-black">
+              Нэр
+            </label>
             <Input
-              className="w-full"
+              className="w-full text-black"
               type="text"
               placeholder="Нэр оруулна уу"
               value={lastName}
@@ -150,18 +220,20 @@ const Page = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Хаяг</label>
+            <label className="block text-sm font-medium mb-1 text-black">
+              Хаяг
+            </label>
             <Input
-              className="w-full h-[131px]"
+              className="w-full h-[131px] text-black"
               type="text"
               placeholder="Хаягаа оруулна уу"
-              value={adress}
-              onChange={(e) => setAdress(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
             />
-            {adressError && (
+            {addressError && (
               <p className="text-red-500 text-sm mt-2 flex items-center">
                 <X className="mr-1 h-4 w-4" />
-                {adressError}
+                {addressError}
               </p>
             )}
           </div>
@@ -205,7 +277,6 @@ const Page = () => {
           <div className="flex justify-center">
             <Button
               className="w-[246px] h-[40px] mt-2"
-              onClick={handleContinue}
               type="submit"
               disabled={loading}
             >

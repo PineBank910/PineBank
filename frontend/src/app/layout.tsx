@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { CurrentUserProvider } from "@/utils/currentUserContext";
 import "./globals.css";
 import type { Metadata } from "next";
+import { UserProvider } from "@/context/userContext";
 
 // Configure fonts
 const geistSans = Geist({
@@ -32,11 +33,15 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-            <CurrentUserProvider>
-              {children}
-            </CurrentUserProvider>
-          </ThemeProvider>
+          <UserProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem={false}
+            >
+              <CurrentUserProvider>{children}</CurrentUserProvider>
+            </ThemeProvider>
+          </UserProvider>
         </body>
       </html>
     </ClerkProvider>
