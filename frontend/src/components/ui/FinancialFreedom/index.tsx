@@ -73,11 +73,11 @@ const FinancialFreedom = () => {
           ))}
         </Edges>
       </Inner>
-      <BriefNote>
+      <BriefNote className='flex items-center justify-center'>
         {isMobile ? (
           <MaskText phrases={mobileBriefNotePhrase} tag="p" />
         ) : (
-          <MaskText phrases={desktopBriefNotePhrase} tag="p" />
+          <MaskText phrases={desktopBriefNotePhrase} tag="p"/>
         )}
       </BriefNote>
     </Wrapper>
