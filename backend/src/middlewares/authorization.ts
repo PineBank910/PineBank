@@ -1,53 +1,69 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
+
+// Extend the Request interface to include the user property
 declare global {
   namespace Express {
     interface Request {
       user?: {
         id: string;
+        email?: string;
+        clerkId?: string;
       };
     }
   }
 }
 
-type Token = {
-  userId: string;
-  email: string;
-  password: string;
-  id: string;
-};
+const prisma = new PrismaClient();
 
-export const authorizationMiddleware = (
+export const clerkAuthMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
-  const { authorization } = req.headers;
+) => {
+  const authHeader = req.headers.authorization;
 
-  if (!authorization) {
-    res.status(401).json({ message: "No token provided" });
+  if (!authHeader) {
+    res.status(401).json({ message: "No token" });
     return;
   }
 
-  const token = authorization.split(" ")[1];
-
-  if (!token) {
-    res.status(401).json({ message: "Token missing or malformed" });
-  }
+  const token = authHeader.replace("Bearer ", "");
 
   try {
-    const decoded = jwt.verify(token, "logically impossible") as Token;
-    console.log("Decoded token:", decoded); // Log the decoded token
+    const decoded = jwt.decode(token) as any;
 
-    if (decoded && decoded.id) {
-      req.user = { id: decoded.id };
-      console.log("User ID set in request:", req.user.id); // Log the user ID
-      next();
-    } else {
+    if (!decoded) {
       res.status(401).json({ message: "Invalid token" });
     }
-  } catch (err) {
-    console.error("Error decoding token:", err); // Log the decoding error
-    res.status(401).json({ message: "Invalid token" });
+
+    const clerkId = decoded.sub;
+
+    if (!clerkId) {
+      res.status(401).json({ message: "No sub in token" });
+    }
+
+    // 🔥 Find your user
+    const user = await prisma.user.findUnique({
+      where: { clerkId },
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found in backend" });
+      return;
+    }
+
+    // ✅ Attach user information
+    req.user = {
+      id: user.id.toString(), // make sure it's a string
+      email: user.email,
+      clerkId: user.clerkId ?? undefined,
+    };
+
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
