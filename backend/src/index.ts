@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
 import { userRouter } from "./routers/userRouter";
 import { accountRouter } from "./routers/bankAccountRouter";
 import { userProfileRouter } from "./routers/userProfileRouter";
@@ -16,14 +15,8 @@ app.use(cors());
 app.use(express.json());
 const port = process.env.PORT
 
-const prisma =new PrismaClient()
-console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 app.use(clerkMiddleware())
 
-app.get("/", async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
-});
 
 app.use("/users", userRouter);
 app.use("/account", accountRouter);

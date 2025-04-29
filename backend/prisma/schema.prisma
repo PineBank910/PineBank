@@ -14,18 +14,17 @@ datasource db {
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 model User {
-  id                  String        @id @default(uuid())
-  email               String        @unique
+  id    String @id
+  email String @unique
 
-  username            String?       @unique
-  
+  username String? @unique
+
   password            String
   transactionPassword String?
   createdAt           DateTime      @default(now())
   userProfile         UserProfile?
   accounts            BankAccount[]
   loans               Loan[]
-  clerkId             String?       @unique    
 }
 
 model UserProfile {
