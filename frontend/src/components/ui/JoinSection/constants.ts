@@ -1,6 +1,5 @@
 import { StaticImageData } from 'next/image';
 import robert_fox from '../../../../public/images/robert_fox.png';
-import cameron_williamson from '../../../../public/images/cameron_williamson.png';
 import esther_howard from '../../../../public/images/esther_howard.png';
 
 export type Props = {
@@ -12,34 +11,28 @@ export type Props = {
 export const testimonials = [
   {
     testimony:
-      "RAFT has transformed my approach to finance. Their smart investing options have helped me grow my wealth, and their user-friendly platform makes managing my money a breeze. I've never felt more confident about my financial future.",
-    person: 'Robert Fox',
+      "PineBank миний санхүүгийн хандлагыг өөрчилсөн. Тэдний ухаалаг хөрөнгө оруулалтын сонголтууд нь миний баялгийг өсгөхөд тусалсан бөгөөд тэдний хэрэглэгчдэд ээлтэй платформ нь миний мөнгийг удирдахад хялбар болгодог. Би санхүүгийн ирээдүйдээ илүү итгэлтэй болсон.",
+    person: 'Д. Түвшинтөгс',
     avatar: robert_fox,
   },
   {
     testimony:
-      "I can't express how grateful I am to RAFT. Their wealth management services have been a game-changer for my family's financial security. The expert guidance and personalized strategies have given us peace of mind, knowing that our future is in capable hands.",
-    person: 'Cameron Williamson',
-    avatar: cameron_williamson,
-  },
-  {
-    testimony:
-      "RAFT's financial planning services have been a lifeline for me. I always struggled with managing my money, but their team crafted a tailored plan that addressed my goals and concerns. It's been a game-changer in achieving my financial dreams",
-    person: 'Esther Howard',
+      "Би PineBank-д ямар их талархаж байгаагаа үгээр илэрхийлэхийн аргагүй. Тэдний менежментийн үйлчилгээ нь миний гэр бүлийн санхүүгийн аюулгүй байдлыг эрс өөрчилсөн. хувь хүнд тохирсон стратеги нь сэтгэлийн амар амгаланг өгсөн.",
+    person: 'С. Номингэрэл',
     avatar: esther_howard,
   },
   {
     testimony:
-      "I can't express how grateful I am to RAFT. Their wealth management services have been a game-changer for my family's financial security. The expert guidance and personalized strategies have given us peace of mind, knowing that our future is in capable hands.",
-    person: 'Cameron Williamson',
-    avatar: cameron_williamson,
+      "PineBank-ийн санхүүгийн төлөвлөлтийн үйлчилгээ нь миний хувьд амин дэм болсон. Би мөнгөө удирдаж чаддаг болсон. Энэ нь миний санхүүгийн мөрөөдлөө биелүүлэхэд маш их хувь нэмэр оруулсан",
+    person: 'Ж. Элбэгтөгс',
+    avatar: robert_fox,
   },
   {
     testimony:
-      "RAFT has transformed my approach to finance. Their smart investing options have helped me grow my wealth, and their user-friendly platform makes managing my money a breeze. I've never felt more confident about my financial future.",
-    person: 'Robert Fox',
-    avatar: robert_fox,
+      "Би Pinebank-д ямар их талархаж байгаагаа үгээр илэрхийлэхийн аргагүй. Тэд миний гэр бүлийн санхүүгийн аюулгүй байдлыг эрс өөрчилсөн. ",
+    person: 'Э. Энхжин',
+    avatar: esther_howard,
   },
 ];
 
-export const desktopHeaderPhrase = ['Join over 3 million', 'members'];
+export const desktopHeaderPhrase = ['Бидэнтэй нэгд', 'PineBank'];

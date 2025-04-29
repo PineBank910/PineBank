@@ -11,8 +11,8 @@ export const desktopParagraphPhrase = [
   "Тиймээс бид таны хүрэх ёстой эрх чөлөөг санал болгож байна.",
 ];
 export const desktopBriefNotePhrase = [
-  'Хөрөнгө оруулалт,',
-  'Үргэлжлүүл, өргөжүүл',
+  'Хөрөнгө оруулалт',
+  'Үргэлжлүүл өргөжүүл',
   'Санхүүгийн аяллаа',
   'Хамт эхлүүлье.',
 ];
@@ -26,32 +26,29 @@ export const mobileParagraphPhrase = [
 ];
 
 export const mobileBriefNotePhrase = [
-  'Smart',
-  ' investments,',
-  'secure',
-  ' payments,',
-  'and expert',
-  'guidance, all',
-  'in one place.',
+  'Хөрөнгө оруулалт',
+  'Үргэлжлүүл өргөжүүл',
+  'Санхүүгийн аяллаа',
+  'Хамт эхлүүлье.',
 ];
 
 export const edges = [
   {
-    point: 'No minimum balance fees',
+    point: 'Хамгийн бага шимтгэл',
     details:
-      'Say goodbye to minimum balance fees. Your account, your balance—no hidden charges',
+      'Таны данс, таны үлдэгдэл',
     icon: ic_banknotes,
   },
   {
-    point: 'No monthly fees',
+    point: 'Сарын хураамж байхгүй',
     details:
-      'Bank with us without worrying about monthly fees. Keep more of your money where it belongs—in your account',
+      'Сарын шимтгэлийн талаар санаа зовохгүйгээр мөнгөө дансандаа хадгалаарай',
     icon: ic_circle_stack,
   },
   {
-    point: 'No bank transfer fees',
+    point: 'Банкны шилжүүлгийн хураамжгүй',
     details:
-      'Seamlessly transfer funds without the extra cost. Send and receive money with zero bank transfer fees.',
+      'Нэмэлт зардалгүйгээр мөнгө шилжүүлэх. Банкны шилжүүлгийн шимтгэлгүй мөнгө илгээх, хүлээн авах.',
     icon: ic_arrows_left_right,
   },
 ];

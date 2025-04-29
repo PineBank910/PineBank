@@ -2,15 +2,15 @@ import ic_money_send from '../../../../public/svgs/ic_money_send.svg';
 import ic_wallet_minus from '../../../../public/svgs/ic_wallet_minus.svg';
 export const cardsInfo = [
   {
-    title: 'Spend Better',
+    title: 'Илүү зарцуул',
     details:
-      'Set and achieve financial goals with ease, automate your savings, and watch your money grow without the stress.',
+      'Санхүүгийн зорилгоо тавьж, түүндээ хүрч, хадгаламжаа автоматжуулж, мөнгө тань стрессгүйгээр өсөхийг хараарай.',
     icon: ic_money_send,
   },
   {
-    title: 'Invest Better',
+    title: 'Илүү хөрөнгө оруулалт хий',
     details:
-      'Set and achieve financial goals with ease, automate your savings, and watch your money grow without the stress.',
+      'Санхүүгийн зорилгоо тавьж, түүндээ хүрч, хадгаламжаа автоматжуулж, мөнгө тань стрессгүйгээр өсөхийг хараарай.',
     icon: ic_wallet_minus,
   },
 ];
@@ -18,40 +18,39 @@ export const cardsInfo = [
 export const stats = [
   {
     number: '50+',
-    subtitle: 'cities',
+    subtitle: 'ХОТ',
   },
   {
     number: '50,000+',
-    subtitle: 'transactions',
+    subtitle: 'ГҮЙЛГЭЭ',
   },
   {
     number: '3M+',
-    subtitle: 'users',
+    subtitle: 'ХЭРЭГЛЭГЧИД',
   },
   {
     number: '5+',
-    subtitle: 'user ratings',
+    subtitle: 'ХЭРЭГЛЭГЧИЙН ҮНЭЛГЭЭ',
   },
 ];
 
 // For desktop
 export const desktopHeaderPhrase = [
-  'Confidently Shape Your',
-  'Financial Future',
+  'Итгэлтэй',
+  'Санхүүгийн ирээдүй',
 ];
 export const desktopParagraphPhrase = [
-  'At RAFT, we empower you to confidently shape your financial future. Our modern',
-  'approach simplifies saving and investing, making it easier than ever.',
+  'Бид санхүүгийн ирээдүйгээ итгэлтэйгээр тодорхойлох боломжийг танд олгож байна',
+  'Хуримтлал болон хөрөнгө оруулалтыг хялбарчилж, урьд өмнөхөөсөө илүү хялбар боллоо',
 ];
+
 
 // For mobile
 export const mobileHeaderPhrase = [
-  'Confidently Shape',
-  ' Your Financial Future',
+  'Итгэлтэй',
+  'Санхүүгийн ирээдүй',
 ];
 export const mobileParagraphPhrase = [
-  'At RAFT, we empower you to confidently shape',
-  'your financial future. Our modern approach',
-  'simplifies saving and investing, making it easier',
-  'than ever.',
+  'Бид санхүүгийн ирээдүйгээ итгэлтэйгээр тодорхойлох боломжийг танд олгож байна',
+  'Хуримтлал болон хөрөнгө оруулалтыг хялбарчилж, урьд өмнөхөөсөө илүү хялбар боллоо',
 ];

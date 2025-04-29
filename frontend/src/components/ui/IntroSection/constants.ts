@@ -3,11 +3,11 @@ import ic_identification from '../../../../public/svgs/ic_identification.svg';
 import ic_lock_closed from '../../../../public/svgs/ic_lock_closed.svg';
 
 // For desktop
-export const desktopHeaderPhrase = ["Introducing RAFT's Next-", 'Gen Cards'];
+export const desktopHeaderPhrase = ["PineCard-ийг танилцуулж байна"];
+
 export const desktopParagraphPhrase = [
-  " Discover RAFT's latest innovation – our new cards. Elevate your banking",
-  'experience with cutting-edge features, security, and unprecedented',
-  'convenience.',
+  "PineCard хамгийн сүүлийн үеийн шинэ картуудыг танилцуулж байна.",
+  'Бид таньд хамгийн сүүлийн үеийн онцлог, аюулгүй байдал, урьд өмнө хэзээ ч байгаагүй тав тухтай байдалыг санал болгож байна.'
 ];
 
 // For mobile
@@ -21,21 +21,21 @@ export const mobileParagraphPhrase = [
 
 export const edges = [
   {
-    point: 'Contactless Technology',
+    point: 'Холбоосгүй төлбөр',
     details:
-      'Our new cards come equipped with contactless technology, allowing you to make swift, secure payments with a simple tap.',
+      'Манай шинэ картууд нь контактгүй технологиор тоноглогдсон бөгөөд танд энгийн товшилтоор хурдан, найдвартай төлбөр хийх боломжийг олгоно.',
     icon: ic_document_duplicate,
   },
   {
-    point: 'Personalization',
+    point: 'Хувийн тохиргоо',
     details:
-      'Customize your card to reflect your unique style. Choose from a range of designs that suit your personality.',
+      'Өөрийн өвөрмөц хэв маягийг харуулахын тулд картаа тохируулаарай. Өөрийнхөө зан чанарт тохирсон загваруудаас сонголтоо хийгээрэй.',
     icon: ic_identification,
   },
   {
-    point: 'Enhanced Security',
+    point: 'Сайжруулсан аюулгүй байдал',
     details:
-      'Your peace of mind is our priority. Our cards feature advanced security measures to protect your transactions and data.',
+      'Таны сэтгэлийн амар амгалан бол бидний нэн тэргүүний зорилт юм. Манай картууд нь таны гүйлгээ болон өгөгдлийг хамгаалах дэвшилтэт хамгаалалтын арга хэмжээг агуулдаг.',
     icon: ic_lock_closed,
   },
 ];

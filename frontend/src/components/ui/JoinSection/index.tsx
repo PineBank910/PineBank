@@ -1,5 +1,5 @@
-'use client';
-import { useState } from 'react';
+"use client";
+import { useState } from "react";
 import {
   Wrapper,
   Inner,
@@ -13,13 +13,13 @@ import {
   PaginationButtonContainer,
   Previous,
   Next,
-} from './styles';
-import ic_arrow_left from '../../../../public/svgs/ic_arrow_left.svg';
-import ic_arrow_right from '../../../../public/svgs/ic_arrow_right.svg';
-import Image from 'next/image';
-import { MaskText } from '@/components';
-import { useIsMobile } from '../../../../libs/useIsMobile';
-import { Props, desktopHeaderPhrase, testimonials } from './constants';
+} from "./styles";
+import ic_arrow_left from "../../../../public/svgs/ic_arrow_left.svg";
+import ic_arrow_right from "../../../../public/svgs/ic_arrow_right.svg";
+import Image from "next/image";
+import { MaskText } from "@/components";
+import { useIsMobile } from "../../../../libs/useIsMobile";
+import { Props, desktopHeaderPhrase, testimonials } from "./constants";
 
 const JoinSection = () => {
   const [testimonialsArr, setTestimonialsArr] = useState<Props[]>(testimonials);
@@ -55,7 +55,7 @@ const JoinSection = () => {
               <UserInfo>
                 <Name>
                   <MaskText phrases={new Array(t.person)} tag="h3" />
-                  <MaskText phrases={new Array('Happy RAFT User')} tag="p" />
+                  <MaskText phrases={new Array("PineBank Хэрэглэгч")} tag="p" />
                 </Name>
                 <Avatar>
                   <Image src={t.avatar} alt="user avatar" />

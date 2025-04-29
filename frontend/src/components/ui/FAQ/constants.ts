@@ -3,8 +3,8 @@ type FAQItem = {
   answer: string;
 };
 
-export const desktopHeaderPhrase = ['Frequently asked', 'questions'];
-export const mobileHeaderPhrase = ['Frequently', 'asked', 'questions'];
+export const desktopHeaderPhrase = ['Асуулт', 'Хариулт'];
+export const mobileHeaderPhrase = ['Асуулт', 'Хариулт'];
 export const animate = {
   initial: {
     y: '100%',
@@ -12,30 +12,30 @@ export const animate = {
   },
   open: (i: number) => ({
     y: '0%',
-    opacity: 1,
+    opacity: 2,
     transition: { duration: 1, delay: 0.1 * i, ease: [0.33, 1, 0.68, 1] },
   }),
 };
 
 export const faqData: FAQItem[] = [
   {
-    question: 'How do I create an account with RAFT?',
+    question: 'PineBank ашиглан хэрхэн данс үүсгэх вэ?',
     answer:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+      'Та бүртгэл үүсгэн автоматаар данс үүсгэх боломжтой. Бүртгэлээ баталгаажуулсны дараа та дансандаа мөнгө шилжүүлэх боломжтой.',
   },
   {
-    question: 'How does RAFT ensure the security of my financial data?',
+    question: 'Мөнгө илгээх & нэхэмжлэх',
     answer:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+      'Гүйлгээ цэс > Харилцах данс сонгох > Гүйлгээний дүн оруулах > Илгээх товчийг дараарай. Гүйлгээ цэсийн баруун буланд байрлах Convo цэс > Сүүлд хийсэн гүйлгээнээс сонгох > Гүйлгээний дүн оруулах > Илгээх товчийг дараарай.',
   },
   {
-    question: 'What types of transactions can I perform with RAFT?',
+    question: 'Банкны харилцагч болох насны доод хязгаар хэд вэ?',
     answer:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+      'Бид одоогоор 18-с дээш насны иргэдэд банкны үйлчилгээг үзүүлж байна. Удахгүй хүүхдүүдэд зориулсан банкны үйлчилгээг нэвтрүүлэх болно.',
   },
   {
-    question: 'What benefits does RAFT offer for wealth management?',
+    question: 'Бүртгэлтэй и-мэйл хаягаа яаж шинэчлэх вэ?',
     answer:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+      '-Хэрвээ та апп-руугаа нэвтрэн орж байгаа бол зүүн дээд буланд байрлах “Профайл” хэсгийн “Миний мэдээлэл” цэс рүү орж бүртгэлтэй и-мэйл хаягаа солих боломжтой',
   },
 ];
