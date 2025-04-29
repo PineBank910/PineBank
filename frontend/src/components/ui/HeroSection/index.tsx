@@ -11,16 +11,19 @@ import {
   paragraphPhrases,
   phrases,
 } from "./constants";
+import Link from "next/link";
 
 const HeroSection = () => {
   const isMobile = useIsMobile();
   return (
     <Wrapper>
       <Inner>
-        <Pill>
-          <span>PineCard Танилцуулга</span>
-          <Image src={ic_chevron_right} alt="chevron-right" />
-        </Pill>
+        <Link href="#cardsec">
+          <Pill>
+            <span>PineCard Танилцуулга</span>
+            <Image src={ic_chevron_right} alt="chevron-right" />
+          </Pill>
+        </Link>
         <HeroTextContainer>
           {isMobile ? (
             <>

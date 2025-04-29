@@ -1,10 +1,10 @@
-'use client';
-import { useState } from 'react';
-import Image from 'next/image';
-import { Edge, Edges, Title } from '../FinancialFreedom/styles';
-import lola_card from '../../../../public/images/lola_card.png';
-import orange_card from '../../../../public/images/orange_card.png';
-import terry_card from '../../../../public/images/terry_card.png';
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import { Edge, Edges, Title } from "../FinancialFreedom/styles";
+import lola_card from "../../../../public/images/lola_card.png";
+import orange_card from "../../../../public/images/orange_card.png";
+import terry_card from "../../../../public/images/terry_card.png";
 import {
   Wrapper,
   Inner,
@@ -14,16 +14,16 @@ import {
   LeftImage,
   MiddleImage,
   RightImage,
-} from './styles';
-import { MaskText } from '@/components';
-import { useIsMobile } from '../../../../libs/useIsMobile';
+} from "./styles";
+import { MaskText } from "@/components";
+import { useIsMobile } from "../../../../libs/useIsMobile";
 import {
   desktopHeaderPhrase,
   desktopParagraphPhrase,
   edges,
   mobileHeaderPhrase,
   mobileParagraphPhrase,
-} from './constants';
+} from "./constants";
 
 const IntroSection = () => {
   const isMobile = useIsMobile();
@@ -34,7 +34,7 @@ const IntroSection = () => {
       <Inner>
         <Header>
           <h3>Introducing</h3>
-          <HeaderMainText>
+          <HeaderMainText id="cardsec">
             {isMobile ? (
               <>
                 <MaskText phrases={mobileHeaderPhrase} tag="h1" />
@@ -50,7 +50,7 @@ const IntroSection = () => {
         </Header>
         <CardsContainer>
           <LeftImage
-            className={isHovered ? 'active' : ''}
+            className={isHovered ? "active" : ""}
             src={orange_card}
             alt="orange_atm_card"
           />
@@ -61,7 +61,7 @@ const IntroSection = () => {
             alt="blue card"
           />
           <RightImage
-            className={isHovered ? 'active' : ''}
+            className={isHovered ? "active" : ""}
             src={terry_card}
             alt="terry card"
           />
