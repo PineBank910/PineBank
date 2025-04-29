@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { clerkClient, getAuth } from "@clerk/express";
+import {  getAuth } from "@clerk/express";
 
 const prisma = new PrismaClient();
 
 export const getUser = async (req: Request, res: Response): Promise<any> => {
   try {
+    console.log(req.headers);
 
     const { userId } = getAuth(req);
 
@@ -15,11 +16,10 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       return
     }
 
-    const clerkUser = await clerkClient.users.getUser(userId);
     console.log("User ID from request:", userId);
 
     const user = await prisma.user.findUnique({
-      where: { clerkId: clerkUser.id },
+      where: { id: userId },
       include: {
         userProfile: true,
         loans: true,

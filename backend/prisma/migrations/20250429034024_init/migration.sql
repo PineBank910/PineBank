@@ -1,22 +1,22 @@
 -- CreateEnum
-CREATE TYPE "AccountType" AS ENUM ('SAVINGS', 'BUSINESS');
+CREATE TYPE "AccountEnum" AS ENUM ('SAVINGS', 'BUSINESS');
 
 -- CreateEnum
-CREATE TYPE "TransactionStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
+CREATE TYPE "TransactionStatusEnum" AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
 
 -- CreateEnum
-CREATE TYPE "LoanStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'ACTIVE', 'CLOSED', 'DEFAULTED');
+CREATE TYPE "LoanStatusEnum" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'ACTIVE', 'CLOSED', 'DEFAULTED');
 
 -- CreateEnum
-CREATE TYPE "CardType" AS ENUM ('DEBIT', 'CREDIT');
+CREATE TYPE "CardEnum" AS ENUM ('DEBIT', 'CREDIT');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
+    "username" TEXT,
     "password" TEXT NOT NULL,
-    "transactionPassword" TEXT NOT NULL,
+    "transactionPassword" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -30,6 +30,7 @@ CREATE TABLE "UserProfile" (
     "lastName" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
 
     CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id")
 );
@@ -38,7 +39,7 @@ CREATE TABLE "UserProfile" (
 CREATE TABLE "BankAccount" (
     "id" TEXT NOT NULL,
     "accountNumber" TEXT NOT NULL,
-    "type" "AccountType" NOT NULL DEFAULT 'BUSINESS',
+    "type" "AccountEnum" NOT NULL DEFAULT 'BUSINESS',
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,7 +54,7 @@ CREATE TABLE "Transaction" (
     "toAccountId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" "TransactionStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "TransactionStatusEnum" NOT NULL DEFAULT 'PENDING',
     "reference" TEXT,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
@@ -69,7 +70,7 @@ CREATE TABLE "Loan" (
     "termMonths" INTEGER NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3) NOT NULL,
-    "status" "LoanStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "LoanStatusEnum" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Loan_pkey" PRIMARY KEY ("id")
@@ -79,7 +80,7 @@ CREATE TABLE "Loan" (
 CREATE TABLE "Card" (
     "id" TEXT NOT NULL,
     "cardNumber" TEXT NOT NULL,
-    "cardType" "CardType" NOT NULL,
+    "cardType" "CardEnum" NOT NULL,
     "expiration" TIMESTAMP(3) NOT NULL,
     "cvv" TEXT NOT NULL,
     "bankAccountId" TEXT NOT NULL,
@@ -90,6 +91,9 @@ CREATE TABLE "Card" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");

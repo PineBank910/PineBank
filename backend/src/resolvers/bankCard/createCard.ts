@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 
 export const createBankCard = async (req: Request, res: Response)=> {
+  
   const { cardType } = req.body;
   const { bankAccountId } = req.params;
 

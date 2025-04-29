@@ -1,3 +1,4 @@
+import { getAuth } from "@clerk/express";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
@@ -5,8 +6,16 @@ export const createProfile = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  try {
-    const { firstName, lastName, userId, address, phone, image } = req.body;
+  try {    
+    const { userId } = getAuth(req);
+    
+    if (!userId) {
+      console.log("User ID is missing");
+      res.status(400).json({ message: "User ID is missing from the token" });
+      return
+    }
+
+    const { firstName, lastName, address, phone, image } = req.body;
     const prisma = new PrismaClient();
 
     const user = await prisma.user.findUnique({
@@ -35,7 +44,7 @@ export const createProfile = async (
         phone,
         image,
         user: {
-          connect: { id: userId }, // Connect the profile to the user
+          connect: { id: userId },
         },
       },
     });
