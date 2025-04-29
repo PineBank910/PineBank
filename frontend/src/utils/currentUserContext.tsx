@@ -37,7 +37,9 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const axiosInstance = axios.create({ baseURL: "http://localhost:8000" });
+  const axiosInstance = axios.create({
+    baseURL: "https://pinebank.onrender.com",
+  });
 
   const getUserData = async () => {
     if (!token) return;
@@ -62,8 +64,7 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <CurrentUser.Provider
-      value={{ error, token, currentUserData, setCurrentUserData }}
-    >
+      value={{ error, token, currentUserData, setCurrentUserData }}>
       {children}
     </CurrentUser.Provider>
   );
