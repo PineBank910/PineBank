@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
+import FetchUserId from "@/components/fetchUserId";
 
 // Configure fonts
 const geistSans = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
               defaultTheme="light"
               enableSystem={false}
             >
+              <FetchUserId />
               {children}
             </ThemeProvider>
           </UserProvider>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -26,38 +26,8 @@ const Page = () => {
 
   const router = useRouter();
   const { getToken } = useAuth();
-  const { userId, setUserId } = useUser();
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const token = await getToken();
-        const res = await fetch("http://localhost:8000/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          console.error("Failed to fetch backend user");
-          return;
-        }
-
-        const data = await res.json();
-        if (data.user && data.user.id) {
-          setUserId(data.user.id);
-          console.log(data.user.id);
-
-        } else {
-          console.error("User ID not found in response", data);
-        }
-      } catch (error) {
-        console.error("Error fetching backend user:", error);
-      }
-    };
-
-    fetchUserId();
-  }, [setUserId, getToken]);
+  const { userId } = useUser();
+  console.log("backend user id", userId);
 
   const handleContinue = () => {
     const result = profileSchema.safeParse({
@@ -91,54 +61,27 @@ const Page = () => {
     phone: string;
     address: string;
   }) => {
-    if (!userId) {
-      console.error("User ID is missing");
+    const token = await getToken(); // Get the token from Clerk
+
+    if (!token) {
+      console.error("No token available");
       return;
     }
-    try {
-      const token = await getToken();
-      console.log("Token:", token);
-      if (!token) {
-        setError("No authentication token found");
-        router.push("/");
-        throw new Error("No authentication token found");
-      }
 
-      const API_URL = "http://localhost:8000";
-      console.log("API URL:", `${API_URL}/profile`);
-      console.log("Request payload:", {
-        ...userProfile,
-        userId,
-      });
+    const response = await fetch("http://localhost:8000/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in the request headers
+      },
+      body: JSON.stringify({ ...userProfile, userId }), // Send the `userId` from the backend
+    });
 
-      const response = await fetch(`${API_URL}/profile`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ...userProfile,
-          userId,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message ||
-          `Failed to create profile: ${response.status} ${response.statusText}`
-        );
-      }
-
-      return await response.json();
-    } catch (err) {
-      console.error("API Error:", err);
-      throw new Error(
-        err instanceof Error
-          ? err.message
-          : "Failed to create profile due to network error"
-      );
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Profile created:", data);
+    } else {
+      console.error("Failed to create profile:", data);
     }
   };
 
