@@ -24,6 +24,7 @@ const Dashboard = () => {
   const [selectedSidebar, setSelectedSidebar] = useState("Dashboard");
   ///////
   const sidebarRef = useRef<HTMLDivElement>(null);
+  ///////
 
   // Handle click outside for mobile sidebar
   React.useEffect(() => {
@@ -249,6 +250,7 @@ const Dashboard = () => {
               {/* {Transaction component gargii} */}
               <p className="font-semibold text-lg">Recent transactions</p>
               <div className="w-full rounded-2xl bg-white dark:bg-gray-800 ">
+                <div className="w-full h-12  ">Some transactions here</div>
                 <div className="w-full h-12  ">Some transactions here</div>
                 <div className="w-full h-12  ">Some transactions here</div>
                 <div className="w-full h-12  ">Some transactions here</div>
