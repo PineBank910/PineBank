@@ -1,6 +1,7 @@
 "use client";
 
 import { User } from "@/app/types";
+import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import {
   createContext,
@@ -36,10 +37,6 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   }, []);
-
-  const axiosInstance = axios.create({
-    baseURL: "https://pinebank.onrender.com",
-  });
 
   const getUserData = async () => {
     if (!token) return;
