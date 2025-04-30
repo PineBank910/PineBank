@@ -1,5 +1,5 @@
 "use client";
-import DarkModeToggle from "@/components/darkmode";
+import DarkModeToggle from "@/components/dashboard/darkmode";
 import {
   SignInButton,
   SignUpButton,
