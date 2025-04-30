@@ -102,7 +102,7 @@ const Page = () => {
         address,
       });
 
-      router.push("/home");
+      router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create profile");
     } finally {
