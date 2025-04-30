@@ -13,7 +13,7 @@ const FetchUserId = () => {
       try {
         const token = await getToken();
 
-        const res = await fetch("http://localhost:8000/users", {
+        const res = await fetch("https://pinebank.onrender.com/users", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
