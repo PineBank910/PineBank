@@ -8,7 +8,6 @@ import {
   LogoContainer,
   Nav,
   CallToActions,
-  AbsoluteLinks,
   BurgerMenu,
 } from "./styles";
 import raft_logo from "../../../../public/svgs/raft_logo.svg";
