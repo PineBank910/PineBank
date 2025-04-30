@@ -188,42 +188,43 @@ const Dashboard = () => {
           </div>
         )}
 
-        <header className="w-full  ">
-          <div className="flex items-center justify-between border-b h-24">
+        <div className="w-full  ">
+          <header className="flex items-center justify-between border-b h-24 w-full">
             <button
               onClick={() => setIsSidebarOpen((prev) => !prev)}
               className="focus:outline-none ml-4 md:hidden"
               aria-label="Toggle sidebar">
               <Menu size={50} />
             </button>
-
-            <div className="sm:text-4xl text-3xl  ml-8 text-[#343C6A]">
-              {selectedSidebar}
-            </div>
-
-            <div className="flex gap-7 items-center mr-8">
-              <div className="hidden  md:flex dark:bg-gray-900 items-center gap-4 pl-6 p-1 sm:w-[8rem] md:w-[13rem] lg:w-[20rem]  h-[3rem] bg-[#F5F7FA] rounded-4xl">
-                <Search color="#718EBF" />
-                <input
-                  className="placeholder-[#718EBF] w-full focus:outline-0 dark:text-blue-500 "
-                  placeholder="Search ..."
-                />
+            <div className="flex flex-col justify-between items-center sm:flex-row w-full">
+              <div className="sm:text-4xl text-3xl md:ml-4  lg:ml-8 text-[#343C6A]">
+                {selectedSidebar}
               </div>
-              <DarkModeToggle />
-              <NotificationBell />
-              <SignedOut>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                  <SignInButton />
-                </button>
-                <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                  <SignUpButton />
-                </button>
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
+
+              <div className="flex gap-4 md:gap-7 items-center mr-8">
+                <div className="hidden  md:flex dark:bg-gray-900 items-center gap-4 pl-6 p-1 sm:w-[8rem] md:w-[13rem] lg:w-[20rem]  h-[3rem] bg-[#F5F7FA] rounded-4xl">
+                  <Search color="#718EBF" />
+                  <input
+                    className="placeholder-[#718EBF] w-full focus:outline-0 dark:text-blue-500 "
+                    placeholder="Search ..."
+                  />
+                </div>
+                <DarkModeToggle />
+                <NotificationBell />
+                <SignedOut>
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                    <SignInButton />
+                  </button>
+                  <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                    <SignUpButton />
+                  </button>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
             </div>
-          </div>
+          </header>
 
           <div className="md:hidden flex items-center gap-4 pl-5 p-1 w-auto h-[3rem] bg-[#F5F7FA] rounded-4xl mt-5 mx-4">
             <Search color="#718EBF" />
@@ -246,7 +247,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="w-3xs">
+            <div className="min-w-3xs ">
               {/* {Transaction component gargii} */}
               <p className="font-semibold text-lg">Recent transactions</p>
               <div className="w-full rounded-2xl bg-white dark:bg-gray-800 ">
@@ -257,7 +258,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </header>
+        </div>
       </section>
     </>
   );
