@@ -2,6 +2,7 @@
 
 import { createRef, useRef } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface ImageMouseTrailProps {
   items: string[];
@@ -87,7 +88,7 @@ export default function ImageCursorTrail({
       )}
     >
       {items.map((item, index) => (
-        <img
+        <Image
           key={index} // Ensure each image has a unique key
           className={cn(
             "opacity:0 data-[status='active']:ease-out-expo absolute -translate-x-[50%] -translate-y-[50%] scale-0 rounded-3xl object-cover transition-transform duration-300 data-[status='active']:scale-100 data-[status='active']:opacity-100 data-[status='active']:duration-500",
