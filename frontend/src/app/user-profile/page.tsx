@@ -53,6 +53,41 @@ const Page = () => {
     setAddressError("");
     return true;
   };
+  const createBankAccount = async () => {
+    const token = await getToken();
+
+    if (!token) {
+      console.error("No token available");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://pinebank.onrender.com/account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          balance: 0,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Failed to create bank account:", data.error || data);
+        return;
+      }
+      if (data.success) {
+        console.log("Bank account created successfully:", data.account);
+      } else {
+        console.error("Failed to create bank account:", data.error || data);
+      }
+    } catch (error) {
+      console.error("Error creating account:", error);
+    }
+  };
 
   const createProfile = async (userProfile: {
     image: string;
@@ -61,7 +96,7 @@ const Page = () => {
     phone: string;
     address: string;
   }) => {
-    const token = await getToken(); // Get the token from Clerk
+    const token = await getToken();
 
     if (!token) {
       console.error("No token available");
@@ -72,9 +107,9 @@ const Page = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token in the request headers
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ ...userProfile, userId }), // Send the `userId` from the backend
+      body: JSON.stringify({ ...userProfile, userId }),
     });
 
     const data = await response.json();
@@ -101,6 +136,7 @@ const Page = () => {
         phone,
         address,
       });
+      await createBankAccount();
 
       router.push("/dashboard");
     } catch (err) {
