@@ -15,6 +15,7 @@ export const viewProfile = async (
       },
       select: {
         userId: true,
+        id: true,
       },
     });    
 
@@ -33,9 +34,17 @@ export const viewProfile = async (
             lastName: true,
           },
         },
-        id: true
+        accounts: {
+          where: {
+            id: userID.id,
+          },
+          select: {
+            id: true, 
+          },
+        },
       },
     });
+    
 
     if (!userInfo) {
       return res.status(404).json({ message: "User not found" });
