@@ -5,6 +5,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
 import FetchUserId from "@/components/fetchUserId";
+import { CurrentUserProvider } from "@/utils/currentUserContext";
 
 // Configure fonts
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <CurrentUserProvider>
           <UserProvider>
             <ThemeProvider
               attribute="class"
@@ -46,6 +48,7 @@ export default function RootLayout({
               {children}
             </ThemeProvider>
           </UserProvider>
+          </CurrentUserProvider>
         </body>
       </html>
     </ClerkProvider>

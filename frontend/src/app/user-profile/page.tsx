@@ -103,7 +103,7 @@ const Page = () => {
       return;
     }
 
-    const response = await fetch("https://pinebank.onrender.com/profile", {
+    const response = await fetch("http://localhost:8000/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
