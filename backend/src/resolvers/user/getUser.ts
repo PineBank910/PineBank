@@ -22,7 +22,6 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       where: { id: userId },
       include: {
         userProfile: true,
-        loans: true,
         accounts: true,
       },
     });
