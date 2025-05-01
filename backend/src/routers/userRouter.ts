@@ -1,11 +1,7 @@
 import express from "express";
 import { getUser } from "../resolvers/user/getUser";
-import { CreateUserV2 } from "../resolvers/user/createUserV2";
-import { DeleteUser } from "../resolvers/user/deleteUser";
-import { UpdateUser } from "../resolvers/user/updateUser";
-
+import { Webhook } from "../resolvers/user/webhook";
 export const userRouter = express.Router();
-userRouter.put("/update", UpdateUser);
-userRouter.post("/signup", CreateUserV2);
+
+userRouter.post("/webhook", Webhook);
 userRouter.get("/", getUser);
-userRouter.delete("/delete", DeleteUser);
