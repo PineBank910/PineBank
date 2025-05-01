@@ -51,7 +51,7 @@ export default function DashboardLayout({
         {isSidebarOpen && (
           <div
             id="SIDEBAR"
-            className="hidden md:block md:w-[10rem] md:min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] bg-white dark:bg-gray-800 border-r">
+            className="hidden md:block md:w-[10rem] md:min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
             <div className="w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold text-center mt-4">
               Pinebank
             </div>
