@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import DarkModeToggle from "@/components/dashboard/darkmode";
 import NotificationBell from "@/components/dashboard/notificationBell";
@@ -18,12 +19,14 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { useState } from "react";
+import { join } from "path";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedSidebar, setSelectedSidebar] = useState("Dashboard");
   ///////
@@ -57,28 +60,40 @@ export default function DashboardLayout({
             </div>
             <div className="w-full">
               <div
-                onClick={() => setSelectedSidebar("Dashboard")}
+                onClick={() => {
+                  setSelectedSidebar("Dashboard");
+                  router.push("/dashboard");
+                }}
                 className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition
                   ${selectedSidebar === "Dashboard" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
                 <House /> Dashboard
               </div>
               <div
-                onClick={() => setSelectedSidebar("Transactions")}
+                onClick={() => {
+                  setSelectedSidebar("Transactions");
+                  router.push("/dashboard/transactions");
+                }}
                 className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition
                   ${selectedSidebar === "Transactions" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
                 <ArrowRightLeft /> Transactions
               </div>
               <div
-                onClick={() => setSelectedSidebar("Accounts")}
+                onClick={() => {
+                  setSelectedSidebar("Accounts");
+                  router.push("/dashboard/accounts");
+                }}
                 className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition
                   ${selectedSidebar === "Accounts" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
                 <UserRound /> Accounts
               </div>
               <div
-                onClick={() => setSelectedSidebar("Settings")}
+                onClick={() => {
+                  setSelectedSidebar("Settings");
+                  router.push("/dashboard/settings");
+                }}
                 className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition
                   ${selectedSidebar === "Settings" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
