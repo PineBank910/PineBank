@@ -10,6 +10,7 @@ import {
   ArrowRightLeft,
   Settings,
   UserRound,
+  Send,
 } from "lucide-react";
 import {
   SignInButton,
@@ -19,7 +20,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { useState } from "react";
-import { join } from "path";
+// import { join } from "path";
 
 export default function DashboardLayout({
   children,
@@ -68,6 +69,16 @@ export default function DashboardLayout({
                   ${selectedSidebar === "Dashboard" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
                 <House /> Dashboard
+              </div>
+              <div
+                onClick={() => {
+                  setSelectedSidebar("Transfer");
+                  router.push("/dashboard/transfer");
+                }}
+                className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition
+                  ${selectedSidebar === "Transfer" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
+                `}>
+                <Send /> Transfer
               </div>
               <div
                 onClick={() => {
