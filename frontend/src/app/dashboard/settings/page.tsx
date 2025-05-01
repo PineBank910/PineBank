@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Cloudinary from "@/components/ui/cloudinaryWidget"; // Cloudinary widget for uploading image
+import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema"; // Your schema validation for form
 import { useAuth } from "@clerk/nextjs"; // For auth token
 import { useUser } from "@/context/userContext"; // For getting userId from context
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Tab UI components
+import { CldUploadButton } from "next-cloudinary";
+import { FaUpload } from "react-icons/fa";
 
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -148,9 +150,23 @@ const ProfilePage = () => {
 
           <TabsContent value="profile">
             <form onSubmit={handleProfileUpdate} className="space-y-6">
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center gap-5 mb-6">
                 <div className="w-40 h-40 rounded-full bg-white border-2 border-gray-400 border-dotted flex items-center justify-center relative">
                   <Cloudinary image={image} setImage={setImage} />
+                </div>
+                <div className="flex items-center">
+                  <CldUploadButton uploadPreset="<Upload Preset>">
+                    <button
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <FaUpload />
+                      Зураг солих
+                    </button>
+                  </CldUploadButton>
                 </div>
               </div>
 
@@ -198,9 +214,8 @@ const ProfilePage = () => {
                 <label className="block text-sm font-medium mb-1 text-black">
                   Хаяг
                 </label>
-                <Input
-                  className="w-full h-[131px] text-black"
-                  type="text"
+                <textarea
+                  className="w-full  text-black border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
                   placeholder="Хаягаа оруулна уу"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
