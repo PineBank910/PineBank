@@ -21,12 +21,10 @@ const GetProfileInput = ({ setToAccountId }: { setToAccountId: (toAccountId: str
       });
       if (response.status === 200) {
         const { userProfile, accounts } = response.data.userInfo;
-        console.log("User Profile:", response.data.userInfo);
         const fullName = userProfile
           ? `${userProfile.firstName} ${userProfile.lastName}`
           : "No name found";
         setFullName(fullName);
-        console.log("account id:", accounts[0].id)
         setToAccountId(accounts[0].id);
       } else {
         console.log("Error fetching user data");

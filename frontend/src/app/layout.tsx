@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
 import FetchUserId from "@/components/fetchUserId";
 import { CurrentUserProvider } from "@/utils/currentUserContext";
+import { ToastContainer } from 'react-toastify';
 
 // Configure fonts
 const geistSans = Geist({
@@ -46,6 +47,7 @@ export default function RootLayout({
             >
               <FetchUserId />
               {children}
+              <ToastContainer/>
             </ThemeProvider>
           </UserProvider>
           </CurrentUserProvider>
