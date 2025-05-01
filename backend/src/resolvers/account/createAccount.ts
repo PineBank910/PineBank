@@ -8,7 +8,7 @@ export const createAccount = async (
   req: Request,
   res: Response
 ) => {
-  const { type, balance } = req.body;
+  const { type = "BUSINESS", balance = 0 } = req.body;
  
   try {
     const { userId } = getAuth(req);
