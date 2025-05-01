@@ -198,9 +198,8 @@ const ProfilePage = () => {
                 <label className="block text-sm font-medium mb-1 text-black">
                   Хаяг
                 </label>
-                <Input
-                  className="w-full h-[131px] text-black"
-                  type="text"
+                <textarea
+                  className="w-full  text-black border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
                   placeholder="Хаягаа оруулна уу"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
