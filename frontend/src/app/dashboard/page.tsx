@@ -7,7 +7,9 @@ const Dashboard = () => {
     <>
       <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] mt-6 text-[#343C6A] dark:text-[white] overflow-y-auto">
         <div className="flex justify-between">
-          <p className="font-semibold text-lg">Миний данс бөлгөө: 910910910 </p>
+          <p className="font-semibold text-xl">
+            Миний данс: <span className="text-3xl">910910910 </span>
+          </p>
           <p className="font-semibold text-lg cursor-pointer">Сонго дансаа</p>
         </div>
         <div className="mt-6 grid-cols-3 grid gap-10">

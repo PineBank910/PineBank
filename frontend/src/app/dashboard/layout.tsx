@@ -114,7 +114,7 @@ export default function DashboardLayout({
           </div>
         )}
 
-        <div className="w-full  ">
+        <div className="w-full">
           <header className="flex items-center justify-between border-b h-24 w-full">
             <button
               onClick={() => setIsSidebarOpen((prev) => !prev)}
