@@ -16,10 +16,15 @@ export const viewProfile = async (
       select: {
         userId: true,
       },
-    });
+    });    
+
+    if (!userID) {
+      return res.status(404).json({ message: "Bank account not found" });
+    }
+
     const userInfo = await prisma.user.findUnique({
       where: {
-        id: userID?.userId,
+        id: userID.userId,
       },
       select: {
         userProfile: {
@@ -28,8 +33,10 @@ export const viewProfile = async (
             lastName: true,
           },
         },
+        id: true
       },
     });
+
     if (!userInfo) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -42,3 +49,4 @@ export const viewProfile = async (
       .json({ message: "Error occurred while fetching user data" });
   }
 };
+

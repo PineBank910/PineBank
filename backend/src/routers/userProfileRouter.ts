@@ -9,4 +9,4 @@ export const userProfileRouter = express.Router();
 
 userProfileRouter.post("/", validate(userProfileSchema), createProfile);
 userProfileRouter.put("/:id" , validate(userProfileSchema), updateProfile);
-userProfileRouter.get("/", viewProfile);
+userProfileRouter.post("/user", viewProfile);
