@@ -5,13 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Cloudinary from "@/components/ui/cloudinaryWidget";
-import { profileSchema } from "@/validation/profileSchema"; // Your schema validation for form
-import { useAuth } from "@clerk/nextjs"; // For auth token
-import { useUser } from "@/context/userContext"; // For getting userId from context
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Tab UI components
-import { CldUploadButton } from "next-cloudinary";
-import { FaUpload } from "react-icons/fa";
+import CloudinaryUploader from "@/components/ui/cloudninaryUploader";
+import { profileSchema } from "@/validation/profileSchema";
+import { useAuth } from "@clerk/nextjs";
+import { useUser as useClerkUser } from "@clerk/nextjs";
+import { useUser as useAppUser } from "@/context/userContext";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -26,8 +26,9 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { getToken } = useAuth();
-  const { userId } = useUser();
   const router = useRouter();
+  const { user } = useClerkUser();
+  const { userId } = useAppUser();
   const [profileId, setProfileId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const ProfilePage = () => {
       }
 
       const profileData = { phone, address, image };
-      console.log("Sending profile update data:", profileData); // Debugging log
+      console.log("Sending profile update data:", profileData);
 
       if (!profileId) {
         setError("Profile ID is missing.");
@@ -120,14 +121,23 @@ const ProfilePage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(profileData), // Correct body data
+          body: JSON.stringify(profileData),
         }
       );
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message || "Profile updated successfully.");
+        toast("🅿 Амжилттай", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         router.push("/dashboard");
       } else {
         setError(data.message || "An error occurred while updating profile.");
@@ -150,25 +160,10 @@ const ProfilePage = () => {
 
           <TabsContent value="profile">
             <form onSubmit={handleProfileUpdate} className="space-y-6">
-              <div className="flex justify-center gap-5 mb-6">
-                <div className="w-40 h-40 rounded-full bg-white border-2 border-gray-400 border-dotted flex items-center justify-center relative">
-                  <Cloudinary image={image} setImage={setImage} />
-                </div>
-                <div className="flex items-center">
-                  <CldUploadButton uploadPreset="<Upload Preset>">
-                    <button
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <FaUpload />
-                      Зураг солих
-                    </button>
-                  </CldUploadButton>
-                </div>
+              <div className="flex justify-start gap-5 mb-6">
+                <CloudinaryUploader image={image} setImage={setImage} />
               </div>
+              <div>Welcome, {user?.username}</div>
 
               <div>
                 <label className="block text-sm font-medium mb-1 text-black">
@@ -272,9 +267,7 @@ const ProfilePage = () => {
             </form>
           </TabsContent>
 
-          <TabsContent value="security">
-            <p className="text-gray-600">Security tab content goes here.</p>
-          </TabsContent>
+          <TabsContent value="security"></TabsContent>
         </Tabs>
       </div>
     </div>
