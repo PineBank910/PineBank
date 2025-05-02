@@ -1,4 +1,5 @@
 "use client";
+import FetchBankAccount from "@/utils/fetchBankAccount";
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import DarkModeToggle from "@/components/dashboard/darkmode";
@@ -27,6 +28,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  FetchBankAccount();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedSidebar, setSelectedSidebar] = useState("Dashboard");

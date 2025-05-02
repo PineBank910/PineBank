@@ -10,7 +10,7 @@ const Transaction = ({
 }) => {
   return (
     <>
-      <div className="px-6 py-2 border-b xl:w-[400px] 2xl:w-[500px]">
+      <div className="px-6 py-2 border-b ">
         <div className="flex justify-between items-center">
           <div>{date}</div>
           <div className="text-[1.5rem]">{amount}₮</div>
