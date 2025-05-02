@@ -150,12 +150,11 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white flex flex-col items-center px-4 py-8">
-      <div className="relative z-10 w-full max-w-3xl shadow-md rounded-lg p-6 bg-white backdrop-blur-md">
+    <div className="relative min-h-screen flex flex-col items-center px-4 py-8 bg-gray-100 dark:bg-gray-950">
+      <div className="relative z-10 w-full max-w-3xl shadow-md rounded-lg p-6 bg-white dark:bg-gray-900 backdrop-blur-md">
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="mb-6">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="profile">Тохиргоо</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
@@ -163,15 +162,18 @@ const ProfilePage = () => {
               <div className="flex justify-start gap-5 mb-6">
                 <CloudinaryUploader image={image} setImage={setImage} />
               </div>
-              <div>Welcome, {user?.username}</div>
+
+              <div className="text-black dark:text-white">
+                Welcome, {user?.username}
+              </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Овог
                 </label>
                 <Input
                   disabled
-                  className="w-full text-black"
+                  className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Овог оруулна уу"
                   value={firstName}
@@ -186,12 +188,12 @@ const ProfilePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Нэр
                 </label>
                 <Input
                   disabled
-                  className="w-full text-black"
+                  className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Нэр оруулна уу"
                   value={lastName}
@@ -206,11 +208,11 @@ const ProfilePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Хаяг
                 </label>
                 <textarea
-                  className="w-full  text-black border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                  className="w-full text-black dark:text-white bg-transparent border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:border-gray-700"
                   placeholder="Хаягаа оруулна уу"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -227,18 +229,19 @@ const ProfilePage = () => {
                 <input
                   type="tel"
                   id="floating-phone-number"
-                  className="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 pl-6 w-full text-sm text-black dark:text-white bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                 />
                 <label
                   htmlFor="floating-phone-number"
-                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Утасны дугаар
                 </label>
               </div>
+
               {phoneError && (
                 <p className="text-red-500 text-sm mt-2 flex items-center">
                   <X className="mr-1 h-4 w-4" />
@@ -257,7 +260,7 @@ const ProfilePage = () => {
               </div>
 
               {loading && (
-                <p className="text-center text-sm text-gray-500 mt-2">
+                <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
                   ...loading
                 </p>
               )}
@@ -266,8 +269,6 @@ const ProfilePage = () => {
               )}
             </form>
           </TabsContent>
-
-          <TabsContent value="security"></TabsContent>
         </Tabs>
       </div>
     </div>

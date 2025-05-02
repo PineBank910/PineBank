@@ -20,8 +20,8 @@ const CloudinaryUploader = ({ image, setImage }: CloudinaryUploaderProps) => {
   };
 
   return (
-    <div className="flex  w-full items-center gap-6 p-4 bg-gray-50 rounded-lg shadow">
-      <div className="relative w-40 h-40 border border-gray-300 rounded-2xl overflow-hidden bg-white">
+    <div className="flex w-full items-center gap-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow">
+      <div className="relative w-40 h-40 border border-gray-300 dark:border-gray-600 rounded-2xl overflow-hidden bg-white dark:bg-gray-700">
         {image ? (
           <Image
             src={image}
@@ -31,7 +31,7 @@ const CloudinaryUploader = ({ image, setImage }: CloudinaryUploaderProps) => {
             className="rounded-es-none"
           />
         ) : (
-          <div className="flex items-center justify-center w-full h-full text-gray-400">
+          <div className="flex items-center justify-center w-full h-full text-gray-400 dark:text-gray-300">
             Зураг байхгүй байна
           </div>
         )}
@@ -74,7 +74,7 @@ const CloudinaryUploader = ({ image, setImage }: CloudinaryUploaderProps) => {
             <Button
               type="button"
               onClick={() => open()}
-              className="px-4 py-2 text-white "
+              className="px-4 py-2 text-white  dark:text-black dark:bg-gray-200"
             >
               Зураг солих
             </Button>
