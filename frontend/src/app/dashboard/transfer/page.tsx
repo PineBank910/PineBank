@@ -4,52 +4,54 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import GetProfileInput from "./_components/GetProfileInput";
-import { Button } from "react-scroll";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { CurrentUser } from "@/utils/currentUserContext";
 import { toast } from "react-toastify";
+import ChooseAccount from "./_components/ChooseAccount";
 
 const Page = () => {
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<number | "">("");
   const [reference, setReference] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [toAccountId, setToAccountId] = useState<[] | null>(null);
-  // const [response, setResponse] = useState<{} | any>({});
+  const [toAccountId, setToAccountId] = useState<string | null>(null);
+
   const { currentUserData } = useContext(CurrentUser);
+
   if (!currentUserData) {
-    return <div className="">...Loading</div>;
+    return <div>...Loading</div>;
   }
+
   const { accounts } = currentUserData;
 
   const createTransaction = async () => {
-
-    if (!currentUserData) {
-      setError("User is not authenticated. Please log in.");
+    if (!currentUserData || !accounts[0]?.id) {
+      setError("User is not authenticated or account is missing.");
       return;
     }
 
-    console.log(accounts[0].id)
-    console.log(toAccountId)
-    console.log(amount)
-    console.log(reference)
+    if (!toAccountId || !amount || !reference) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
     setLoading(true);
     setError("");
+
     try {
       const transaction = {
         fromAccountId: accounts[0].id,
         toAccountId,
-        amount,
+        amount: Number(amount),
         reference,
       };
 
-      const res = await axiosInstance.post("/transaction", transaction );
+      const res = await axiosInstance.post("/transaction", transaction);
 
       if (res.status === 201) {
-        const { transaction } = res.data;
-        // setResponse(transaction);
-        console.log("Transaction successful", transaction);
-        notify()
+        toast("Transaction successful!");
+        console.log("Transaction successful", res.data.transaction);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -62,39 +64,35 @@ const Page = () => {
     }
   };
 
-  const notify = () => toast("Wow so easy!");
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="text-3xl font-bold">Transaction Page</h2>
-          <p className="text-gray-500">This is the transaction page.</p>
-          <GetProfileInput setToAccountId={setToAccountId} />
-        </div>
-        <Input
-          id="amount"
-          placeholder="Enter the amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <Input
-          id="reference"
-          type="text"
-          placeholder="Enter your reference"
-          value={reference}
-          onChange={(e) => setReference(e.target.value)}
-        />
-        {error && <p className="text-red-500">{error}</p>}
-        <Button
-          type="submit"
-          className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded z-30"
-          onClick={createTransaction}
-        >
-          Гүйлгээ хийх
-        </Button>
+    <div className="flex flex-col w-1/3 h-screen space-y-4">
+      <ChooseAccount />
+      <GetProfileInput setToAccountId={setToAccountId} />
+      <Input
+        id="amount"
+        type="number"
+        placeholder="Enter the amount"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+      />
+      <Input
+        id="reference"
+        type="text"
+        placeholder="Enter your reference"
+        value={reference}
+        onChange={(e) => setReference(e.target.value)}
+      />
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      <Button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={createTransaction}
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Гүйлгээ хийх"}
+      </Button>
     </div>
   );
 };

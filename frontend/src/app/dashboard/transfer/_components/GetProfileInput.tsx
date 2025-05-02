@@ -39,7 +39,7 @@ const GetProfileInput = ({ setToAccountId }: { setToAccountId: (toAccountId: str
   };
 
   useEffect(() => {
-    if (accountNumber.length === 10) {
+    if (accountNumber.length === 11) {
       getProfile();
     }
   }, [accountNumber]);
@@ -63,10 +63,7 @@ const GetProfileInput = ({ setToAccountId }: { setToAccountId: (toAccountId: str
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
       />
-
-      <Button
-        onClick={getProfile}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"/>
+      
       {error && <p className="text-red-500">{error}</p>}
       <div className="flex gap-2 mt-4">
         <div className="text-gray-800 font-semibold">Full Name:</div>
