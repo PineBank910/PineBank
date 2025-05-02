@@ -1,4 +1,5 @@
 "use client";
+import FetchBankAccount from "@/utils/fetchBankAccount";
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import DarkModeToggle from "@/components/dashboard/darkmode";
@@ -27,6 +28,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  FetchBankAccount();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedSidebar, setSelectedSidebar] = useState("Dashboard");
@@ -114,7 +116,7 @@ export default function DashboardLayout({
           </div>
         )}
 
-        <div className="w-full  ">
+        <div className="w-full">
           <header className="flex items-center justify-between border-b h-24 w-full">
             <button
               onClick={() => setIsSidebarOpen((prev) => !prev)}
