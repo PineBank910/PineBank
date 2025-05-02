@@ -5,13 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Cloudinary from "@/components/ui/cloudinaryWidget";
-import { profileSchema } from "@/validation/profileSchema"; // Your schema validation for form
-import { useAuth } from "@clerk/nextjs"; // For auth token
-import { useUser } from "@/context/userContext"; // For getting userId from context
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Tab UI components
-import { CldUploadButton } from "next-cloudinary";
-import { FaUpload } from "react-icons/fa";
+import CloudinaryUploader from "@/components/ui/cloudninaryUploader";
+import { profileSchema } from "@/validation/profileSchema";
+import { useAuth } from "@clerk/nextjs";
+import { useUser as useClerkUser } from "@clerk/nextjs";
+import { useUser as useAppUser } from "@/context/userContext";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -26,8 +26,9 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { getToken } = useAuth();
-  const { userId } = useUser();
   const router = useRouter();
+  const { user } = useClerkUser();
+  const { userId } = useAppUser();
   const [profileId, setProfileId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const ProfilePage = () => {
       }
 
       const profileData = { phone, address, image };
-      console.log("Sending profile update data:", profileData); // Debugging log
+      console.log("Sending profile update data:", profileData);
 
       if (!profileId) {
         setError("Profile ID is missing.");
@@ -120,14 +121,23 @@ const ProfilePage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(profileData), // Correct body data
+          body: JSON.stringify(profileData),
         }
       );
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message || "Profile updated successfully.");
+        toast("🅿 Амжилттай", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         router.push("/dashboard");
       } else {
         setError(data.message || "An error occurred while updating profile.");
@@ -140,43 +150,30 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white flex flex-col items-center px-4 py-8">
-      <div className="relative z-10 w-full max-w-3xl shadow-md rounded-lg p-6 bg-white backdrop-blur-md">
+    <div className="relative min-h-screen flex flex-col items-center px-4 py-8 bg-gray-100 dark:bg-gray-950">
+      <div className="relative z-10 w-full max-w-3xl shadow-md rounded-lg p-6 bg-white dark:bg-gray-900 backdrop-blur-md">
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="mb-6">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="profile">Тохиргоо</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
             <form onSubmit={handleProfileUpdate} className="space-y-6">
-              <div className="flex justify-center gap-5 mb-6">
-                <div className="w-40 h-40 rounded-full bg-white border-2 border-gray-400 border-dotted flex items-center justify-center relative">
-                  <Cloudinary image={image} setImage={setImage} />
-                </div>
-                <div className="flex items-center">
-                  <CldUploadButton uploadPreset="<Upload Preset>">
-                    <button
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <FaUpload />
-                      Зураг солих
-                    </button>
-                  </CldUploadButton>
-                </div>
+              <div className="flex justify-start gap-5 mb-6">
+                <CloudinaryUploader image={image} setImage={setImage} />
+              </div>
+
+              <div className="text-black dark:text-white">
+                Welcome, {user?.username}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Овог
                 </label>
                 <Input
                   disabled
-                  className="w-full text-black"
+                  className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Овог оруулна уу"
                   value={firstName}
@@ -191,12 +188,12 @@ const ProfilePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Нэр
                 </label>
                 <Input
                   disabled
-                  className="w-full text-black"
+                  className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Нэр оруулна уу"
                   value={lastName}
@@ -211,11 +208,11 @@ const ProfilePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1 text-black">
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">
                   Хаяг
                 </label>
                 <textarea
-                  className="w-full  text-black border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                  className="w-full text-black dark:text-white bg-transparent border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 dark:border-gray-700"
                   placeholder="Хаягаа оруулна уу"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -232,18 +229,19 @@ const ProfilePage = () => {
                 <input
                   type="tel"
                   id="floating-phone-number"
-                  className="block py-2.5 pl-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 pl-6 w-full text-sm text-black dark:text-white bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                 />
                 <label
                   htmlFor="floating-phone-number"
-                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Утасны дугаар
                 </label>
               </div>
+
               {phoneError && (
                 <p className="text-red-500 text-sm mt-2 flex items-center">
                   <X className="mr-1 h-4 w-4" />
@@ -262,7 +260,7 @@ const ProfilePage = () => {
               </div>
 
               {loading && (
-                <p className="text-center text-sm text-gray-500 mt-2">
+                <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
                   ...loading
                 </p>
               )}
@@ -270,10 +268,6 @@ const ProfilePage = () => {
                 <p className="text-red-500 text-center mt-4">{error}</p>
               )}
             </form>
-          </TabsContent>
-
-          <TabsContent value="security">
-            <p className="text-gray-600">Security tab content goes here.</p>
           </TabsContent>
         </Tabs>
       </div>
