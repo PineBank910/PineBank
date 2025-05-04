@@ -12,14 +12,23 @@ import {
 import { CurrentUser } from "@/utils/currentUserContext";
 
 const ChooseAccount = () => {
-  const { currentUserData } = useContext(CurrentUser);
+  const context = useContext(CurrentUser);
+  const currentUserData = context?.currentUserData;
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
 
   useEffect(() => {
-    if (currentUserData?.accounts?.length > 0) {
-      setSelectedAccountId(currentUserData.accounts[0].id); // ✅ Default to first account
+    if (
+      currentUserData &&
+      Array.isArray(currentUserData.accounts) &&
+      currentUserData.accounts.length > 0
+    ) {
+      setSelectedAccountId(currentUserData.accounts[0].id);
     }
   }, [currentUserData]);
+
+  if (!context || !context.currentUserData) {
+    return <div>...Loading</div>;
+  }
 
   if (!currentUserData) {
     return <div>...Loading</div>;
