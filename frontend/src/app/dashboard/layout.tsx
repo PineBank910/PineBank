@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import FetchBankAccount from "@/utils/fetchBankAccount";
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
@@ -21,7 +22,6 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { useState } from "react";
-// import { join } from "path";
 
 export default function DashboardLayout({
   children,
@@ -58,8 +58,23 @@ export default function DashboardLayout({
           <div
             id="SIDEBAR"
             className="hidden md:block md:w-[10rem] md:min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
-            <div className="w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold text-center mt-4">
-              Pinebank
+            <div className="flex justify-center items-center w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold text-center mt-4 ">
+              <div
+                style={{
+                  position: "relative",
+                  width: "50px",
+                  aspectRatio: "1/1",
+                }}>
+                <Image
+                  src="/images/Pinebank_Printstream.png"
+                  alt="Example"
+                  fill
+                  style={{ objectFit: "contain" }}
+                  className="dark:hidden"
+                />
+              </div>
+              <span className="hidden dark:block">P</span>
+              <p>inebank</p>
             </div>
             <div className="w-full">
               <div

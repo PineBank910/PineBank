@@ -43,7 +43,7 @@ const ChooseAccount = () => {
             <SelectItem key={account.id} value={account.id}>
               <div className="flex justify-between w-full">
                 <span>{account.accountNumber}</span>
-                <span>{account.balance}</span>
+                {/* <span>{account.balance}</span> */}
               </div>
             </SelectItem>
           ))}
