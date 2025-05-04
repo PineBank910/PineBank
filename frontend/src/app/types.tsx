@@ -13,9 +13,16 @@ export type UserContextProps = {
   setUserId: (id: number | null) => void;
 };
 
+export type Accounts = {
+  id: string;
+  accountNumber: string;
+  balance: number;
+};
+
 export type User = {
   id: number;
   username: string;
   email: string;
   profile?: ProfileDetail;
+  accounts: Accounts[];
 };
