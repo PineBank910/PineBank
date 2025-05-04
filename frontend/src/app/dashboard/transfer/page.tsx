@@ -17,11 +17,13 @@ const Page = () => {
   const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
 
-  const { currentUserData } = useContext(CurrentUser);
+  const context = useContext(CurrentUser);
 
-  if (!currentUserData) {
+  if (!context || !context.currentUserData) {
     return <div>...Loading</div>;
   }
+
+  const { currentUserData } = context;
 
   const { accounts } = currentUserData;
 
@@ -87,7 +89,7 @@ const Page = () => {
 
       <Button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="px-4 py-2 text-white bg-blue-500 rounded"
         onClick={createTransaction}
         disabled={loading}
       >

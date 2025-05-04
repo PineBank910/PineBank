@@ -45,7 +45,7 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   useEffect(() => {
-      getUserData();
+    getUserData();
   }, []);
   return (
     <CurrentUser.Provider

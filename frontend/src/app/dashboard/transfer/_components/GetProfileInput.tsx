@@ -1,12 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const GetProfileInput = ({ setToAccountId }: { setToAccountId: (toAccountId: string) => void }) => {
+const GetProfileInput = ({
+  setToAccountId,
+}: {
+  setToAccountId: (toAccountId: string) => void;
+}) => {
   const [accountNumber, setAccountNumber] = useState("");
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
@@ -63,10 +66,10 @@ const GetProfileInput = ({ setToAccountId }: { setToAccountId: (toAccountId: str
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
       />
-      
+
       {error && <p className="text-red-500">{error}</p>}
       <div className="flex gap-2 mt-4">
-        <div className="text-gray-800 font-semibold">Full Name:</div>
+        <div className="font-semibold text-gray-800">Full Name:</div>
         <div>{fullName}</div>
       </div>
     </div>
