@@ -57,7 +57,6 @@ const Page = () => {
     const token = await getToken();
 
     if (!token) {
-      console.error("No token available");
       return;
     }
 
@@ -73,16 +72,8 @@ const Page = () => {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        console.error("Failed to create bank account:", data.error || data);
         return;
-      }
-      if (data.success) {
-        console.log("Bank account created successfully:", data.account);
-      } else {
-        console.error("Failed to create bank account:", data.error || data);
       }
     } catch (error) {
       console.error("Error creating account:", error);
@@ -99,11 +90,10 @@ const Page = () => {
     const token = await getToken();
 
     if (!token) {
-      console.error("No token available");
       return;
     }
 
-    const response = await fetch("http://localhost:8000/profile", {
+    const response = await fetch("https://pinebank.onrender.com/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,13 +101,6 @@ const Page = () => {
       },
       body: JSON.stringify({ ...userProfile, userId }),
     });
-
-    const data = await response.json();
-    if (response.ok) {
-      console.log("Profile created:", data);
-    } else {
-      console.error("Failed to create profile:", data);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

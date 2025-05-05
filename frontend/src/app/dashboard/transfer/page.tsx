@@ -53,7 +53,6 @@ const Page = () => {
 
       if (res.status === 201) {
         toast("Transaction successful!");
-        console.log("Transaction successful", res.data.transaction);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
