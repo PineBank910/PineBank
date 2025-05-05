@@ -9,7 +9,6 @@ import {
   Menu,
   House,
   Search,
-  ArrowRightLeft,
   Settings,
   UserRound,
   Send,
@@ -32,11 +31,9 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedSidebar, setSelectedSidebar] = useState("Dashboard");
-  ///////
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  ///////
 
-  // Handle click outside for mobile sidebar
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
     if (!isSidebarOpen) return;
     function handleClickOutside(event: MouseEvent) {
@@ -50,7 +47,9 @@ export default function DashboardLayout({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
-  //////////////
+  const handleSidebarClick = () => {
+    router.push("/dashboard");
+  }
   return (
     <>
       <section className="flex relative">
@@ -58,7 +57,7 @@ export default function DashboardLayout({
           <div
             id="SIDEBAR"
             className="hidden md:block md:w-[10rem] md:min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
-            <div className="flex justify-center items-center w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold text-center mt-4 ">
+            <div onClick={handleSidebarClick} className="flex justify-center items-center w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold text-center mt-4 ">
               <div
                 style={{
                   position: "relative",
@@ -97,7 +96,7 @@ export default function DashboardLayout({
                 `}>
                 <Send /> Transfer
               </div>
-              <div
+              {/* <div
                 onClick={() => {
                   setSelectedSidebar("Transactions");
                   router.push("/dashboard/transactions");
@@ -106,7 +105,7 @@ export default function DashboardLayout({
                   ${selectedSidebar === "Transactions" ? "text-blue-600  dark:hover:bg-gray-700 hover:bg-gray-100" : "dark:hover:bg-gray-700 hover:bg-gray-100"}
                 `}>
                 <ArrowRightLeft /> Transactions
-              </div>
+              </div> */}
               <div
                 onClick={() => {
                   setSelectedSidebar("Accounts");
