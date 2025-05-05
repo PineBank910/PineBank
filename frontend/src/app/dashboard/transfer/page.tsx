@@ -2,11 +2,10 @@
 
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import GetProfileInput from "./_components/GetProfileInput";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CurrentUser } from "@/utils/currentUserContext";
 import { toast } from "react-toastify";
 import ChooseAccount from "./_components/ChooseAccount";
 
@@ -16,19 +15,12 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
+  const [selectedAccountId, setSelectedAccountId] = useState<string>("");
 
-  const context = useContext(CurrentUser);
 
-  if (!context || !context.currentUserData) {
-    return <div>...Loading</div>;
-  }
-
-  const { currentUserData } = context;
-
-  const { accounts } = currentUserData;
 
   const createTransaction = async () => {
-    if (!currentUserData || !accounts[0]?.id) {
+    if (!selectedAccountId) {
       setError("User is not authenticated or account is missing.");
       return;
     }
@@ -43,7 +35,7 @@ const Page = () => {
 
     try {
       const transaction = {
-        fromAccountId: accounts[0].id,
+        fromAccountId: selectedAccountId,
         toAccountId,
         amount: Number(amount),
         reference,
@@ -67,11 +59,10 @@ const Page = () => {
 
   return (
     <div className="flex flex-col w-1/3 h-screen space-y-4">
-      <ChooseAccount />
+      <ChooseAccount selectedAccountId={selectedAccountId} setSelectedAccountId={setSelectedAccountId}/>
       <GetProfileInput setToAccountId={setToAccountId} />
       <Input
         id="amount"
-        type="number"
         placeholder="Enter the amount"
         value={amount}
         onChange={(e) => setAmount(Number(e.target.value))}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
   Select,
@@ -11,11 +11,16 @@ import {
 } from "@/components/ui/select";
 import { CurrentUser } from "@/utils/currentUserContext";
 
-const ChooseAccount = () => {
+type ChooseAccountProps = {
+  selectedAccountId: string;
+  setSelectedAccountId: (accountId: string) => void;
+};
+const ChooseAccount = (props:ChooseAccountProps) => {
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
-  const [selectedAccountId, setSelectedAccountId] = useState<string>("");
+  const {selectedAccountId, setSelectedAccountId} = props
 
+  console.log(currentUserData, "data")
   useEffect(() => {
     if (
       currentUserData &&
