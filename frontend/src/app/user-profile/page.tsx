@@ -101,6 +101,9 @@ const Page = () => {
       },
       body: JSON.stringify({ ...userProfile, userId }),
     });
+    if (!response.ok) {
+      return;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
