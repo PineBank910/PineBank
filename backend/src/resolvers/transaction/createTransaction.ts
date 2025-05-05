@@ -32,6 +32,7 @@ export const createTransaction = async (req: Request, res: Response) => {
     }
     else{
         const transaction = await prisma.$transaction(async (tx) => {
+          
             const createdTransaction = await tx.transaction.create({
               data: {
                 fromAccountId,
