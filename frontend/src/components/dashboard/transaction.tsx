@@ -5,7 +5,7 @@ const Transaction = ({ date = "", balance = "", amount = "" }) => {
       <div className="px-6 py-2 border-b ">
         <div className="flex items-center justify-between">
           <div>{date}</div>
-          <div className="text-[1.5rem]">{amount}₮</div>
+          <div className="text-[1.5rem]">₮ {amount}</div>
         </div>
         <div className="flex">
           <div>Үлдэгдэл: {balance}</div>
