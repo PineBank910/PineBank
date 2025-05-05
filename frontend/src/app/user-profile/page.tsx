@@ -68,7 +68,7 @@ const Page = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          balance: 0,
+          balance: 10000,
         }),
       });
 
