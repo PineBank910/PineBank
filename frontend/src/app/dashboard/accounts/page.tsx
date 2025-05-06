@@ -6,7 +6,6 @@ import {
   ArrowRightLeft,
   ReceiptText,
   HandCoins,
-  Plus,
 } from "lucide-react";
 import { useCurrent } from "@/utils/currentUserContext";
 import { formatNumber } from "@/lib/balanceFormat";

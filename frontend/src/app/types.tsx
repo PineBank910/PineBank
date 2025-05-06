@@ -24,5 +24,5 @@ export type User = {
   username: string;
   email: string;
   profile?: ProfileDetail;
-  accounts: Accounts[];
+  accounts?: Accounts[] | null;
 };

@@ -54,9 +54,9 @@ const Page = () => {
       }
       setLoading(true);
       try {
-        const response = await axiosInstance.get<{ transactions: Transaction[] }>(
-          `account/statement/${accountNumber}`
-        );
+        const response = await axiosInstance.get<{
+          transactions: Transaction[];
+        }>(`account/statement/${accountNumber}`);
         setTransactionInfo(response.data.transactions);
       } catch (err) {
         if (axios.isAxiosError(err)) {
@@ -72,7 +72,10 @@ const Page = () => {
     getTransactionInfo();
   }, [accountNumber]);
 
-  const filterByDays = (transactions: Transaction[], days: number): Transaction[] => {
+  const filterByDays = (
+    transactions: Transaction[],
+    days: number
+  ): Transaction[] => {
     const now = new Date();
     return transactions.filter((t) => {
       const txDate = new Date(t.timestamp);
@@ -82,7 +85,9 @@ const Page = () => {
     });
   };
 
-  const groupTransactionsByDay = (transactions: Transaction[]): Record<string, Transaction[]> => {
+  const groupTransactionsByDay = (
+    transactions: Transaction[]
+  ): Record<string, Transaction[]> => {
     const grouped: Record<string, Transaction[]> = {};
 
     transactions.forEach((transaction) => {
@@ -160,7 +165,9 @@ const Page = () => {
                         Үлдэгдэл:
                         {isVisible ? (
                           <div className=" font-medium">
-                            {account ? account.balance + transaction.runningBalance : "—"}
+                            {account
+                              ? account.balance + transaction.runningBalance
+                              : "—"}
                           </div>
                         ) : (
                           <div className="text-lg tracking-widest select-none">
@@ -182,7 +189,9 @@ const Page = () => {
                       {isVisible ? (
                         <div className="font-medium">{transaction.amount}₮</div>
                       ) : (
-                        <div className="text-lg tracking-widest select-none">•••••</div>
+                        <div className="text-lg tracking-widest select-none">
+                          •••••
+                        </div>
                       )}
                     </div>
                     <Dialog>
@@ -194,7 +203,9 @@ const Page = () => {
                       <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
                           <DialogTitle>Transaction Details</DialogTitle>
-                          <DialogDescription>{transaction.reference}</DialogDescription>
+                          <DialogDescription>
+                            {transaction.reference}
+                          </DialogDescription>
                         </DialogHeader>
                       </DialogContent>
                     </Dialog>
