@@ -12,7 +12,7 @@ const VisibilityContext = createContext<VisibilityContextProps | undefined>(
 export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);

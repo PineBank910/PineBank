@@ -2,13 +2,19 @@
 
 import { SignIn } from "@clerk/nextjs";
 const LoginPage = () => {
-
   return (
     <>
-      <div className="h-full w-full flex items-center justify-center">
-        <div className="flex items-center justify-center min-h-screen">
-          <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-        </div>
+      <div className="h-full min-h-screen w-full flex sm:mt-0 mt-4 sm:items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+        <SignIn
+          path="/sign-in"
+          routing="path"
+          signUpUrl="/sign-up"
+          appearance={{
+            variables: {
+              colorPrimary: "green",
+            },
+          }}
+        />
       </div>
     </>
   );

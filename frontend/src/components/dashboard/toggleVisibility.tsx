@@ -10,9 +10,9 @@ const ToggleVisibility = () => {
         onClick={toggleVisibility}
         className="hover:shadow-lg hover:shadow-blue-500/50 transition duration-300 w-10 h-10 flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 text-black dark:text-white hover:cursor-pointer">
         {isVisible ? (
-          <EyeOff className="w-5 h-5" />
-        ) : (
           <Eye className="w-5 h-5" />
+        ) : (
+          <EyeOff className="w-5 h-5" />
         )}
       </button>
     </>

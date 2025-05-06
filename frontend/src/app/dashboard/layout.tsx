@@ -213,7 +213,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar initially closed
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar initially closed
   const [selectedSidebar, setSelectedSidebar] = useState("Эхлэл");
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -234,7 +234,6 @@ export default function DashboardLayout({
   const handleSidebarClick = () => {
     router.push("/dashboard");
     setSelectedSidebar("Эхлэл");
-    
   };
 
   return (
@@ -246,7 +245,7 @@ export default function DashboardLayout({
             <div
               id="SIDEBAR"
               ref={sidebarRef} // Attach ref to the sidebar
-              className="absolute z-50 md:relative md:block md:w-[10rem] md:min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
+              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
               <div className="flex justify-center items-center w-full h-21 text-2xl sm:text-3xl lg:text-4xl font-bold mt-4">
                 <div
                   onClick={handleSidebarClick}
@@ -277,6 +276,7 @@ export default function DashboardLayout({
                   onClick={() => {
                     setSelectedSidebar("Эхлэл");
                     router.push("/dashboard");
+                    if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
                   className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
                     selectedSidebar === "Эхлэл"
@@ -289,6 +289,7 @@ export default function DashboardLayout({
                   onClick={() => {
                     setSelectedSidebar("Гүйлгээ");
                     router.push("/dashboard/transfer");
+                    if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
                   className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
                     selectedSidebar === "Гүйлгээ"
@@ -301,6 +302,7 @@ export default function DashboardLayout({
                   onClick={() => {
                     setSelectedSidebar("Данс");
                     router.push("/dashboard/accounts");
+                    if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
                   className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
                     selectedSidebar === "Данс"
@@ -313,6 +315,7 @@ export default function DashboardLayout({
                   onClick={() => {
                     setSelectedSidebar("Тохиргоо");
                     router.push("/dashboard/settings");
+                    if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
                   className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
                     selectedSidebar === "Тохиргоо"
@@ -331,15 +334,15 @@ export default function DashboardLayout({
               {/* Menu Button */}
               <button
                 onClick={() => setIsSidebarOpen((prev) => !prev)} // Toggle sidebar
-                className="focus:outline-none ml-4"
+                className="focus:outline-none ml-4 md:hidden"
                 aria-label="Toggle sidebar">
                 <Menu size={50} />
               </button>
               <div className="flex flex-col justify-between items-center sm:flex-row w-full">
-                <div className="sm:text-4xl text-3xl md:ml-4 lg:ml-8 text-[#343C6A]">
+                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A]">
                   {selectedSidebar}
                 </div>
-                <div className="flex gap-4 md:gap-7 items-center mr-8">
+                <div className="flex gap-4 sm:gap-7 items-center sm:mr-8">
                   <ToggleVisibility />
                   <DarkModeToggle />
                   <NotificationBell />
