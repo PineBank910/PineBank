@@ -221,6 +221,7 @@ export default function DashboardLayout({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
+        window.innerWidth < 768 && // Only close sidebar for screens smaller than 768px
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target as Node)
       ) {
