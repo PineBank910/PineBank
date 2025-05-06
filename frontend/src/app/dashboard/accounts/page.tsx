@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { useCurrent } from "@/utils/currentUserContext";
 import { formatNumber } from "@/lib/balanceFormat";
+import { useVisibility } from "@/context/visibilityContext";
+import { useRouter } from "next/navigation";
+import { DialogDemo } from "./_components/Dialog";
 
 export default function Page() {
   const { currentUserData } = useCurrent();
@@ -21,6 +24,8 @@ export default function Page() {
     typeof rawBalance === "number"
       ? `${formatNumber(rawBalance)} MNT`
       : "Үлдэгдэл байхгүй";
+  const { isVisible } = useVisibility();
+  const router = useRouter();
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 flex flex-col items-center h-screen">
@@ -35,10 +40,7 @@ export default function Page() {
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 w-full max-w-[1252px] shadow-2xl">
         <div className="flex flex-col sm:flex-row gap-2 mb-5 ml-3 mt-3">
-          <button className="flex items-center justify-center border text-gray-800 dark:border-gray-200 dark:text-gray-200 px-4 py-2 rounded-md hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 w-full sm:w-auto">
-            <Plus className="h-3.5 w-3.5 mr-2" />
-            Шинэ данс нээх
-          </button>
+          <DialogDemo />
         </div>
         <Card className="mb-2 dark:bg-gray-700 ml-3 shadow-none border-none">
           <CardContent className="flex justify-between items-center p-4 border-b">
@@ -65,17 +67,29 @@ export default function Page() {
                 <div className="text-sm text-black dark:text-gray-200 mb-1">
                   Барит хийсэн /Хүлээгдэж буй дүн:{" "}
                 </div>
-                <span className="font-semibold text-sm text-black dark:text-white">
-                  0.00 MNT
-                </span>
+                {isVisible ? (
+                  <span className="font-semibold text-sm text-black dark:text-white">
+                    0.00 MNT
+                  </span>
+                ) : (
+                  <span className="font-semibold text-sm text-black dark:text-white">
+                    *****
+                  </span>
+                )}
               </div>
               <div className="flex flex-col items-end">
-                <div className="text-sm  text-gray-700 dark:text-gray-200 mb-1">
-                  Боломжит үлдэгдэл:{" "}
+                <div className="text-sm text-gray-700 dark:text-gray-200 mb-1">
+                  Боломжит үлдэгдэл:
                 </div>
-                <span className="font-semibold text-sm text-black dark:text-white">
-                  {balance}
-                </span>
+                {isVisible ? (
+                  <span className="font-semibold text-sm text-black dark:text-white">
+                    {balance ? balance : "N/A"}
+                  </span>
+                ) : (
+                  <span className="font-semibold text-sm text-black dark:text-white">
+                    *****
+                  </span>
+                )}
               </div>
             </div>
 
@@ -100,6 +114,7 @@ export default function Page() {
 
               <Button
                 variant="ghost"
+                onClick={() => router.push("/dashboard/transfer")}
                 className="w-[66px] h-[66px] flex flex-col rounded-xl shadow-[0_4px_25px_rgba(0,0,0,0.15)] dark:border-gray-200 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 "
               >
                 <ArrowRightLeft className="!w-5 !h-5 shrink-0 font-black" />
