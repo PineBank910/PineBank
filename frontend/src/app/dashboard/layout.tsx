@@ -197,7 +197,14 @@ import React, { useRef, useEffect, useState } from "react";
 import DarkModeToggle from "@/components/dashboard/darkmode";
 import ToggleVisibility from "@/components/dashboard/toggleVisibility";
 import NotificationBell from "@/components/dashboard/notificationBell";
-import { Menu, House, Settings, UserRound, Send } from "lucide-react";
+import {
+  Menu,
+  House,
+  Settings,
+  UserRound,
+  Send,
+  NotepadText,
+} from "lucide-react";
 import {
   SignInButton,
   SignUpButton,
@@ -298,6 +305,19 @@ export default function DashboardLayout({
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
                   }`}>
                   <Send /> Гүйлгээ
+                </div>
+                <div
+                  onClick={() => {
+                    setSelectedSidebar("Хуулга");
+                    router.push("/dashboard/statement");
+                    if (window.innerWidth < 768) setIsSidebarOpen(false);
+                  }}
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
+                    selectedSidebar === "Хуулга"
+                      ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
+                      : "dark:hover:bg-gray-700 hover:bg-gray-100"
+                  }`}>
+                  <NotepadText /> Хуулга
                 </div>
                 <div
                   onClick={() => {
