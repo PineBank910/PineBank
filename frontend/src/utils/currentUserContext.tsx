@@ -47,7 +47,6 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     getUserData();
   }, []);
-  console.log("Current user data:", currentUserData);
   return (
     <CurrentUser.Provider
       value={{ error, currentUserData, setCurrentUserData }}
