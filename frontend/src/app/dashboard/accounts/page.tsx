@@ -8,19 +8,19 @@ import {
   HandCoins,
   Plus,
 } from "lucide-react";
-import { useUser } from "@/context/userContext";
+import { useCurrent } from "@/utils/currentUserContext";
 import { formatNumber } from "@/lib/balanceFormat";
 
 export default function Page() {
-  const { allAccounts } = useUser();
+  const { currentUserData } = useCurrent();
+  const allAccounts = currentUserData?.accounts;
   const firstAccount = allAccounts?.[0];
+  const accountNumber = firstAccount?.accountNumber || "Данс олдсонгүй";
   const rawBalance = firstAccount?.balance;
   const balance =
     typeof rawBalance === "number"
       ? `${formatNumber(rawBalance)} MNT`
       : "Үлдэгдэл байхгүй";
-
-  const accountNumber = firstAccount?.accountNumber || "Данс олдсонгүй";
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 flex flex-col items-center h-screen">
