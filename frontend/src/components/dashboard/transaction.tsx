@@ -1,5 +1,12 @@
 //Ene Transactionii utguudiig backend ees avna, Uurchilj bolno
-const Transaction = ({ date = "", balance = "", amount = "" }) => {
+interface TransactionProps {
+  date?: string;
+  balance?: string;
+  amount?: string;
+  type?: string;
+  reference?: string; // Added the missing 'type' property
+}
+const Transaction: React.FC<TransactionProps> = ({ date, balance, amount }) => {
   return (
     <>
       <div className="px-6 py-2 border-b ">

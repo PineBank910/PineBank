@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import ChooseAccount from "./_components/ChooseAccount";
-import { TabsDemo } from "./_components/Tabs";
 
 const Page = () => {
   const [amount, setAmount] = useState<number | "">("");
