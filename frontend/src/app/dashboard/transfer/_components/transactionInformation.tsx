@@ -18,7 +18,7 @@ const Transaction = ({ selectedAccountId }: Props) => {
   useEffect(() => {
     const getTransactionInfo = async () => {
       if (!currentUserData) return;
-
+      console.log("Current user data:", currentUserData);
       const accountNumber = currentUserData.accounts.find(
         (account) => account.id === selectedAccountId
       )?.accountNumber;
@@ -26,7 +26,7 @@ const Transaction = ({ selectedAccountId }: Props) => {
         setError("Account not found.");
         return;
       }
-
+      console.log("Current account", accountNumber);
       setLoading(true);
       try {
         const response = await axiosInstance.post("users/transaction", {
