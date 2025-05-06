@@ -20,7 +20,6 @@ const ChooseAccount = (props:ChooseAccountProps) => {
   const currentUserData = context?.currentUserData;
   const {selectedAccountId, setSelectedAccountId} = props
 
-  console.log(currentUserData, "data")
   useEffect(() => {
     if (
       currentUserData &&
