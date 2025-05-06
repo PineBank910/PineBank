@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import ChooseAccount from "./_components/ChooseAccount";
+import { TabsDemo } from "./_components/Tabs";
 
 const Page = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -16,8 +17,6 @@ const Page = () => {
   const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-
-
 
   const createTransaction = async () => {
     if (!selectedAccountId) {
@@ -59,7 +58,10 @@ const Page = () => {
 
   return (
     <div className="flex flex-col w-1/3 h-screen space-y-4">
-      <ChooseAccount selectedAccountId={selectedAccountId} setSelectedAccountId={setSelectedAccountId}/>
+      <ChooseAccount
+        selectedAccountId={selectedAccountId}
+        setSelectedAccountId={setSelectedAccountId}
+      />
       <GetProfileInput setToAccountId={setToAccountId} />
       <Input
         id="amount"
@@ -85,6 +87,7 @@ const Page = () => {
       >
         {loading ? "Processing..." : "Гүйлгээ хийх"}
       </Button>
+      <TabsDemo />
     </div>
   );
 };
