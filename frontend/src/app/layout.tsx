@@ -7,7 +7,7 @@ import { UserProvider } from "@/context/userContext";
 import FetchUserId from "@/components/fetchUserId";
 import { CurrentUserProvider } from "@/utils/currentUserContext";
 import { ToastContainer } from "react-toastify";
-
+import { SidebarProvider } from "@/context/sidebarContext";
 // Configure fonts
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +44,7 @@ export default function RootLayout({
                 defaultTheme="light"
                 enableSystem={false}>
                 <FetchUserId />
-                {children}
+                <SidebarProvider>{children}</SidebarProvider>
                 <ToastContainer />
               </ThemeProvider>
             </UserProvider>

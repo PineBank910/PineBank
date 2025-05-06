@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import ChooseAccount from "./_components/ChooseAccount";
+import { TabsDemo } from "./_components/Tabs";
 
 const Page = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -78,7 +79,6 @@ const Page = () => {
         />
 
         {error && <p className="text-red-500">{error}</p>}
-
         <Button
           type="submit"
           className="px-4 py-2 text-white bg-blue-500 rounded"

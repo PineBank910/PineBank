@@ -213,7 +213,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { VisibilityProvider } from "@/context/visibilityContext";
-
+import { useSidebar } from "@/context/sidebarContext";
 export default function DashboardLayout({
   children,
 }: {
@@ -221,7 +221,8 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar initially closed
-  const [selectedSidebar, setSelectedSidebar] = useState("Эхлэл");
+  // const [selectedSidebar, setSelectedSidebar] = useState("Эхлэл");
+  const { selectedSidebar, setSelectedSidebar } = useSidebar();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   // Close sidebar when clicking outside
