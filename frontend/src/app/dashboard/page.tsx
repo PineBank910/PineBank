@@ -6,6 +6,7 @@ import { Wallet } from "lucide-react";
 import { useState, useContext } from "react";
 // import { useUser } from "@/context/userContext";
 import ChooseAccount from "./transfer/_components/ChooseAccount";
+import { formatNumber } from "@/lib/balanceFormat";
 const Dashboard = () => {
   // const { allAccounts } = useUser();
   const { isVisible } = useVisibility();
@@ -18,6 +19,9 @@ const Dashboard = () => {
   const selectedAccount = currentUserData?.accounts.find(
     (account) => account.id === selectedAccountId
   );
+  const rawBalance = selectedAccount?.balance;
+  const balance =
+    typeof rawBalance === "number" ? `${formatNumber(rawBalance)} MNT` : "...";
   // console.log("CURRENT DANS:", selectedAccountId);
   // console.log("LEL:", currentUserData);
   return (
@@ -45,7 +49,7 @@ const Dashboard = () => {
                   {isVisible ? (
                     // Show this div when isVisible is true
                     <div className="text-2xl font-medium">
-                      ₮ {selectedAccount ? selectedAccount.balance : "N/A"}
+                      ₮ {selectedAccount ? balance : "..."}
                     </div>
                   ) : (
                     // Show this div when isVisible is false
