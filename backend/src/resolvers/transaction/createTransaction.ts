@@ -6,10 +6,6 @@ const prisma = new PrismaClient();
 export const createTransaction = async (req: Request, res: Response) => {
   const { fromAccountId, toAccountId, amount, reference, } = req.body;
 
-  console.log(fromAccountId)
-  console.log(toAccountId)
-  console.log(amount)
-  console.log(reference)
   if (!fromAccountId || !toAccountId || !amount || isNaN(amount) ){
      res.status(400).json({ message: "Invalid transaction data" });
   }

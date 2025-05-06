@@ -7,5 +7,5 @@ export const userRouter = express.Router();
 
 userRouter.post("/webhook", Webhook);
 userRouter.get("/", getUser);
-userRouter.post("/transaction", getTransaction);
+
 

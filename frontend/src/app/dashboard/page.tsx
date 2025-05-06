@@ -54,7 +54,7 @@ const Dashboard = () => {
                   ) : (
                     // Show this div when isVisible is false
                     <div className="text-lg tracking-widest select-none">
-                      •••••••
+                      ••••
                     </div>
                   )}
                 </div>

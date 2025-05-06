@@ -308,19 +308,6 @@ export default function DashboardLayout({
                 </div>
                 <div
                   onClick={() => {
-                    setSelectedSidebar("Хуулга");
-                    router.push("/dashboard/statement");
-                    if (window.innerWidth < 768) setIsSidebarOpen(false);
-                  }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
-                    selectedSidebar === "Хуулга"
-                      ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
-                      : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}>
-                  <NotepadText /> Хуулга
-                </div>
-                <div
-                  onClick={() => {
                     setSelectedSidebar("Данс");
                     router.push("/dashboard/accounts");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);

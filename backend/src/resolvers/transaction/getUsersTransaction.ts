@@ -8,8 +8,7 @@ export const getTransaction = async (
   res: Response
 ): Promise<any> => {
   try {
-    const { accountNumber } = req.body;
-
+    const { accountNumber } = req.params;
     const account = await prisma.bankAccount.findUnique({
       where: {
         accountNumber: accountNumber,
@@ -33,6 +32,7 @@ export const getTransaction = async (
         timestamp: "asc",
       },
       select: {
+        id: true,
         amount: true,
         timestamp: true,
         reference: true,
@@ -54,6 +54,7 @@ export const getTransaction = async (
       }
 
       return {
+        id: tx.id,
         amount: tx.amount,
         timestamp: tx.timestamp,
         reference: tx.reference,
