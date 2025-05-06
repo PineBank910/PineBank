@@ -36,13 +36,36 @@ export const getTransaction = async (
         amount: true,
         timestamp: true,
         reference: true,
+        fromAccountId: true,
+        toAccountId: true,
       },
+    });
+
+    // Calculate running balance
+    let runningBalance = 0;
+    const historyWithBalance = transactions.map((tx) => {
+      const isCredit = tx.toAccountId === account.id;
+      const isDebit = tx.fromAccountId === account.id;
+
+      if (isCredit) {
+        runningBalance += tx.amount;
+      } else if (isDebit) {
+        runningBalance -= tx.amount;
+      }
+
+      return {
+        amount: tx.amount,
+        timestamp: tx.timestamp,
+        reference: tx.reference,
+        type: isCredit ? "CREDIT" : "DEBIT",
+        runningBalance,
+      };
     });
 
     res.json({
       message: "User data fetched successfully",
-      balance: account.balance,
-      transactions,
+      currentBalance: account.balance,
+      transactions: historyWithBalance,
     });
   } catch (err) {
     console.error(err);

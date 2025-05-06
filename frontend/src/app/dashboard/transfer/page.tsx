@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import ChooseAccount from "./_components/ChooseAccount";
+import Transaction from "./_components/transactionInformation";
 
 const Page = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -16,8 +17,6 @@ const Page = () => {
   const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-
-
 
   const createTransaction = async () => {
     if (!selectedAccountId) {
@@ -59,32 +58,38 @@ const Page = () => {
 
   return (
     <div className="flex flex-col w-1/3 h-screen space-y-4">
-      <ChooseAccount selectedAccountId={selectedAccountId} setSelectedAccountId={setSelectedAccountId}/>
-      <GetProfileInput setToAccountId={setToAccountId} />
-      <Input
-        id="amount"
-        placeholder="Enter the amount"
-        value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
-      />
-      <Input
-        id="reference"
-        type="text"
-        placeholder="Enter your reference"
-        value={reference}
-        onChange={(e) => setReference(e.target.value)}
-      />
+      <div className="">
+        <ChooseAccount
+          selectedAccountId={selectedAccountId}
+          setSelectedAccountId={setSelectedAccountId}
+        />
+        <GetProfileInput setToAccountId={setToAccountId} />
+        <Input
+          id="amount"
+          placeholder="Enter the amount"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+        />
+        <Input
+          id="reference"
+          type="text"
+          placeholder="Enter your reference"
+          value={reference}
+          onChange={(e) => setReference(e.target.value)}
+        />
 
-      {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500">{error}</p>}
 
-      <Button
-        type="submit"
-        className="px-4 py-2 text-white bg-blue-500 rounded"
-        onClick={createTransaction}
-        disabled={loading}
-      >
-        {loading ? "Processing..." : "Гүйлгээ хийх"}
-      </Button>
+        <Button
+          type="submit"
+          className="px-4 py-2 text-white bg-blue-500 rounded"
+          onClick={createTransaction}
+          disabled={loading}
+        >
+          {loading ? "Processing..." : "Гүйлгээ хийх"}
+        </Button>
+      </div>
+      <Transaction selectedAccountId={selectedAccountId} />
     </div>
   );
 };

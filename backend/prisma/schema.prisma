@@ -62,7 +62,6 @@ model Transaction {
   toAccount     BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
   status        TransactionStatusEnum @default(PENDING)
   reference     String?
-  balanceAfterTransaction Float?
 }
 
 model Loan {
