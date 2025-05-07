@@ -15,10 +15,10 @@ type ChooseAccountProps = {
   selectedAccountId: string;
   setSelectedAccountId: (accountId: string) => void;
 };
-const ChooseAccount = (props:ChooseAccountProps) => {
+const ChooseAccount = (props: ChooseAccountProps) => {
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
-  const {selectedAccountId, setSelectedAccountId} = props
+  const { selectedAccountId, setSelectedAccountId } = props;
 
   useEffect(() => {
     if (
@@ -45,7 +45,7 @@ const ChooseAccount = (props:ChooseAccountProps) => {
   }
 
   return (
-    <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
+    <Select  value={selectedAccountId} onValueChange={setSelectedAccountId}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select an account" />
       </SelectTrigger>
