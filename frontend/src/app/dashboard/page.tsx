@@ -8,12 +8,15 @@ import { formatNumber } from "@/utils/balanceFormat";
 import { useAuth } from "@clerk/clerk-react";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import Transaction from "@/components/dashboard/transaction";
+import { useRouter } from "next/navigation";
+import { useSidebar } from "@/context/sidebarContext";
 const Dashboard = () => {
   const { getToken } = useAuth();
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-
+  const { setSelectedSidebar } = useSidebar();
+  const router = useRouter(); 
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
 
@@ -57,6 +60,13 @@ const Dashboard = () => {
     fetchTransactions();
   }, [accountNumber]);
 
+  const handleClickNiit = () => {
+    router.push("/dashboard/accounts");
+    setSelectedSidebar("Данс");
+  };
+  const handleClickZagvar = () => {
+    router.push("/dashboard");
+  };
   const groupedTransactions = groupTransactionsByDay(transactions.slice(0, 10));
   return (
     <>
@@ -69,6 +79,11 @@ const Dashboard = () => {
                 selectedAccountId={selectedAccountId}
                 setSelectedAccountId={setSelectedAccountId}
               />
+            </div>
+            <div
+              onClick={handleClickNiit}
+              className="text-[orange] hover:underline cursor-pointer">
+              нийт
             </div>
           </div>
           <div className="mt-6 mb-6 h-[6rem] sm:h-[144px] sm:w-full border bg-white dark:bg-blue-950 rounded-2xl flex  lg:gap-2 xl:gap-5 items-center px-2 sm:px-4">
@@ -167,3 +182,6 @@ const Dashboard = () => {
   );
 };
 export default Dashboard;
+// #323031
+// #fbfffe
+// #f2a65a
