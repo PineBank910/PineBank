@@ -14,10 +14,10 @@ const Transaction: React.FC<TransactionProps> = ({ date, balance, amount, refere
   const { isVisible } = useVisibility();
   return (
     <>
-      <div className="px-6 py-2 border-b flex justify-between items-center">
+      <div className="border-b flex justify-between items-center mb-2">
         <div className="flex flex-col">
-          <div>{date}</div>
-          <div>{reference}</div>
+          <div className="">{date}</div>
+          <div className="">{reference}</div>
         </div>
         <div className="flex flex-col">
           {isVisible ? (

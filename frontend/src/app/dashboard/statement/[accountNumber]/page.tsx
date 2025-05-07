@@ -6,7 +6,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import ChooseAccount from "../../transfer/_components/ChooseAccount";
-import { CurrentUser } from "@/utils/currentUserContext";
+import { CurrentUser } from "@/lib/currentUserContext";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,15 +17,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChevronRightIcon } from "lucide-react";
-
-type Transaction = {
-  id: string;
-  timestamp: string;
-  type: "DEBIT" | "CREDIT";
-  amount: number;
-  reference: string;
-  runningBalance: number;
-};
+import { TransactionType } from "@/app/types";
+import { groupTransactionsByDay } from "@/utils/filterByDay";
+import { jsPDF } from "jspdf";
+ 
 
 type Account = {
   accountNumber: string;
@@ -33,10 +28,12 @@ type Account = {
 };
 
 const Page = () => {
-  const [transactionInfo, setTransactionInfo] = useState<Transaction[]>([]);
+  const [transactionInfo, setTransactionInfo] = useState<TransactionType[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [filter, setFilter] = useState<"ALL" | "CREDIT" | "DEBIT">("ALL");
+
   const params = useParams();
   const accountNumber = Array.isArray(params?.accountNumber)
     ? params.accountNumber[0]
@@ -55,9 +52,10 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get<{
-          transactions: Transaction[];
+          transactions: TransactionType[];
         }>(`transaction/all/${accountNumber}`);
         setTransactionInfo(response.data.transactions);
+        console.log("Fetched transactions:", response.data.transactions);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           setError(err.response?.data?.message || "Axios error");
@@ -73,9 +71,9 @@ const Page = () => {
   }, [accountNumber]);
 
   const filterByDays = (
-    transactions: Transaction[],
+    transactions: TransactionType[],
     days: number
-  ): Transaction[] => {
+  ): TransactionType[] => {
     const now = new Date();
     return transactions.filter((t) => {
       const txDate = new Date(t.timestamp);
@@ -85,24 +83,13 @@ const Page = () => {
     });
   };
 
-  const groupTransactionsByDay = (
-    transactions: Transaction[]
-  ): Record<string, Transaction[]> => {
-    const grouped: Record<string, Transaction[]> = {};
+  const transactionsByDays = filterByDays(transactionInfo, 7);
 
-    transactions.forEach((transaction) => {
-      const txDate = new Date(transaction.timestamp);
-      const dateString = txDate.toISOString().split("T")[0];
-      if (!grouped[dateString]) {
-        grouped[dateString] = [];
-      }
-      grouped[dateString].push(transaction);
-    });
+  const filteredTransactions = transactionsByDays.filter((tx) => {
+    if (filter === "ALL") return true;
+    return tx.type === filter;
+  });
 
-    return grouped;
-  };
-
-  const filteredTransactions = filterByDays(transactionInfo, 7);
   const groupedTransactions = groupTransactionsByDay(filteredTransactions);
 
   const totalIncome = filteredTransactions
@@ -125,8 +112,36 @@ const Page = () => {
     (acc: Account) => acc.accountNumber === accountNumber
   );
 
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+ 
+    doc.setFontSize(16);
+    doc.text("Transaction Report", 20, 20);
+    doc.setFontSize(12);
+ 
+    let y = 30; // Starting Y position
+    Object.entries(groupedTransactions).forEach(([date, transactions]) => {
+      doc.text(`Date: ${date}`, 20, y);
+      y += 10;
+ 
+      transactions.forEach((transaction) => {
+        doc.text(
+          `Reference: ${transaction.reference} | Amount: ${transaction.amount}₮`,
+          20,
+          y
+        );
+        y += 10;
+        doc.text(`Balance: ${transaction.runningBalance}₮`, 20, y);
+        y += 10;
+      });
+      y += 5; 
+    });
+ 
+    doc.save("transaction_report.pdf");
+  };
+ 
   return (
-    <div className="px-6 py-2 border-b">
+    <div className="max-w-6xl flex flex-col mx-auto px-6 py-2 border-b">
       <div className="flex">
         <ChooseAccount
           selectedAccountId={selectedAccountId}
@@ -136,10 +151,15 @@ const Page = () => {
         <p className=" text-xl">Total Outcome: ₮{totalOutcome}</p>
       </div>
       <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl flex justify-between items-center p-4 mt-4 w-full">
-        <Button>Бүгд</Button>
-        <Button>Орлого</Button>
-        <Button>Зарлага</Button>
+        <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl flex justify-between items-center p-4 mt-4 w-full">
+          <Button onClick={() => setFilter("ALL")}>Бүгд</Button>
+          <Button onClick={() => setFilter("CREDIT")}>Орлого</Button>
+          <Button onClick={() => setFilter("DEBIT")}>Зарлага</Button>
+        </div>
       </div>
+      <Button onClick={downloadPDF} className="mt-4">
+        Download PDF
+      </Button>
       {loading && <p>Loading transactions...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && Object.keys(groupedTransactions).length > 0 && (

@@ -21,20 +21,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar initially closed
-  // const [selectedSidebar, setSelectedSidebar] = useState("Эхлэл");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { selectedSidebar, setSelectedSidebar } = useSidebar();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Close sidebar when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        window.innerWidth < 768 && // Only close sidebar for screens smaller than 768px
+        window.innerWidth < 768 && 
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target as Node)
       ) {
-        setIsSidebarOpen(false); // Close sidebar
+        setIsSidebarOpen(false); 
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -50,12 +48,12 @@ export default function DashboardLayout({
     <>
       <VisibilityProvider>
         <section className="relative flex">
-          {/* Sidebar */}
           {isSidebarOpen && (
             <div
               id="SIDEBAR"
-              ref={sidebarRef} // Attach ref to the sidebar
-              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
+              ref={sidebarRef} 
+              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r"
+            >
               <div className="flex items-center justify-center w-full mt-4 text-2xl font-bold h-21 sm:text-3xl lg:text-4xl">
                 <div
                   onClick={handleSidebarClick}
@@ -138,12 +136,10 @@ export default function DashboardLayout({
             </div>
           )}
 
-          {/* Header */}
           <div className="w-full">
             <header className="flex items-center justify-between w-full h-24 border-b">
-              {/* Menu Button */}
               <button
-                onClick={() => setIsSidebarOpen((prev) => !prev)} // Toggle sidebar
+                onClick={() => setIsSidebarOpen((prev) => !prev)}
                 className="ml-4 focus:outline-none md:hidden"
                 aria-label="Toggle sidebar">
                 <Menu size={50} />

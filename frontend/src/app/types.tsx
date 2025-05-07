@@ -26,3 +26,14 @@ export type User = {
   profile?: ProfileDetail;
   accounts?: Accounts[] | null;
 };
+
+export type TransactionType = {
+  id: string;
+  timestamp: string;
+  type: "DEBIT" | "CREDIT";
+  amount: number;
+  reference: string;
+  runningBalance: number;
+  fromAccountId: string;
+  toAccountId: string;
+};
