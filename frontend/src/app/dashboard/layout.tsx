@@ -62,8 +62,7 @@ export default function DashboardLayout({
                     position: "relative",
                     width: "50px",
                     aspectRatio: "1/1",
-                  }}
-                >
+                  }}>
                   <Image
                     src="/images/Pinebank_Printstream.png"
                     alt="Example"
@@ -73,8 +72,7 @@ export default function DashboardLayout({
                 </div>
                 <span
                   onClick={handleSidebarClick}
-                  className="hidden cursor-pointer dark:block"
-                >
+                  className="hidden cursor-pointer dark:block">
                   P
                 </span>
                 <p className="cursor-pointer" onClick={handleSidebarClick}>
@@ -92,8 +90,7 @@ export default function DashboardLayout({
                     selectedSidebar === "Эхлэл"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
-                >
+                  }`}>
                   <House /> Эхлэл
                 </div>
                 <div
@@ -106,8 +103,7 @@ export default function DashboardLayout({
                     selectedSidebar === "Гүйлгээ"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
-                >
+                  }`}>
                   <Send /> Гүйлгээ
                 </div>
                 <div
@@ -120,8 +116,7 @@ export default function DashboardLayout({
                     selectedSidebar === "Данс"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
-                >
+                  }`}>
                   <UserRound /> Данс
                 </div>
                 <div
@@ -134,8 +129,7 @@ export default function DashboardLayout({
                     selectedSidebar === "Тохиргоо"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
-                >
+                  }`}>
                   <Settings /> Тохиргоо
                 </div>
               </div>
@@ -147,8 +141,7 @@ export default function DashboardLayout({
               <button
                 onClick={() => setIsSidebarOpen((prev) => !prev)}
                 className="ml-4 focus:outline-none md:hidden"
-                aria-label="Toggle sidebar"
-              >
+                aria-label="Toggle sidebar">
                 <Menu size={50} />
               </button>
               <div className="flex flex-col items-center justify-between w-full sm:flex-row">
@@ -173,7 +166,7 @@ export default function DashboardLayout({
                 </div>
               </div>
             </header>
-            {children}
+            <div className="dark:bg-[#111111] bg-[#FFFAFA]">{children}</div>
           </div>
         </section>
       </VisibilityProvider>

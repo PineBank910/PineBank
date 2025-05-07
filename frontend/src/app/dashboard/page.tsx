@@ -13,8 +13,8 @@ const Dashboard = () => {
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
 
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
 
   const selectedAccount = currentUserData?.accounts?.find(
@@ -24,7 +24,7 @@ const Dashboard = () => {
   const rawBalance = selectedAccount?.balance;
   const balance =
     typeof rawBalance === "number" ? `${formatNumber(rawBalance)} MNT` : "...";
-
+  
   useEffect(() => {
     if (!accountNumber) return;
 
@@ -46,7 +46,6 @@ const Dashboard = () => {
           console.error("Transaction fetch failed:", await response.text());
           return;
         }
-
         const data = await response.json();
         setTransactions(data.transactions);
         console.log("Fetched transactions:", data.transactions);
@@ -61,8 +60,8 @@ const Dashboard = () => {
   const groupedTransactions = groupTransactionsByDay(transactions.slice(0, 10));
   return (
     <>
-      <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] mt-6 text-[#343C6A] dark:text-[white] w-full block md:flex gap-10">
-        <div className="w-full sm:w-1/2">
+      <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] w-full block md:flex gap-14 max-w-[1500px] h-screen ">
+        <div className="w-full  sm:w-1/2">
           <div className="flex justify-between">
             <div className="flex text-xl font-semibold">
               <div className="w-[100px] mb-2">Данс:</div>
@@ -73,6 +72,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="mt-6 mb-6 h-[6rem] sm:h-[144px] sm:w-full border bg-white dark:bg-blue-950 rounded-2xl flex  lg:gap-2 xl:gap-5 items-center px-2 sm:px-4">
+
             <div className="flex justify-between w-full gap-2 sm:flex-col">
               <h3 className="text-[11px] sm:text-[1rem]">
                 ХАРИЛЦАХ/ ИРГЭД / MNT
@@ -82,6 +82,7 @@ const Dashboard = () => {
                 <div className="text-2xl font-medium ">
                   {isVisible ? (
                     <div className="2xl:text-2xl text-[1rem] tex font-medium">
+
                       {selectedAccount ? balance : "..."}
                     </div>
                   ) : (
@@ -89,6 +90,35 @@ const Dashboard = () => {
                       ****
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between">
+              <div className="text-xl font-semibold">Хадгалсан загварууд</div>
+              <div
+                onClick={handleClickZagvar}
+                className="text-[orange] hover:underline cursor-pointer">
+                нийт
+              </div>
+            </div>
+            <div className="flex gap-6 mt-6">
+              <button className="cursor-pointer  w-[96px] h-[96px] rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
+                <div className="text-orange-400 text-2xl">+</div>
+                <div>
+                  <div className="text-sm">Загвар</div>
+                  <div className="text-sm">нэмэх</div>
+                </div>
+              </button>
+              <div className="w-full  border rounded-2xl py-3 px-6 shadow-2xl">
+                <div className="text-3xl font-semibold pb-2 dark:text-zinc-100 ">
+                  Амархан гүйлгээ
+                </div>
+                <hr></hr>
+                <div className="pt-2 dark:text-gray-200 ">
+                  Тогтмол харьцдаг дансны загвараа хадгалаад гүйлгээгээ
+                  амарханаар хийгээрэй.
                 </div>
               </div>
             </div>

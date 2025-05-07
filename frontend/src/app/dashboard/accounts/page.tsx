@@ -18,7 +18,7 @@ export default function Page() {
   const allAccounts = currentUserData?.accounts || [];
   const { isVisible } = useVisibility();
   const router = useRouter();
-  const { selectedSidebar, setSelectedSidebar } = useSidebar();
+  const { setSelectedSidebar } = useSidebar();
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 flex flex-col items-center h-screen">
       <div className="w-full max-w-[1252px] px-1  ">
@@ -97,15 +97,16 @@ export default function Page() {
                     )}
                   </div>
                 </div>
-            <div className="flex space-x-2 gap-8">
-              <Button
-                onClick={() => router.push(`/dashboard/statement/${accountNumber}`)}
-                variant="ghost"
-                className="w-[66px] h-[66px] flex flex-col  rounded-xl shadow-[0_4px_25px_rgba(0,0,0,0.15)] dark:border-gray-200 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 "
-              >
-                <ReceiptText className="!w-5 !h-5 shrink-0" />
-                <span className="text-[10px]">Хуулга</span>
-              </Button>
+                <div className="flex space-x-2 gap-8">
+                  <Button
+                    onClick={() =>
+                      router.push(`/dashboard/statement/${accountNumber}`)
+                    }
+                    variant="ghost"
+                    className="w-[66px] h-[66px] flex flex-col  rounded-xl shadow-[0_4px_25px_rgba(0,0,0,0.15)] dark:border-gray-200 dark:text-gray-200 hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 ">
+                    <ReceiptText className="!w-5 !h-5 shrink-0" />
+                    <span className="text-[10px]">Хуулга</span>
+                  </Button>
 
                   <Button
                     variant="ghost"

@@ -52,26 +52,43 @@ const GetProfileInput = ({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <label
         htmlFor="accountNumber"
-        className="text-sm font-medium text-gray-700"
+        className="font-medium text-gray-700 text-xs mt-2 flex gap-1"
       >
-        Account Number
+        <p className="text-red-700">*</p>
+        Хүлээн авагчийн данс
       </label>
       <Input
         id="accountNumber"
         type="text"
-        placeholder="Enter your account number"
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
+        className="border-0 border-b-1 border-gray-300 rounded-none 
+               focus:outline-none focus:ring-0 focus:border-black 
+               hover:border-black"
+      />
+
+      <label
+        htmlFor="fullName"
+        className="font-medium text-gray-700 text-xs mt-2 flex gap-1"
+      >
+        <p className="text-red-700">*</p>
+        Хүлээн авагчийн нэр
+      </label>
+      <Input
+        id="fullName"
+        type="text"
+        value={fullName}
+        readOnly
+        disabled
+        className="border-0 border-b-1 border-gray-300 rounded-none 
+               focus:outline-none focus:ring-0 focus:border-black 
+               hover:border-black bg-transparent cursor-default"
       />
 
       {error && <p className="text-red-500">{error}</p>}
-      <div className="flex gap-2 mt-4">
-        <div className="font-semibold text-gray-800">Full Name:</div>
-        <div>{fullName}</div>
-      </div>
     </div>
   );
 };
