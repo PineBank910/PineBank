@@ -1,3 +1,4 @@
+import { getAuth } from "@clerk/express";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
@@ -8,28 +9,34 @@ export const getTransaction = async (
   res: Response
 ): Promise<any> => {
   try {
-    const { accountNumber } = req.params;
-    const account = await prisma.bankAccount.findUnique({
-      where: {
-        accountNumber: accountNumber,
-      },
-      select: {
-        id: true,
-        balance: true,
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      console.log("User ID is missing");
+      res.status(400).json({ message: "User ID is missing from the token" });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        accounts: true,
       },
     });
 
-    if (!account) {
-      console.log("Bank account not found");
-      return res.status(400).json({ message: "Bank account not found" });
+    if (!user || !user.accounts.length) {
+      return res
+        .status(404)
+        .json({ message: "No bank accounts found for user" });
     }
 
+    const account = user.accounts[0];
     const transactions = await prisma.transaction.findMany({
       where: {
         OR: [{ fromAccountId: account.id }, { toAccountId: account.id }],
       },
       orderBy: {
-        timestamp: "asc",
+        timestamp: "desc",
       },
       select: {
         id: true,
@@ -41,19 +48,12 @@ export const getTransaction = async (
       },
     });
 
-    // Calculate running balance
-    let runningBalance = 0;
+    let runningBalance = account.balance;
     const historyWithBalance = transactions.map((tx) => {
       const isCredit = tx.toAccountId === account.id;
       const isDebit = tx.fromAccountId === account.id;
 
-      if (isCredit) {
-        runningBalance += tx.amount;
-      } else if (isDebit) {
-        runningBalance -= tx.amount;
-      }
-
-      return {
+      const entry = {
         id: tx.id,
         amount: tx.amount,
         timestamp: tx.timestamp,
@@ -61,17 +61,19 @@ export const getTransaction = async (
         type: isCredit ? "CREDIT" : "DEBIT",
         runningBalance,
       };
+
+      if (isCredit) runningBalance -= tx.amount;
+      if (isDebit) runningBalance += tx.amount;
+
+      return entry;
     });
 
-    res.json({
-      message: "User data fetched successfully",
+    return res.json({
       currentBalance: account.balance,
-      transactions: historyWithBalance,
+      transactions: historyWithBalance.reverse(),
     });
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({ message: "Error occurred while fetching user data" });
+    return res.status(500).json({ message: "Failed to fetch transactions" });
   }
 };
