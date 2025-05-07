@@ -5,7 +5,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
 import FetchUserId from "@/components/fetchUserId";
-import { CurrentUserProvider } from "@/utils/currentUserContext";
+import { CurrentUserProvider } from "@/lib/currentUserContext";
 import { ToastContainer } from "react-toastify";
 import { SidebarProvider } from "@/context/sidebarContext";
 // Configure fonts
