@@ -7,10 +7,9 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { CurrentUser } from "@/lib/currentUserContext";
-
+import { formatNumber } from "@/utils/balanceFormat";
 type ChooseAccountProps = {
   selectedAccountId: string;
   setSelectedAccountId: (accountId: string) => void;
@@ -45,18 +44,52 @@ const ChooseAccount = (props: ChooseAccountProps) => {
   }
 
   return (
-    <Select  value={selectedAccountId} onValueChange={setSelectedAccountId}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select an account" />
+    <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
+      <SelectTrigger className="w-full flex items-center text-left justify-center min-h-16  border-0 shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
+        {selectedAccountId ? (
+          <div className="flex flex-col gap-1 ">
+            <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
+            <div className="flex justify-between w-[650px]">
+              <span className="text-sm font-semibold text-gray-500 block">
+                MN{" "}
+                {
+                  accounts.find((acc) => acc.id === selectedAccountId)
+                    ?.accountNumber
+                }
+              </span>
+              <span className="text-sm font-semibold text-gray-500 block">
+                {formatNumber(
+                  accounts.find((acc) => acc.id === selectedAccountId)
+                    ?.balance || 0
+                )}{" "}
+                MNT
+              </span>
+            </div>
+          </div>
+        ) : (
+          <span className="text-gray-400">Данс сонгоно уу</span>
+        )}
       </SelectTrigger>
-      <SelectContent className="w-full">
+
+      <SelectContent className="max-h-[500px]">
         <SelectGroup>
-          <SelectLabel>Данс</SelectLabel>
+          <SelectLabel className="ml-5.5 uppercase">Данс</SelectLabel>
           {accounts.map((account) => (
-            <SelectItem key={account.id} value={account.id}>
-              <div className="flex justify-between w-full">
-                <span>{account.accountNumber}</span>
-                {/* <span>{account.balance}</span> */}
+            <SelectItem
+              className="h-16 py-4 flex justify-center"
+              key={account.id}
+              value={account.id}
+            >
+              <div className="flex flex-col gap-2">
+                <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
+                <div className="flex justify-between w-[650px]">
+                  <span className="text-sm font-semibold text-gray-500 block">
+                    {account.accountNumber}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-500 block">
+                    {formatNumber(account?.balance || 0)} MNT
+                  </span>
+                </div>
               </div>
             </SelectItem>
           ))}

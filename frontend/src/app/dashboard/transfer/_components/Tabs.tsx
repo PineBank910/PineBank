@@ -90,25 +90,27 @@ export function TabsDemo() {
   };
 
   return (
-    <div className="h-screen mt-10 ">
-      <span className="font-bold">Гүйлгээ</span>
+    <div className="h-screen mt-10">
+      <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
+        Гүйлгээ
+      </span>
       <Tabs defaultValue="account" className="flex flex-row mt-10 gap-12">
         <TabsList className="flex flex-col w-[305px] h-35 gap-5 p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
           <TabsTrigger
             value="account"
-            className="flex items-center justify-center h-10 w-full text-sm uppercase 
-               hover:bg-black hover:text-white 
-               data-[state=active]:bg-black data-[state=active]:text-white 
-               transition-colors duration-400 shadow-2xl"
+            className="flex items-center justify-center h-10 w-full text-sm uppercase
+           hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
+           data-[state=active]:bg-black data-[state=active]:text-white
+           transition-colors duration-400 shadow-lg"
           >
             банкны данс руу
           </TabsTrigger>
           <TabsTrigger
             value="password"
-            className="flex items-center justify-center h-16 w-full text-sm uppercase 
-               hover:bg-black hover:text-white 
-               data-[state=active]:bg-black data-[state=active]:text-white 
-               transition-colors duration-400 shadow-2xl"
+            className="flex items-center justify-center h-16 w-full text-sm uppercase
+           hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
+           data-[state=active]:bg-black data-[state=active]:text-white
+           transition-colors duration-400 shadow-lg"
           >
             Загварууд
           </TabsTrigger>
@@ -116,24 +118,24 @@ export function TabsDemo() {
 
         <div className="flex-1 min-w-[947px]">
           <TabsContent
-            className="shadow-2xl rounded-lg bg-white"
+            className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
             value="account"
           >
-            <div className="flex flex-col gap-8">
-              <CardHeader className="bg-black h-[104px] justify-center items-center rounded-t-lg">
+            <div className="flex flex-col gap-8 items-center">
+              <CardHeader className="bg-black w-full h-[104px] justify-center items-center rounded-t-lg">
                 <CardTitle className="text-white text-xs mt-5">
                   Гүйлгээний төрөл
                 </CardTitle>
-                <CardDescription className="text-black text-[12px] justify-center min-w-[740px] h-11 border rounded-lg flex items-center mb-5 bg-white font-bold text-center">
+                <CardDescription className="text-black dark:text-white text-[12px] justify-center min-w-[740px] h-11 border rounded-lg flex items-center mb-5 bg-white dark:bg-gray-700 font-bold text-center">
                   PINE БАНКНЫ ДАНС РУУ
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="space-y-6 px-6 pb-2">
-                <div className="space-y-2">
+              <CardContent className="space-y-6 px-6 pb-2 w-[788px]">
+                <div className="space-y-2 mb-2">
                   <Label
                     htmlFor="from-account"
-                    className="font-medium text-gray-700 text-xs"
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
                   >
                     <span className="text-red-600">*</span> Шилжүүлэх дансаа
                     сонгох
@@ -147,50 +149,51 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="to-account"
-                    className="font-medium text-gray-700 text-xs"
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
                   ></Label>
                   <GetProfileInput setToAccountId={setToAccountId} />
                 </div>
                 <div className="flex gap-4">
                   <Switch onChange={handleSwitchChange} />
-                  <span className="text-xs font-bold">Загвар хадгалах</span>
+                  <span className="text-xs font-bold text-white">
+                    Загвар хадгалах
+                  </span>
 
                   {isSwitchChecked && (
                     <Input
                       type="text"
                       placeholder="Enter your text"
-                      className="mt-2 p-2 border border-gray-300 rounded"
+                      className="mt-2 p-2 border border-gray-300 rounded bg-transparent"
                     />
                   )}
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="amount"
-                    className="font-medium text-gray-700 text-xs"
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
                   >
                     <span className="text-red-600">*</span> Гүйлгээний дүн
                   </Label>
-                  <Input
+                  <input
                     id="amount"
                     value={formatAmount(amount)}
                     onChange={handleAmountChange}
-                    className="border-0 border-b border-gray-300 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent"
+                    className="border-0 border-b w-full border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="reference"
-                    className="font-medium text-gray-700 text-xs"
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
                   >
                     <span className="text-red-600">*</span> Гүйлгээний утга
                   </Label>
-                  <Input
+                  <input
                     id="reference"
                     type="text"
                     value={reference}
-                    placeholder="Жишээ: Төлбөр"
                     onChange={(e) => setReference(e.target.value)}
-                    className="border-0 border-b border-gray-300 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent"
+                    className="border-0 w-full border-b border-gray-300 dark:border-white rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
                 </div>
               </CardContent>
@@ -198,7 +201,7 @@ export function TabsDemo() {
               <CardFooter className="px-6 pb-6 gap-5 justify-center">
                 <Button
                   type="submit"
-                  className="py-2 text-gray-900 border w-[280px] h-[50px] bg-white duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px]"
                   onClick={() => {
                     setAccountNumber("");
                     setAmount("");
@@ -211,7 +214,7 @@ export function TabsDemo() {
                 </Button>
                 <Button
                   type="submit"
-                  className="py-2 text-white bg-green-600 w-[280px] h-[50px] shadow duration-400 hover:bg-black hover:text-green-600 transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-white bg-green-600 dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-black hover:text-green-600 transition rounded-2xl font-semibold text-[16px]"
                   onClick={createTransaction}
                   disabled={loading}
                 >
@@ -222,7 +225,7 @@ export function TabsDemo() {
           </TabsContent>
 
           <TabsContent value="password">
-            <Card className="shadow-2xl rounded-lg">
+            <Card className="shadow-2xl rounded-lg bg-gray-800 dark:bg-gray-900 text-white">
               <CardHeader className="bg-black text-white rounded-t-lg py-6">
                 <CardTitle className="text-xs">Нууц үг солих</CardTitle>
                 <CardDescription className="text-white text-sm mt-1">
@@ -234,20 +237,28 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="current"
-                    className="text-xs font-medium text-gray-700"
+                    className="text-xs font-medium text-gray-300"
                   >
                     Одоогийн нууц үг
                   </Label>
-                  <Input id="current" type="password" />
+                  <Input
+                    id="current"
+                    type="password"
+                    className="bg-transparent text-white"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="new"
-                    className="text-xs font-medium text-gray-700"
+                    className="text-xs font-medium text-gray-300"
                   >
                     Шинэ нууц үг
                   </Label>
-                  <Input id="new" type="password" />
+                  <Input
+                    id="new"
+                    type="password"
+                    className="bg-transparent text-white"
+                  />
                 </div>
               </CardContent>
 
