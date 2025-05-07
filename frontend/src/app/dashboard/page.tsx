@@ -16,6 +16,8 @@ const Dashboard = () => {
     runningBalance: string;
     type: string;
     reference: string;
+    fromAccountId: string;
+    toAccountId: string;
   }
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const { setSelectedSidebar } = useSidebar();
@@ -25,6 +27,7 @@ const Dashboard = () => {
   const { isVisible } = useVisibility();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
+
   const selectedAccount = currentUserData?.accounts?.find(
     (account) => account.id === selectedAccountId
   );
@@ -40,12 +43,15 @@ const Dashboard = () => {
     router.push("/dashboard");
   };
   useEffect(() => {
+    if (!accountNumber) return;
+
     const fetchTransactions = async () => {
       try {
         const token = await getToken();
         if (!token) return;
+
         const response = await fetch(
-          "https://pinebank.onrender.com/transaction",
+          "https://pinebank.onrender.com/transaction/get",
           {
             method: "GET",
             headers: {
@@ -54,19 +60,25 @@ const Dashboard = () => {
             },
           }
         );
+
         if (!response.ok) {
           console.error("Transaction fetch failed:", await response.text());
           return;
         }
         const data = await response.json();
         setTransactions(data.transactions);
+        console.log("Fetched transactions:", data.transactions);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     };
-    fetchTransactions();
-  }, []);
 
+    fetchTransactions();
+  }, [accountNumber]);
+
+  // if (accountNumber = !fromaccountNumber) {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <>
       <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] w-full block md:flex gap-14 max-w-[1500px] h-screen ">
@@ -102,7 +114,7 @@ const Dashboard = () => {
                   ) : (
                     // Show this div when isVisible is false
                     <div className="text-lg tracking-widest select-none">
-                      ••••
+                      ****
                     </div>
                   )}
                 </div>
@@ -146,11 +158,17 @@ const Dashboard = () => {
               {transactions.map((tx) => (
                 <Transaction
                   key={tx.id}
-                  date={new Date(tx.timestamp).toLocaleString()}
+                  date={new Date(tx.timestamp).toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false
+                  })}
                   amount={tx.amount}
                   balance={tx.runningBalance}
                   type={tx.type}
                   reference={tx.reference}
+                  fromAccountId={tx.fromAccountId}
+                  toAccountId={tx.toAccountId}
                 />
               ))}
             </div>

@@ -10,33 +10,41 @@ export const getTransaction = async (
 ): Promise<any> => {
   try {
     const { userId } = getAuth(req);
+    const { accountNumber } = req.body;
 
     if (!userId) {
       console.log("User ID is missing");
-      res.status(400).json({ message: "User ID is missing from the token" });
-      return;
+      return res.status(400).json({ message: "User ID is missing from the token" });
+    }
+
+    if (!accountNumber) {
+      return res.status(400).json({ message: "Account number is required" });
     }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        accounts: true,
-      },
+      include: { accounts: true },
     });
 
     if (!user || !user.accounts.length) {
-      return res
-        .status(404)
-        .json({ message: "No bank accounts found for user" });
+      return res.status(404).json({ message: "No bank accounts found for user" });
     }
 
-    const account = user.accounts[0];
+    const account = user.accounts.find(acc => acc.accountNumber === accountNumber);
+
+    if (!account) {
+      return res.status(404).json({ message: "Account not found for this user" });
+    }
+
     const transactions = await prisma.transaction.findMany({
       where: {
-        OR: [{ fromAccountId: account.id }, { toAccountId: account.id }],
+        OR: [
+          { fromAccountId: account.id },
+          { toAccountId: account.id },
+        ],
       },
       orderBy: {
-        timestamp: "desc",
+        timestamp: "asc",
       },
       select: {
         id: true,
@@ -59,6 +67,8 @@ export const getTransaction = async (
         timestamp: tx.timestamp,
         reference: tx.reference,
         type: isCredit ? "CREDIT" : "DEBIT",
+        fromAccountId: tx.fromAccountId,
+        toAccountId: tx.toAccountId,     
         runningBalance,
       };
 
@@ -70,7 +80,7 @@ export const getTransaction = async (
 
     return res.json({
       currentBalance: account.balance,
-      transactions: historyWithBalance.reverse(),
+      transactions: historyWithBalance.reverse(), // Return the latest transactions first
     });
   } catch (err) {
     console.error(err);

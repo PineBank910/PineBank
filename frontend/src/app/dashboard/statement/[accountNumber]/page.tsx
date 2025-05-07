@@ -56,7 +56,7 @@ const Page = () => {
       try {
         const response = await axiosInstance.get<{
           transactions: Transaction[];
-        }>(`account/statement/${accountNumber}`);
+        }>(`transaction/all/${accountNumber}`);
         setTransactionInfo(response.data.transactions);
       } catch (err) {
         if (axios.isAxiosError(err)) {
