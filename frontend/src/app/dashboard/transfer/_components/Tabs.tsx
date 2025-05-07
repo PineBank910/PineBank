@@ -17,6 +17,7 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 
 export function TabsDemo() {
   const [amount, setAmount] = useState<number | "">("");
@@ -26,6 +27,7 @@ export function TabsDemo() {
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [isSwitchChecked, setIsSwitchChecked] = useState(false);
 
   const createTransaction = async () => {
     if (!selectedAccountId) {
@@ -65,8 +67,30 @@ export function TabsDemo() {
     }
   };
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    value = value.replace(/[^0-9.]/g, "");
+
+    if (value !== "") {
+      const numericValue = parseFloat(value);
+      setAmount(isNaN(numericValue) ? "" : numericValue);
+    } else {
+      setAmount("");
+    }
+  };
+
+  const formatAmount = (amount: number | "") => {
+    if (amount === "") return "";
+    return amount.toLocaleString();
+  };
+
+  const handleSwitchChange = () => {
+    setIsSwitchChecked(!isSwitchChecked);
+  };
+
   return (
-    <div>
+    <div className="h-screen mt-10 ">
       <span className="font-bold">Гүйлгээ</span>
       <Tabs defaultValue="account" className="flex flex-row mt-10 gap-12">
         <TabsList className="flex flex-col w-[305px] h-35 gap-5 p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
@@ -91,13 +115,11 @@ export function TabsDemo() {
         </TabsList>
 
         <div className="flex-1 min-w-[947px]">
-          {/* Account Tab */}
           <TabsContent
             className="shadow-2xl rounded-lg bg-white"
             value="account"
           >
             <div className="flex flex-col gap-8">
-              {/* Header */}
               <CardHeader className="bg-black h-[104px] justify-center items-center rounded-t-lg">
                 <CardTitle className="text-white text-xs mt-5">
                   Гүйлгээний төрөл
@@ -107,9 +129,7 @@ export function TabsDemo() {
                 </CardDescription>
               </CardHeader>
 
-              {/* Form Content */}
               <CardContent className="space-y-6 px-6 pb-2">
-                {/* Account Selector */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="from-account"
@@ -124,7 +144,6 @@ export function TabsDemo() {
                   />
                 </div>
 
-                {/* Recipient Input */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="to-account"
@@ -132,8 +151,18 @@ export function TabsDemo() {
                   ></Label>
                   <GetProfileInput setToAccountId={setToAccountId} />
                 </div>
+                <div className="flex gap-4">
+                  <Switch onChange={handleSwitchChange} />
+                  <span className="text-xs font-bold">Загвар хадгалах</span>
 
-                {/* Amount Input */}
+                  {isSwitchChecked && (
+                    <Input
+                      type="text"
+                      placeholder="Enter your text"
+                      className="mt-2 p-2 border border-gray-300 rounded"
+                    />
+                  )}
+                </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="amount"
@@ -143,8 +172,8 @@ export function TabsDemo() {
                   </Label>
                   <Input
                     id="amount"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    value={formatAmount(amount)}
+                    onChange={handleAmountChange}
                     className="border-0 border-b border-gray-300 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent"
                   />
                 </div>
@@ -174,7 +203,7 @@ export function TabsDemo() {
                     setAccountNumber("");
                     setAmount("");
                     setReference("");
-                    setToAccountId(null); // Clear toAccountId state
+                    setToAccountId(null);
                   }}
                   disabled={loading}
                 >
@@ -192,7 +221,6 @@ export function TabsDemo() {
             </div>
           </TabsContent>
 
-          {/* Password Tab */}
           <TabsContent value="password">
             <Card className="shadow-2xl rounded-lg">
               <CardHeader className="bg-black text-white rounded-t-lg py-6">

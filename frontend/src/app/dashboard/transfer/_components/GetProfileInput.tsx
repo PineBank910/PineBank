@@ -64,7 +64,12 @@ const GetProfileInput = ({
         id="accountNumber"
         type="text"
         value={accountNumber}
-        onChange={(e) => setAccountNumber(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (/^\d*$/.test(value)) {
+            setAccountNumber(value);
+          }
+        }}
         className="border-0 border-b-1 border-gray-300 rounded-none 
                focus:outline-none focus:ring-0 focus:border-black 
                hover:border-black"
