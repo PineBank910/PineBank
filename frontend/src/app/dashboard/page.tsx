@@ -43,7 +43,7 @@ const Dashboard = () => {
         const token = await getToken();
         if (!token) return;
 
-        const response = await fetch("http://localhost:8000/transaction", {
+        const response = await fetch("https://pinebank.onrender.com/transaction", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
