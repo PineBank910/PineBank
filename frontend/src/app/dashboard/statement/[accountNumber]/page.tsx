@@ -20,6 +20,9 @@ import { ChevronRightIcon } from "lucide-react";
 import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import { jsPDF } from "jspdf";
+import { DateRange } from "react-day-picker";
+import { DatePickerWithRange } from "./_components/filterDate";
+import { addDays } from "date-fns";
  
 
 type Account = {
@@ -33,6 +36,11 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [filter, setFilter] = useState<"ALL" | "CREDIT" | "DEBIT">("ALL");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+      from: new Date(),
+      to: addDays(new Date(), 1),
+    })
+    console.log("Date Range:", dateRange)
 
   const params = useParams();
   const accountNumber = Array.isArray(params?.accountNumber)
@@ -70,20 +78,19 @@ const Page = () => {
     getTransactionInfo();
   }, [accountNumber]);
 
-  const filterByDays = (
-    transactions: TransactionType[],
-    days: number
-  ): TransactionType[] => {
-    const now = new Date();
+  const filterByDateRange = (transactions: TransactionType[]): TransactionType[] => {
+    if (!dateRange?.from || !dateRange?.to) return transactions;
+
+    const from = new Date(dateRange.from);
+    const to = new Date(dateRange.to);
+
     return transactions.filter((t) => {
       const txDate = new Date(t.timestamp);
-      const diffTime = now.getTime() - txDate.getTime();
-      const diffDays = diffTime / (1000 * 60 * 60 * 24);
-      return diffDays <= days;
+      return txDate >= from && txDate <= to;
     });
   };
-
-  const transactionsByDays = filterByDays(transactionInfo, 7);
+  const transactionsByDays = filterByDateRange(transactionInfo);
+  console.log("Filtered transactions:", transactionsByDays);
 
   const filteredTransactions = transactionsByDays.filter((tx) => {
     if (filter === "ALL") return true;
@@ -150,13 +157,14 @@ const Page = () => {
         <p className=" text-xl">Total Income: ₮{totalIncome}</p>
         <p className=" text-xl">Total Outcome: ₮{totalOutcome}</p>
       </div>
-      <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl flex justify-between items-center p-4 mt-4 w-full">
+
+      <DatePickerWithRange date={dateRange} setDate={setDateRange} className="mt-4" />
+
         <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl flex justify-between items-center p-4 mt-4 w-full">
           <Button onClick={() => setFilter("ALL")}>Бүгд</Button>
           <Button onClick={() => setFilter("CREDIT")}>Орлого</Button>
           <Button onClick={() => setFilter("DEBIT")}>Зарлага</Button>
         </div>
-      </div>
       <Button onClick={downloadPDF} className="mt-4">
         Download PDF
       </Button>
