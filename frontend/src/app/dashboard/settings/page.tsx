@@ -14,6 +14,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "react-toastify";
 //////////
 import { CurrentUser } from "@/lib/currentUserContext";
+// import { EyeOff } from "lucide-react";
 //////////
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -150,27 +151,30 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
-  // Transaction password functions from here //////////////////////////
+  // Transaction password functions from here /////////////////////////////////////////////////////////////
 
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
   const currentTransactionPassword = currentUserData?.transactionPassword;
-  console.log("Current:", currentTransactionPassword);
   const [password, setPassword] = useState("");
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [typedCurrentPassword, setTypedCurrentPassword] = useState("");
+  const [oldPasswordMatchingError, setOldPasswordMatchingError] = useState("");
+  const [allPasswordValid, setAllPasswordValid] = useState(false);
   const [validatingError, setValidatingError] = useState(
     "Password must contain at least one number and one symbol."
   );
-  const [matchingError, setMatchingError] = useState("Passwords do not match.");
+  const [matchingError, setMatchingError] = useState(
+    "Нууц үгнүүд хоорондоо таарахгүй байна."
+  );
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const validatePassword = (password: string): boolean => {
     // Regex to check for at least one number and one capital letter and 8-16 characters
     const regex: RegExp =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*()\-_=+]{8,20}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,20}$/;
     if (!regex.test(password)) {
       setValidatingError(
-        "Password must contain at least one number and 8-20 characters."
+        "Нууц үг дор хаяж нэг тоо, нэг үсэг болон 8-20 тэмдэгттэй байх ёстой."
       );
       return false;
     }
@@ -189,7 +193,8 @@ const ProfilePage = () => {
       setValidatingError("");
     }
     if (value !== confirmPassword) {
-      setMatchingError("Passwords do not match.");
+      setMatchingError("Нууц үгнүүд хоорондоо таарахгүй байна.");
+      setAllPasswordValid(false);
     } else {
       setMatchingError("");
     }
@@ -201,7 +206,8 @@ const ProfilePage = () => {
     const value = e.target.value;
     setConfirmPassword(value);
     if (value !== password) {
-      setMatchingError("Passwords do not match.");
+      setMatchingError("Нууц үгнүүд хоорондоо таарахгүй байна.");
+      setAllPasswordValid(false);
     } else {
       setMatchingError("");
     }
@@ -209,6 +215,76 @@ const ProfilePage = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       document.getElementById("submitButton")?.click();
+    }
+  };
+  const handleTypedCurrentPassword = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setTypedCurrentPassword(value);
+    console.log(typedCurrentPassword);
+  };
+  useEffect(() => {
+    if (currentTransactionPassword !== typedCurrentPassword) {
+      setOldPasswordMatchingError(
+        "Өмнөх гүйлгээний нууц үгтэй таарахгүй байна."
+      );
+      setAllPasswordValid(false);
+    } else {
+      setOldPasswordMatchingError("");
+    }
+  }, [handleTypedCurrentPassword]);
+  useEffect(() => {
+    if (
+      oldPasswordMatchingError == "" &&
+      matchingError == "" &&
+      validatingError == "" &&
+      password.length > 0 &&
+      confirmPassword.length > 0
+    ) {
+      setAllPasswordValid(true);
+    }
+  }, [
+    handleTypedCurrentPassword,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+  ]);
+  const handlePasswordUpdate = async () => {
+    try {
+      const token = await getToken();
+      console.log(token);
+      if (!token) {
+        console.log("No token available");
+        return;
+      }
+      const response = await fetch(
+        "https://pinebank.onrender/users/transaction-password/update",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: userId, password }),
+        }
+      );
+      if (response.ok) {
+        toast("Нууц үг амжилттай шинэчлэгдлээ!", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const data = await response.json();
+        console.log(data.message || "Нууц үг шинэчлэхэд алдаа гарлаа.");
+      }
+    } catch (error) {
+      console.log("Error:", error);
     }
   };
   return (
@@ -224,72 +300,93 @@ const ProfilePage = () => {
 
           <TabsContent value="transactionPassword">
             <div className="">
-              <div>Гүйлгээний нууц үг өөрчлөх</div>
               <div className="w-full flex flex-col gap-6">
-                <div className="login-top">
-                  Create a strong password
-                  <br />
-                  <span className="login-mid">
-                    Create a strong password with letters and numbers.
-                  </span>
+                <div className=" text-lg font-medium">
+                  Гүйлгээний нууц үг өөрчлөх
                 </div>
-                <input
-                  id="password"
-                  type={isPasswordVisible ? "text" : "password"}
-                  className={`rounded-md w-1/2 border h-[2.25rem] pl-3 ${
+                <div
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
+                    oldPasswordMatchingError
+                      ? "border-[#ef4444] border-opacity-50"
+                      : "border-gray-300"
+                  }`}>
+                  <input
+                    type={isPasswordVisible ? "text" : "password"}
+                    className={`w-full focus:outline-0 `}
+                    placeholder="Хуучин нууц үг"
+                    value={typedCurrentPassword}
+                    onChange={(e) => {
+                      handleTypedCurrentPassword(e);
+                    }}
+                  />
+                  {/* <button className="hover:cursor-pointer">
+                    <EyeOff className="" />
+                  </button> */}
+                </div>
+                {oldPasswordMatchingError && (
+                  <div className="text-red-600">{oldPasswordMatchingError}</div>
+                )}
+                <div
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
                     validatingError
                       ? "border-[#ef4444] border-opacity-50"
                       : "border-gray-300"
-                  }`}
-                  placeholder="Password"
-                  onChange={(e) => {
-                    handlePasswordChange(e);
-                  }}
-                  value={password}
-                />
-                <input
-                  id="checkpassword"
-                  className={`rounded-md w-1/2 border h-[2.25rem] pl-3 ${
-                    matchingError
+                  }`}>
+                  <input
+                    id="password"
+                    type={isPasswordVisible ? "text" : "password"}
+                    className={`w-full focus:outline-0 `}
+                    placeholder="Шинэ нууц үг"
+                    onChange={(e) => {
+                      handlePasswordChange(e);
+                    }}
+                    value={password}
+                  />
+                </div>
+                <div
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
+                    validatingError
                       ? "border-[#ef4444] border-opacity-50"
                       : "border-gray-300"
-                  }`}
-                  placeholder="Confirm"
-                  type={isPasswordVisible ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
-                  onKeyDown={handleKeyDown}
-                />
+                  }`}>
+                  <input
+                    id="checkpassword"
+                    className={`w-full focus:outline-0 `}
+                    placeholder="Шинэ нууц үг давтах"
+                    type={isPasswordVisible ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+
                 {validatingError && (
-                  <p className="login-warning">{validatingError}</p>
+                  <p className="text-red-600">{validatingError}</p>
                 )}
                 {matchingError && (
-                  <p className="login-warning">{matchingError}</p>
+                  <p className="text-red-600">{matchingError}</p>
                 )}
                 <div className="flex items-center">
                   <input
                     type="checkbox"
                     onChange={(e) => setIsPasswordVisible(e.target.checked)}
                   />
-                  <span className="ml-2">Show password</span>
+                  <span className="ml-2">Нууц үг харуулах</span>
                 </div>
                 <div>
                   <button
+                    onClick={() => {
+                      handlePasswordUpdate();
+                    }}
                     id="submitButton"
-                    disabled={!isPasswordValid}
-                    className="w-full  bg-[#18181B] text-[#fafafa] rounded-md h-[2.25rem]"
+                    disabled={!allPasswordValid}
+                    className="w-full dark:bg-green-700 dark:text-white bg-[#18181B] text-[#fafafa] rounded-md h-[2.25rem]"
                     style={{
-                      opacity: isPasswordValid ? 1 : 0.2,
-                      cursor: isPasswordValid ? "pointer" : "not-allowed",
+                      opacity: allPasswordValid ? 1 : 0.2,
+                      cursor: allPasswordValid ? "pointer" : "not-allowed",
                     }}>
-                    Let&apos;s go
+                    Нууц үг шинэчлэх
                   </button>
-                </div>
-                <div className="inline-block">
-                  Already have an account?
-                  <span className="text-[#2563EB] cursor-pointer inline-block p-2">
-                    Log in
-                  </span>
                 </div>
               </div>
             </div>

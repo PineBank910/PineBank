@@ -21,8 +21,9 @@ export const updateTransactionPassword = async (
     if (!user) {
       res.status(404).json({ error: "User not found" });
     }
-    const { updatedTransactionPassword } = req.body; // Get the new transaction password from the request body
-    if (!updatedTransactionPassword) {
+    console.log("REQ>BODY:", req.body);
+    const { password } = req.body; // Get the new transaction password from the request body
+    if (!password) {
       return res
         .status(400)
         .json({ message: "Transaction password is required" });
@@ -31,7 +32,7 @@ export const updateTransactionPassword = async (
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        transactionPassword: updatedTransactionPassword, // Update the transactionPassword field
+        transactionPassword: password, // Update the transactionPassword field
       },
     });
     return res.status(200).json({
