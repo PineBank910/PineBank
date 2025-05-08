@@ -26,6 +26,7 @@ const InactivityHandler = () => {
   };
 
   useEffect(() => {
+    // "mousemove" eniig door oruulval mouse hudluh uyd resetTimer ajillana
     const events = ["keydown", "click", "scroll"];
     events.forEach((event) => window.addEventListener(event, resetTimer));
 
