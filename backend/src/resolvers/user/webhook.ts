@@ -22,6 +22,7 @@ export const Webhook = async (req: Request, res: Response) => {
           email: email_addresses[0].email_address,
           username: username || null,
           password: password || null,
+          transactionPassword: "",
           id: id,
         },
       });
