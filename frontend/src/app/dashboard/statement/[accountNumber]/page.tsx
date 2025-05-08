@@ -8,22 +8,12 @@ import { useContext, useEffect, useState } from "react";
 import ChooseAccount from "../../transfer/_components/ChooseAccount";
 import { CurrentUser } from "@/lib/currentUserContext";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ChevronRightIcon } from "lucide-react";
 import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import { jsPDF } from "jspdf";
 import { DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "./_components/filterDate";
-import { addDays } from "date-fns";
- 
+import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 
 type Account = {
   accountNumber: string;
@@ -36,11 +26,12 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [filter, setFilter] = useState<"ALL" | "CREDIT" | "DEBIT">("ALL");
+  const today = new Date();
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-      from: new Date(),
-      to: addDays(new Date(), 1),
-    })
-    console.log("Date Range:", dateRange)
+    from: startOfDay(subDays(today, 0)),
+    to: addDays(new Date(today), 0),
+  });
+  console.log("Date Range:", dateRange);
 
   const params = useParams();
   const accountNumber = Array.isArray(params?.accountNumber)
@@ -59,9 +50,9 @@ const Page = () => {
       }
       setLoading(true);
       try {
-        const response = await axiosInstance.get<{
+        const response = await axiosInstance.post<{
           transactions: TransactionType[];
-        }>(`transaction/all/${accountNumber}`);
+        }>(`transaction/all/${accountNumber}`, { dateRange });
         setTransactionInfo(response.data.transactions);
         console.log("Fetched transactions:", response.data.transactions);
       } catch (err) {
@@ -76,26 +67,36 @@ const Page = () => {
     };
 
     getTransactionInfo();
-  }, [accountNumber]);
+  }, [accountNumber, dateRange]);
 
-  const filterByDateRange = (transactions: TransactionType[]): TransactionType[] => {
-    if (!dateRange?.from || !dateRange?.to) return transactions;
-
-    const from = new Date(dateRange.from);
-    const to = new Date(dateRange.to);
-
-    return transactions.filter((t) => {
-      const txDate = new Date(t.timestamp);
-      return txDate >= from && txDate <= to;
-    });
-  };
-  const transactionsByDays = filterByDateRange(transactionInfo);
-  console.log("Filtered transactions:", transactionsByDays);
-
-  const filteredTransactions = transactionsByDays.filter((tx) => {
+  const filteredTransactions = transactionInfo.filter((tx) => {
     if (filter === "ALL") return true;
     return tx.type === filter;
   });
+
+  const setYesterday = () => {
+    const yesterday = subDays(new Date(), 1);
+    setDateRange({
+      from: startOfDay(yesterday),
+      to: endOfDay(yesterday),
+    });
+  };
+
+  const setLast7Days = () => {
+    const today = new Date();
+    setDateRange({
+      from: startOfDay(subDays(today, 6)),
+      to: endOfDay(today),
+    });
+  };
+
+  const setLastMonth = () => {
+    const today = new Date();
+    setDateRange({
+      from: startOfDay(subDays(today, 29)),
+      to: endOfDay(today),
+    });
+  };
 
   const groupedTransactions = groupTransactionsByDay(filteredTransactions);
 
@@ -121,16 +122,16 @@ const Page = () => {
 
   const downloadPDF = () => {
     const doc = new jsPDF();
- 
+
     doc.setFontSize(16);
     doc.text("Transaction Report", 20, 20);
     doc.setFontSize(12);
- 
+
     let y = 30; // Starting Y position
     Object.entries(groupedTransactions).forEach(([date, transactions]) => {
       doc.text(`Date: ${date}`, 20, y);
       y += 10;
- 
+
       transactions.forEach((transaction) => {
         doc.text(
           `Reference: ${transaction.reference} | Amount: ${transaction.amount}₮`,
@@ -141,39 +142,46 @@ const Page = () => {
         doc.text(`Balance: ${transaction.runningBalance}₮`, 20, y);
         y += 10;
       });
-      y += 5; 
+      y += 5;
     });
- 
+
     doc.save("transaction_report.pdf");
   };
- 
   return (
     <div className="max-w-6xl flex flex-col mx-auto px-6 py-2 border-b">
-      <div className="flex">
+      <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
         <ChooseAccount
           selectedAccountId={selectedAccountId}
           setSelectedAccountId={setSelectedAccountId}
         />
-        <p className=" text-xl">Total Income: ₮{totalIncome}</p>
-        <p className=" text-xl">Total Outcome: ₮{totalOutcome}</p>
+        <p className=" text-xl bg-secondary p-2">
+          Total Income: ₮{totalIncome}
+        </p>
+        <p className=" text-xl bg-secondary">Total Outcome: ₮{totalOutcome}</p>
       </div>
-
-      <DatePickerWithRange date={dateRange} setDate={setDateRange} className="mt-4" />
-
-        <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl flex justify-between items-center p-4 mt-4 w-full">
-          <Button onClick={() => setFilter("ALL")}>Бүгд</Button>
-          <Button onClick={() => setFilter("CREDIT")}>Орлого</Button>
-          <Button onClick={() => setFilter("DEBIT")}>Зарлага</Button>
-        </div>
-      <Button onClick={downloadPDF} className="mt-4">
-        Download PDF
-      </Button>
+      <div className="flex items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
+        <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+        <Button onClick={setYesterday}>Өчигдөр</Button>
+        <Button onClick={setLast7Days}>7 хоног</Button>
+        <Button onClick={setLastMonth}>1 сар</Button>
+      </div>
+      <div className="rounded-2xl flex justify-between items-center p-2 mt-4 w-full bg-secondary">
+        <Button onClick={() => setFilter("ALL")}>Бүгд</Button>
+        <Button onClick={() => setFilter("CREDIT")}>Орлого</Button>
+        <Button onClick={() => setFilter("DEBIT")}>Зарлага</Button>
+        <Button onClick={downloadPDF} className="mt-4">
+          Download PDF
+        </Button>
+      </div>
       {loading && <p>Loading transactions...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && Object.keys(groupedTransactions).length > 0 && (
-        <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl mt-4 p-4">
+        <div className="rounded-2xl mt-4 p-4">
           {Object.keys(groupedTransactions).map((date) => (
-            <div key={date} className="mb-4">
+            <div
+              key={date}
+              className="mb-4 border border-gray-200 rounded-lg p-4"
+            >
               <h3 className="text-xl font-semibold">{date}</h3>
               {groupedTransactions[date].map((transaction) => (
                 <div
@@ -222,21 +230,6 @@ const Page = () => {
                         </div>
                       )}
                     </div>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" className="w-8 h-8">
-                          <ChevronRightIcon />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                          <DialogTitle>Transaction Details</DialogTitle>
-                          <DialogDescription>
-                            {transaction.reference}
-                          </DialogDescription>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
                   </div>
                 </div>
               ))}

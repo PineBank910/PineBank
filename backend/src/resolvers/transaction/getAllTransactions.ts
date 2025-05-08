@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { filterByDateRange } from "../../utils/filterTransactionByDay";
  
 const prisma = new PrismaClient();
  
@@ -9,6 +10,7 @@ export const getAllTransaction = async (
 ): Promise<any> => {
   try {
     const { accountNumber } = req.params;
+    const {dateRange} = req.body
     const account = await prisma.bankAccount.findUnique({
       where: {
         accountNumber: accountNumber,
@@ -40,10 +42,10 @@ export const getAllTransaction = async (
         toAccountId: true,
       },
     });
- 
-    // Calculate running balance
+
+    const filterDateTransactions = filterByDateRange(transactions, dateRange);
     let runningBalance = 0;
-    const historyWithBalance = transactions.map((tx) => {
+    const historyWithBalance = filterDateTransactions.map((tx) => {
       const isCredit = tx.toAccountId === account.id;
       const isDebit = tx.fromAccountId === account.id;
  

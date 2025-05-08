@@ -9,4 +9,4 @@ export const transactionRouter = express.Router();
 transactionRouter.post("/", createTransaction);
 transactionRouter.get("/:accountId/income-outcome", getAccountIncomeOutcome);
 transactionRouter.post("/get", getTransaction);
-transactionRouter.get("/all/:accountNumber", getAllTransaction);
+transactionRouter.post("/all/:accountNumber", getAllTransaction);
