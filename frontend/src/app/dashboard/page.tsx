@@ -11,12 +11,13 @@ import Transaction from "@/components/dashboard/transaction";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
 const Dashboard = () => {
+  const { isLoaded, isSignedIn } = useAuth();
   const { getToken } = useAuth();
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const { setSelectedSidebar } = useSidebar();
-  const router = useRouter(); 
+  const router = useRouter();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
 
@@ -27,7 +28,12 @@ const Dashboard = () => {
   const rawBalance = selectedAccount?.balance;
   const balance =
     typeof rawBalance === "number" ? `${formatNumber(rawBalance)} MNT` : "...";
-  
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-in"); // Redirect to sign-in page if not signed in
+    }
+  }, [isLoaded, isSignedIn, router]);
+
   useEffect(() => {
     if (!accountNumber) return;
 
@@ -36,14 +42,17 @@ const Dashboard = () => {
         const token = await getToken();
         if (!token) return;
 
-        const response = await fetch("https://pinebank.onrender.com/transaction/get", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ accountNumber }),
-        });
+        const response = await fetch(
+          "https://pinebank.onrender.com/transaction/get",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ accountNumber }),
+          }
+        );
 
         if (!response.ok) {
           console.error("Transaction fetch failed:", await response.text());
@@ -68,6 +77,9 @@ const Dashboard = () => {
     router.push("/dashboard");
   };
   const groupedTransactions = groupTransactionsByDay(transactions.slice(0, 10));
+  if (!isLoaded || !isSignedIn) {
+    return <div>Loading...</div>; // Show a loading state while checking auth
+  }
   return (
     <>
       <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] w-full block md:flex gap-14 max-w-[1500px] h-screen ">
@@ -87,7 +99,6 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="mt-6 mb-6 h-[6rem] sm:h-[144px] sm:w-full border bg-white dark:bg-blue-950 rounded-2xl flex  lg:gap-2 xl:gap-5 items-center px-2 sm:px-4">
-
             <div className="flex justify-between w-full gap-2 sm:flex-col">
               <h3 className="text-[11px] sm:text-[1rem]">
                 ХАРИЛЦАХ/ ИРГЭД / MNT
@@ -97,7 +108,6 @@ const Dashboard = () => {
                 <div className="text-2xl font-medium ">
                   {isVisible ? (
                     <div className="2xl:text-2xl text-[1rem] tex font-medium">
-
                       {selectedAccount ? balance : "..."}
                     </div>
                   ) : (
@@ -145,33 +155,31 @@ const Dashboard = () => {
             <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4">
               {Object.keys(groupedTransactions).length > 0 && (
                 <div className="">
-                  {Object.keys(groupedTransactions)
-
-                    .map((date) => (
-                      <div key={date} className="">
-                        <h3 className="text-l font-semibold bg-[#F8F8F8]">
-                          {date}
-                        </h3>
-                        {groupedTransactions[date].map((transaction) => (
-                          <Transaction
-                            key={transaction.id}
-                            date={new Date(
-                              transaction.timestamp
-                            ).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: false,
-                            })}
-                            amount={String(transaction.amount)}
-                            balance={String(transaction.runningBalance)}
-                            type={transaction.type}
-                            reference={transaction.reference}
-                            fromAccountId={transaction.fromAccountId}
-                            toAccountId={transaction.toAccountId}
-                          />
-                        ))}
-                      </div>
-                    ))}
+                  {Object.keys(groupedTransactions).map((date) => (
+                    <div key={date} className="">
+                      <h3 className="text-l font-semibold bg-[#F8F8F8]">
+                        {date}
+                      </h3>
+                      {groupedTransactions[date].map((transaction) => (
+                        <Transaction
+                          key={transaction.id}
+                          date={new Date(
+                            transaction.timestamp
+                          ).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
+                          amount={String(transaction.amount)}
+                          balance={String(transaction.runningBalance)}
+                          type={transaction.type}
+                          reference={transaction.reference}
+                          fromAccountId={transaction.fromAccountId}
+                          toAccountId={transaction.toAccountId}
+                        />
+                      ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
