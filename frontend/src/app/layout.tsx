@@ -1,10 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
-import FetchUserId from "@/components/fetchUserId";
+
 import { CurrentUserProvider } from "@/lib/currentUserContext";
 import { ToastContainer } from "react-toastify";
 import { SidebarProvider } from "@/context/sidebarContext";
@@ -36,14 +36,15 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="light" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <CurrentUserProvider>
             <UserProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="light"
-                enableSystem={false}>
-                <FetchUserId />
+                defaultTheme="system"
+                enableSystem
+              >
                 <SidebarProvider>{children}</SidebarProvider>
                 <ToastContainer />
               </ThemeProvider>
