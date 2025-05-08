@@ -53,7 +53,7 @@ export function DatePickerWithRange(props: DatePickerProps) {
             selected={date}
             onSelect={setDate}
             numberOfMonths={1}
-            className="bg-white w-full mt-2 rounded-lg"
+            className="bg-white dark:bg-black w-full mt-2 rounded-lg"
           />
         </PopoverContent>
       </Popover>
