@@ -2,14 +2,14 @@
 import { CurrentUser } from "@/lib/currentUserContext";
 import { useVisibility } from "@/context/visibilityContext";
 import { TransactionType } from "../types";
-import { useState, useContext, useEffect } from "react";
-import ChooseAccount from "./transfer/_components/ChooseAccount";
+import { useState, useContext, useEffect } from "react";;
 import { formatNumber } from "@/utils/balanceFormat";
 import { useAuth } from "@clerk/clerk-react";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import Transaction from "@/components/dashboard/transaction";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
+import AccountSelector from "./_components/AccountSelector";
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const { getToken } = useAuth();
@@ -30,7 +30,7 @@ const Dashboard = () => {
     typeof rawBalance === "number" ? `${formatNumber(rawBalance)} MNT` : "...";
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push("/sign-in"); // Redirect to sign-in page if not signed in
+      router.push("/sign-in");
     }
   }, [isLoaded, isSignedIn, router]);
 
@@ -82,15 +82,11 @@ const Dashboard = () => {
   }
   return (
     <>
-      <div className="pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] w-full block md:flex gap-14 max-w-[1500px] h-screen ">
+      <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] h-screen">
         <div className="w-full  sm:w-1/2">
-          <div className="flex justify-between">
+          <div className="flex justify-between mb-4">
             <div className="flex text-xl font-semibold">
-              <div className="w-[100px] mb-2">Данс:</div>
-              <ChooseAccount
-                selectedAccountId={selectedAccountId}
-                setSelectedAccountId={setSelectedAccountId}
-              />
+              <div className="w-[100px] mb-2">Данс</div>
             </div>
             <div
               onClick={handleClickNiit}
@@ -98,28 +94,11 @@ const Dashboard = () => {
               нийт
             </div>
           </div>
-          <div className="mt-6 mb-6 h-[6rem] sm:h-[144px] sm:w-full border bg-white dark:bg-blue-950 rounded-2xl flex  lg:gap-2 xl:gap-5 items-center px-2 sm:px-4">
-            <div className="flex justify-between w-full gap-2 sm:flex-col">
-              <h3 className="text-[11px] sm:text-[1rem]">
-                ХАРИЛЦАХ/ ИРГЭД / MNT
-              </h3>
-              <div className="md:flex md:justify-between text-[11px] sm:text-[1rem]">
-                {accountNumber}
-                <div className="text-2xl font-medium ">
-                  {isVisible ? (
-                    <div className="2xl:text-2xl text-[1rem] tex font-medium">
-                      {selectedAccount ? balance : "..."}
-                    </div>
-                  ) : (
-                    <div className="text-lg tracking-widest select-none">
-                      ****
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
+          <AccountSelector
+            selectedAccountId={selectedAccountId}
+            setSelectedAccountId={setSelectedAccountId}
+          />
+          <div className="w-full mt-6">
             <div className="flex justify-between">
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
               <div
@@ -152,7 +131,7 @@ const Dashboard = () => {
         <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
           <div className="w-full">
             <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
-            <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4">
+            <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">
               {Object.keys(groupedTransactions).length > 0 && (
                 <div className="">
                   {Object.keys(groupedTransactions).map((date) => (
