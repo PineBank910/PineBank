@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -52,7 +51,7 @@ const GetProfileInput = ({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-5">
       <label
         htmlFor="accountNumber"
         className="font-medium text-gray-700 text-xs mt-2 flex gap-1"
@@ -60,7 +59,7 @@ const GetProfileInput = ({
         <p className="text-red-700">*</p>
         Хүлээн авагчийн данс
       </label>
-      <Input
+      <input
         id="accountNumber"
         type="text"
         value={accountNumber}
@@ -70,9 +69,9 @@ const GetProfileInput = ({
             setAccountNumber(value);
           }
         }}
-        className="border-0 border-b-1 border-gray-300 rounded-none 
+        className="border-0 border-b border-gray-300 rounded-none 
                focus:outline-none focus:ring-0 focus:border-black 
-               hover:border-black"
+               hover:border-black duration-500"
       />
 
       <label
@@ -82,15 +81,14 @@ const GetProfileInput = ({
         <p className="text-red-700">*</p>
         Хүлээн авагчийн нэр
       </label>
-      <Input
+      <input
         id="fullName"
         type="text"
         value={fullName}
         readOnly
-        disabled
-        className="border-0 border-b-1 border-gray-300 rounded-none 
+        className="border-0 border-b border-gray-300 rounded-none 
                focus:outline-none focus:ring-0 focus:border-black 
-               hover:border-black bg-transparent cursor-default"
+               hover:border-black duration-500"
       />
 
       {error && <p className="text-red-500">{error}</p>}
