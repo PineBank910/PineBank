@@ -1,4 +1,5 @@
 "use client";
+import InactivityHandler from "@/components/dashboard/inactivityHandler";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useRef, useEffect, useState } from "react";
@@ -46,6 +47,7 @@ export default function DashboardLayout({
 
   return (
     <>
+      <InactivityHandler />
       <VisibilityProvider>
         <section className="relative flex">
           {isSidebarOpen && (
@@ -54,6 +56,7 @@ export default function DashboardLayout({
               ref={sidebarRef}
               className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r"
             >
+
               <div className="flex items-center justify-center w-full mt-4 text-2xl font-bold h-21 sm:text-3xl lg:text-4xl">
                 <div
                   onClick={handleSidebarClick}
