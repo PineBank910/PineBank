@@ -17,8 +17,8 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-
+import SwitchDemo from "./SwitchSave";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 export function TabsDemo() {
   const [amount, setAmount] = useState<number | "">("");
   const [reference, setReference] = useState("");
@@ -26,17 +26,20 @@ export function TabsDemo() {
   const [, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [isSwitchChecked, setIsSwitchChecked] = useState(false);
+  const [, setAccountNumber] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const createTransaction = async () => {
     if (!selectedAccountId) {
-      setError("User is not authenticated or account is missing.");
+      setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+      openDialog();
       return;
     }
 
     if (!toAccountId || !amount || !reference) {
-      setError("Please fill in all fields.");
+      setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+      openDialog();
       return;
     }
 
@@ -54,7 +57,12 @@ export function TabsDemo() {
       const res = await axiosInstance.post("/transaction", transaction);
 
       if (res.status === 201) {
-        alert("Transaction successful!");
+        setSuccess("Transaction successful!");
+        openDialog();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -62,10 +70,12 @@ export function TabsDemo() {
       } else {
         setError("An unexpected error occurred.");
       }
+      openDialog();
     } finally {
       setLoading(false);
     }
   };
+  const openDialog = () => setIsDialogOpen(true);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
@@ -83,10 +93,6 @@ export function TabsDemo() {
   const formatAmount = (amount: number | "") => {
     if (amount === "") return "";
     return amount.toLocaleString();
-  };
-
-  const handleSwitchChange = () => {
-    setIsSwitchChecked(!isSwitchChecked);
   };
 
   return (
@@ -154,18 +160,7 @@ export function TabsDemo() {
                   <GetProfileInput setToAccountId={setToAccountId} />
                 </div>
                 <div className="flex gap-4">
-                  <Switch onChange={handleSwitchChange} />
-                  <span className="text-xs font-bold text-white">
-                    Загвар хадгалах
-                  </span>
-
-                  {isSwitchChecked && (
-                    <Input
-                      type="text"
-                      placeholder="Enter your text"
-                      className="mt-2 p-2 border border-gray-300 rounded bg-transparent"
-                    />
-                  )}
+                  <SwitchDemo />
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -210,16 +205,26 @@ export function TabsDemo() {
                   }}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "Шинэчлэх"}
+                  {loading ? "Шинэчлэл хийгдлээ" : "Шинэчлэх"}
                 </Button>
                 <Button
                   type="submit"
-                  className="py-2 text-white bg-green-600 dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-black hover:text-green-600 transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px]"
                   onClick={createTransaction}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "Гүйлгээ хийх"}
-                </Button>{" "}
+                  {loading ? "Гүйлгээ хийгдэж байна" : "Гүйлгээ хийх"}
+                </Button>
+
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogContent className="p-8 bg-white rounded-lg shadow-lg w-[400px] flex items-center">
+                    <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
+                      {success
+                        ? "Гүйлгээ амжилттай"
+                        : "Хүлээн авагчийн мэдээлэл оруулна уу!"}
+                    </DialogTitle>
+                  </DialogContent>
+                </Dialog>
               </CardFooter>
             </div>
           </TabsContent>

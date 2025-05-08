@@ -63,6 +63,7 @@ const GetProfileInput = ({
         id="accountNumber"
         type="text"
         value={accountNumber}
+        maxLength={12}
         onChange={(e) => {
           const value = e.target.value;
           if (/^\d*$/.test(value)) {
@@ -88,7 +89,7 @@ const GetProfileInput = ({
         readOnly
         className="border-0 border-b border-gray-300 rounded-none 
                focus:outline-none focus:ring-0 focus:border-black 
-               hover:border-black duration-500"
+               hover:border-black duration-500 uppercase cursor-not-allowed"
       />
 
       {error && <p className="text-red-500">{error}</p>}
