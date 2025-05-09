@@ -1,218 +1,256 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
+import { useVisibility } from "@/context/visibilityContext";
+import { axiosInstance } from "@/lib/addedAxiosInstance";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { CurrentUser } from "@/lib/currentUserContext";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { BackgroundBeams } from "@/components/ui/backgroundBeams";
-import Cloudinary from "@/components/ui/cloudinaryWidget";
-import { profileSchema } from "@/validation/profileSchema";
-import { useAuth } from "@clerk/nextjs";
-import { useUser } from "@/context/userContext";
-import { createBankAccount, createProfile } from "@/lib/api";
+import { TransactionType } from "@/app/types";
+import { groupTransactionsByDay } from "@/utils/filterByDay";
+import { jsPDF } from "jspdf";
+import { DateRange } from "react-day-picker";
+import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
+import { DatePickerWithRange } from "./_components/filterDate";
+import ChooseAccountWithId from "./_components/ChooseAccountWithId";
+
+type Account = {
+  accountNumber: string;
+  balance: number;
+};
 
 const Page = () => {
-  const { isLoaded, isSignedIn } = useAuth();
-  const [firstName, setFirstName] = useState("");
-  const [firstNameError, setFirstNameError] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [address, setAddress] = useState("");
-  const [addressError, setAddressError] = useState("");
-  const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [transactionInfo, setTransactionInfo] = useState<TransactionType[]>([]);
+  const [selectedAccountId, setSelectedAccountId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [filter, setFilter] = useState<"ALL" | "CREDIT" | "DEBIT">("ALL");
+  const today = new Date();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfDay(subDays(today, 0)),
+    to: addDays(new Date(today), 0),
+  });
+  const params = useParams();
+  const accountNumber = Array.isArray(params?.accountNumber)
+    ? params.accountNumber[0]
+    : params?.accountNumber;
+  console.log("Account Number:", accountNumber);
+  const { isVisible } = useVisibility();
+  const context = useContext(CurrentUser);
+  const currentUserData = context?.currentUserData;
 
-  const router = useRouter();
-  const { getToken } = useAuth();
-  const { userId } = useUser();
-  console.log("backend user id", userId);
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-    }
-  }, [isLoaded, isSignedIn, router]);
+    const getTransactionInfo = async () => {
+      if (!accountNumber) {
+        setError("Account not found.");
+        return;
+      }
+      setLoading(true);
+      try {
+        const response = await axiosInstance.post<{
+          transactions: TransactionType[];
+        }>(`transaction/all/${accountNumber}`, { dateRange });
+        setTransactionInfo(response.data.transactions);
+        console.log("Fetched transactions:", response.data.transactions);
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data?.message || "Axios error");
+        } else {
+          setError("An unexpected error occurred.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleContinue = () => {
-    const result = profileSchema.safeParse({
-      firstName,
-      lastName,
-      phone,
-      address,
-      image,
+    getTransactionInfo();
+  }, [accountNumber, dateRange]);
+
+  const filteredTransactions = transactionInfo.filter((tx) => {
+    if (filter === "ALL") return true;
+    return tx.type === filter;
+  });
+
+  const setYesterday = () => {
+    const yesterday = subDays(new Date(), 1);
+    setDateRange({
+      from: startOfDay(yesterday),
+      to: endOfDay(new Date()),
+    });
+  };
+
+  const setLast7Days = () => {
+    const today = new Date();
+    setDateRange({
+      from: startOfDay(subDays(today, 6)),
+      to: endOfDay(today),
+    });
+  };
+
+  const setLastMonth = () => {
+    const today = new Date();
+    setDateRange({
+      from: startOfDay(subDays(today, 29)),
+      to: endOfDay(today),
+    });
+  };
+
+  const groupedTransactions = groupTransactionsByDay(filteredTransactions);
+
+  const totalIncome = filteredTransactions
+    .filter((tx) => tx.type === "CREDIT")
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  const totalOutcome = filteredTransactions
+    .filter((tx) => tx.type === "DEBIT")
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  if (!context || !context.currentUserData) return <div>...Loading</div>;
+
+  const accounts = currentUserData?.accounts ?? [];
+
+
+  if (!accounts || accounts.length === 0) {
+    return <div>No accounts available</div>;
+  }
+
+  const account = accounts.find(
+    (acc: Account) => acc.accountNumber === accountNumber
+  );
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("Transaction Report", 20, 20);
+    doc.setFontSize(12);
+
+    let y = 30; // Starting Y position
+    Object.entries(groupedTransactions).forEach(([date, transactions]) => {
+      doc.text(`Date: ${date}`, 20, y);
+      y += 10;
+
+      transactions.forEach((transaction) => {
+        doc.text(
+          `Reference: ${transaction.reference} | Amount: ${transaction.amount}₮`,
+          20,
+          y
+        );
+        y += 10;
+        doc.text(`Balance: ${transaction.runningBalance}₮`, 20, y);
+        y += 10;
+      });
+      y += 5;
     });
 
-    if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
-      setFirstNameError(fieldErrors.firstName?.[0] || "");
-      setLastNameError(fieldErrors.lastName?.[0] || "");
-      setPhoneError(fieldErrors.phone?.[0] || "");
-      setAddressError(fieldErrors.address?.[0] || "");
-      return false;
-    }
-
-    setFirstNameError("");
-    setLastNameError("");
-    setPhoneError("");
-    setAddressError("");
-    return true;
+    doc.save("transaction_report.pdf");
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const isValid = handleContinue();
-    if (!isValid) return;
-
-    try {
-      setLoading(true);
-      const token = await getToken();
-      if (!token) throw new Error("Token not found");
-
-      await createProfile(token, {
-        image,
-        firstName,
-        lastName,
-        phone,
-        address,
-        userId: userId || "",
-      });
-
-      await createBankAccount(token);
-
-      router.push("/dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create profile");
-    } finally {
-      setLoading(false);
-    }
-  };
-  if (!isLoaded || !isSignedIn) {
-    return <div>Loading...</div>;
-  }
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-white px-4 overflow-hidden">
-      <BackgroundBeams className="absolute inset-0 z-0" />
-
-      <div className="relative z-10 w-full max-w-xl shadow-md rounded-lg p-8 backdrop-blur-md bg-white ">
-        <h3 className="text-2xl font-semibold text-center mb-8">
-          Хэрэглэгч үүсгэх хэсэг
-        </h3>
-
-        <div className="flex justify-center mb-8">
-          <div className="flex justify-center items-center w-40 h-40 rounded-full bg-white mt-6 border-2 border-gray-400 border-dotted relative">
-            <Cloudinary image={image} setImage={setImage} />
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-1 text-black">
-              Овог
-            </label>
-            <Input
-              className="w-full text-black"
-              type="text"
-              placeholder="Овог оруулна уу"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            {firstNameError && (
-              <p className="text-red-500 text-sm mt-2 flex items-center">
-                <X className="mr-1 h-4 w-4" />
-                {firstNameError}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1 text-black">
-              Нэр
-            </label>
-            <Input
-              className="w-full text-black"
-              type="text"
-              placeholder="Нэр оруулна уу"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            {lastNameError && (
-              <p className="text-red-500 text-sm mt-2 flex items-center">
-                <X className="mr-1 h-4 w-4" />
-                {lastNameError}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1 text-black">
-              Хаяг
-            </label>
-            <Input
-              className="w-full h-[131px] text-black"
-              type="text"
-              placeholder="Хаягаа оруулна уу"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-            {addressError && (
-              <p className="text-red-500 text-sm mt-2 flex items-center">
-                <X className="mr-1 h-4 w-4" />
-                {addressError}
-              </p>
-            )}
-          </div>
-          <div className="relative">
-            <span className="absolute start-0 bottom-3 text-gray-500 dark:text-gray-400">
-              <svg
-                className="w-4 h-4 rtl:rotate-[270deg]"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 19 18">
-                <path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
-              </svg>
-            </span>
-
-            <input
-              type="tel"
-              id="floating-phone-number"
-              className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-            />
-
-            <label
-              htmlFor="floating-phone-number"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:pl-6 peer-focus:pl-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
-              Утасны дугаар
-            </label>
-          </div>
-
-          {phoneError && (
-            <p className="text-red-500 text-sm mt-2 flex items-center">
-              <X className="mr-1 h-4 w-4" />
-              {phoneError}
-            </p>
-          )}
-
-          <div className="flex justify-center">
-            <Button
-              className="w-[246px] h-[40px] mt-2"
-              type="submit"
-              disabled={loading}>
-              Continue
-            </Button>
-          </div>
-
-          {loading && (
-            <p className="text-center text-sm text-gray-500 mt-2">...loading</p>
-          )}
-          {error && <p className="text-red-500 text-center mt-4">{error}</p>}
-        </form>
+    <div className="max-w-6xl flex flex-col mx-auto px-6 py-2 border-b">
+      <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
+        <ChooseAccountWithId
+          selectedAccountId={selectedAccountId}
+          setSelectedAccountId={setSelectedAccountId}
+        />
+        <Button onClick={downloadPDF} className="mt-4">
+          Download PDF
+        </Button>
       </div>
+      <div className="flex items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
+        <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+        <Button onClick={setYesterday}>Өчигдөр</Button>
+        <Button onClick={setLast7Days}>7 хоног</Button>
+        <Button onClick={setLastMonth}>1 сар</Button>
+      </div>
+      <div className="rounded-2xl flex justify-between items-center p-4 mt-4 w-full bg-secondary">
+        <Button
+          className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("ALL")}
+        >
+          Бүгд
+        </Button>
+        <Button
+          className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("CREDIT")}
+        >
+          Орлого
+        </Button>
+        <Button
+          className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("DEBIT")}
+        >
+          Зарлага
+        </Button>
+        <p className=" text-xl bg-secondary p-2">
+          Total Income: ₮{totalIncome}
+        </p>
+        <p className=" text-xl bg-secondary">Total Outcome: ₮{totalOutcome}</p>
+      </div>
+      {loading && <p>Loading transactions...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {!loading && Object.keys(groupedTransactions).length > 0 && (
+        <div className="rounded-2xl mt-4 p-4">
+          {Object.keys(groupedTransactions).map((date) => (
+            <div
+              key={date}
+              className="mb-4 border border-gray-200 rounded-lg p-4"
+            >
+              <h3 className="text-xl font-semibold">{date}</h3>
+              {groupedTransactions[date].map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="flex justify-between items-center p-4 border-b"
+                >
+                  <div className="flex flex-col items-start justify-between">
+                    <div className="text-sm text-gray-500">
+                      {new Date(transaction.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </div>
+                    <div>{transaction.reference}</div>
+                    <div className="text-1xl"></div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <div
+                      className={
+                        transaction.type === "DEBIT"
+                          ? "text-red-500 flex"
+                          : "text-green-500 flex"
+                      }
+                    >
+                      {transaction.type === "DEBIT" ? "-" : "+"}
+                      {isVisible ? (
+                        <div className="font-medium">{transaction.amount}₮</div>
+                      ) : (
+                        <div className="text-lg tracking-widest select-none">
+                          •••••
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center">
+                      Үлдэгдэл:
+                      {isVisible ? (
+                        <div className=" font-medium">
+                          {account
+                            ? account.balance + transaction.runningBalance
+                            : "—"}
+                        </div>
+                      ) : (
+                        <div className="text-lg tracking-widest select-none">
+                          •••••
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
