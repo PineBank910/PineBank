@@ -1,7 +1,7 @@
 export type ProfileDetail = {
   firstName: string;
   lastName: string;
-  adress: string;
+  address: string;
   image: string;
   phone: number;
 };
@@ -15,7 +15,7 @@ export type UserContextProps = {
 
 export type Accounts = {
   accountNumber: string;
-  balance: string;
+  balance: number;
   type: string;
   id: string;
   userId: string;
@@ -26,7 +26,7 @@ export type User = {
   username: string;
   email: string;
   profile?: ProfileDetail;
-  accounts?: Accounts[] | null;
+  accounts?: Accounts[] | [];
   transactionPassword?: string;
 };
 

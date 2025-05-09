@@ -5,15 +5,15 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import ChooseAccount from "../../transfer/_components/ChooseAccount";
 import { CurrentUser } from "@/lib/currentUserContext";
 import { Button } from "@/components/ui/button";
 import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import { jsPDF } from "jspdf";
 import { DateRange } from "react-day-picker";
-import { DatePickerWithRange } from "./_components/filterDate";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
+import { DatePickerWithRange } from "./_components/filterDate";
+import ChooseAccountWithId from "./_components/ChooseAccountWithId";
 
 type Account = {
   accountNumber: string;
@@ -31,13 +31,11 @@ const Page = () => {
     from: startOfDay(subDays(today, 0)),
     to: addDays(new Date(today), 0),
   });
-  console.log("Date Range:", dateRange);
-
   const params = useParams();
   const accountNumber = Array.isArray(params?.accountNumber)
     ? params.accountNumber[0]
     : params?.accountNumber;
-
+  console.log("Account Number:", accountNumber);
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
@@ -78,7 +76,7 @@ const Page = () => {
     const yesterday = subDays(new Date(), 1);
     setDateRange({
       from: startOfDay(yesterday),
-      to: endOfDay(yesterday),
+      to: endOfDay(new Date()),
     });
   };
 
@@ -110,13 +108,14 @@ const Page = () => {
 
   if (!context || !context.currentUserData) return <div>...Loading</div>;
 
-  const { accounts } = currentUserData;
+  const accounts = currentUserData?.accounts ?? [];
+
 
   if (!accounts || accounts.length === 0) {
     return <div>No accounts available</div>;
   }
 
-  const account: Account | undefined = accounts.find(
+  const account = accounts.find(
     (acc: Account) => acc.accountNumber === accountNumber
   );
 
@@ -150,14 +149,13 @@ const Page = () => {
   return (
     <div className="max-w-6xl flex flex-col mx-auto px-6 py-2 border-b">
       <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
-        <ChooseAccount
+        <ChooseAccountWithId
           selectedAccountId={selectedAccountId}
           setSelectedAccountId={setSelectedAccountId}
         />
-        <p className=" text-xl bg-secondary p-2">
-          Total Income: ₮{totalIncome}
-        </p>
-        <p className=" text-xl bg-secondary">Total Outcome: ₮{totalOutcome}</p>
+        <Button onClick={downloadPDF} className="mt-4">
+          Download PDF
+        </Button>
       </div>
       <div className="flex items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
@@ -165,13 +163,29 @@ const Page = () => {
         <Button onClick={setLast7Days}>7 хоног</Button>
         <Button onClick={setLastMonth}>1 сар</Button>
       </div>
-      <div className="rounded-2xl flex justify-between items-center p-2 mt-4 w-full bg-secondary">
-        <Button onClick={() => setFilter("ALL")}>Бүгд</Button>
-        <Button onClick={() => setFilter("CREDIT")}>Орлого</Button>
-        <Button onClick={() => setFilter("DEBIT")}>Зарлага</Button>
-        <Button onClick={downloadPDF} className="mt-4">
-          Download PDF
+      <div className="rounded-2xl flex justify-between items-center p-4 mt-4 w-full bg-secondary">
+        <Button
+          className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("ALL")}
+        >
+          Бүгд
         </Button>
+        <Button
+          className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("CREDIT")}
+        >
+          Орлого
+        </Button>
+        <Button
+          className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
+          onClick={() => setFilter("DEBIT")}
+        >
+          Зарлага
+        </Button>
+        <p className=" text-xl bg-secondary p-2">
+          Total Income: ₮{totalIncome}
+        </p>
+        <p className=" text-xl bg-secondary">Total Outcome: ₮{totalOutcome}</p>
       </div>
       {loading && <p>Loading transactions...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -193,25 +207,11 @@ const Page = () => {
                       {new Date(transaction.timestamp).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
+                        hour12: false,
                       })}
                     </div>
                     <div>{transaction.reference}</div>
-                    <div className="text-1xl">
-                      <div className="flex items-center">
-                        Үлдэгдэл:
-                        {isVisible ? (
-                          <div className=" font-medium">
-                            {account
-                              ? account.balance + transaction.runningBalance
-                              : "—"}
-                          </div>
-                        ) : (
-                          <div className="text-lg tracking-widest select-none">
-                            •••••
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                    <div className="text-1xl"></div>
                   </div>
                   <div className="flex flex-col items-end">
                     <div
@@ -224,6 +224,20 @@ const Page = () => {
                       {transaction.type === "DEBIT" ? "-" : "+"}
                       {isVisible ? (
                         <div className="font-medium">{transaction.amount}₮</div>
+                      ) : (
+                        <div className="text-lg tracking-widest select-none">
+                          •••••
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center">
+                      Үлдэгдэл:
+                      {isVisible ? (
+                        <div className=" font-medium">
+                          {account
+                            ? account.balance + transaction.runningBalance
+                            : "—"}
+                        </div>
                       ) : (
                         <div className="text-lg tracking-widest select-none">
                           •••••
