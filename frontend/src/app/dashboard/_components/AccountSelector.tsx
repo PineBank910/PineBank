@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-
+import { useVisibility } from "@/context/visibilityContext";
 import {
     Select,
     SelectContent,
@@ -19,6 +19,7 @@ const AccountSelector = (props: ChooseAccountProps) => {
     const context = useContext(CurrentUser);
     const currentUserData = context?.currentUserData;
     const { selectedAccountId, setSelectedAccountId } = props;
+    const { isVisible } = useVisibility();
 
     useEffect(() => {
         if (
@@ -48,9 +49,10 @@ const AccountSelector = (props: ChooseAccountProps) => {
         <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
             <SelectTrigger className="w-full flex items-center text-left justify-center min-h-[8rem] border-0  shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
                 {selectedAccountId ? (
-                    <div className="flex flex-col gap-1 ">
-                        <div className="text-sm font-semibold">ХАРИЛЦАХ / ИРГЭД / MNT</div>
-                        <div className="flex justify-between w-[650px]">
+                    <div className="flex justify-between items-center gap-1 w-full">
+
+                        <div className="flex flex-col">
+                            <div className="text-sm font-semibold">ХАРИЛЦАХ / ИРГЭД / MNT</div>
                             <span className="text-sm font-semibold text-gray-500 block">
                                 MN{" "}
                                 {
@@ -58,14 +60,21 @@ const AccountSelector = (props: ChooseAccountProps) => {
                                         ?.accountNumber
                                 }
                             </span>
+
+                        </div>
+                        {isVisible ? (
                             <span className="text-sm font-semibold text-gray-500 block">
                                 {formatNumber(
-                                    accounts.find((acc) => acc.id === selectedAccountId)
-                                        ?.balance || 0
+                                    Number(accounts.find((acc) => acc.id === selectedAccountId)
+                                        ?.balance) || 0
                                 )}{" "}
                                 MNT
                             </span>
-                        </div>
+                        ) : (
+                            <div className="text-lg tracking-widest select-none">
+                                ******
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <span className="text-gray-400">Данс сонгоно уу</span>
@@ -88,7 +97,7 @@ const AccountSelector = (props: ChooseAccountProps) => {
                                         {account.accountNumber}
                                     </span>
                                     <span className="text-sm font-semibold text-gray-500 block">
-                                        {formatNumber(account?.balance || 0)} MNT
+                                        {formatNumber(Number(account?.balance) || 0)} MNT
                                     </span>
                                 </div>
                             </div>

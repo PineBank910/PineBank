@@ -10,6 +10,7 @@ import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@/context/userContext";
+import { createBankAccount, createProfile } from "@/lib/api";
 
 const Page = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -31,7 +32,6 @@ const Page = () => {
   console.log("backend user id", userId);
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push("/sign-in"); // Redirect to sign-in page if not signed in
     }
   }, [isLoaded, isSignedIn, router]);
 
@@ -59,59 +59,6 @@ const Page = () => {
     setAddressError("");
     return true;
   };
-  const createBankAccount = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      return;
-    }
-
-    try {
-      const response = await fetch("https://pinebank.onrender.com/account", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          balance: 10000,
-        }),
-      });
-
-      if (!response.ok) {
-        return;
-      }
-    } catch (error) {
-      console.error("Error creating account:", error);
-    }
-  };
-
-  const createProfile = async (userProfile: {
-    image: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    address: string;
-  }) => {
-    const token = await getToken();
-
-    if (!token) {
-      return;
-    }
-
-    const response = await fetch("https://pinebank.onrender.com/profile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ...userProfile, userId }),
-    });
-    if (!response.ok) {
-      return;
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -120,15 +67,19 @@ const Page = () => {
 
     try {
       setLoading(true);
+      const token = await getToken();
+      if (!token) throw new Error("Token not found");
 
-      await createProfile({
+      await createProfile(token, {
         image,
         firstName,
         lastName,
         phone,
         address,
+        userId: userId || "",
       });
-      await createBankAccount();
+
+      await createBankAccount(token);
 
       router.push("/dashboard");
     } catch (err) {
@@ -138,7 +89,7 @@ const Page = () => {
     }
   };
   if (!isLoaded || !isSignedIn) {
-    return <div>Loading...</div>; // Show a loading state while checking auth
+    return <div>Loading...</div>;
   }
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-white px-4 overflow-hidden">
