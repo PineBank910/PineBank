@@ -12,8 +12,8 @@ import { groupTransactionsByDay } from "@/utils/filterByDay";
 import { DateRange } from "react-day-picker";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 import ChooseAccountWithId from "./_components/ChooseAccountWithId";
-import { DatePickerWithRange } from "./_components/FilterDate";
-import { downloadPDF } from "./_components/DownloadPDF";
+import { DatePickerWithRange } from "./_components/filterDate";
+import { downloadPDF } from "./_components/downloadPDF";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Account = {
@@ -123,8 +123,8 @@ const Page = () => {
     return <div>Account not found</div>;
   }
   return (
-    <div className="max-w-6xl flex flex-col mx-auto h-full">
-      <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-10 w-full">
+    <div className="flex flex-col h-full max-w-6xl mx-auto">
+      <div className="flex items-center justify-between w-full gap-3 p-4 mt-10 bg-secondary rounded-2xl">
         <ChooseAccountWithId
           selectedAccountId={selectedAccountId}
           setSelectedAccountId={setSelectedAccountId}
@@ -136,12 +136,12 @@ const Page = () => {
               downloadPDF(filteredTransactions);
             }
           }}
-          className="h-16 w-16 rounded-lg"
+          className="w-16 h-16 rounded-lg"
         >
           PDF
         </Button>
       </div>
-      <div className="flex items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
+      <div className="flex items-center justify-between w-full p-4 mt-4 bg-secondary rounded-2xl">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
         <div className="flex gap-2">
           <Button onClick={setYesterday}>Өчигдөр</Button>
@@ -149,13 +149,13 @@ const Page = () => {
           <Button onClick={setLastMonth}>1 сар</Button>
         </div>
       </div>
-      <div className="rounded-2xl flex justify-between items-center p-4 mt-4 w-full bg-secondary">
+      <div className="flex items-center justify-between w-full p-4 mt-4 rounded-2xl bg-secondary">
         <div className="flex gap-2">
-          <p className=" text-xl flex flex-col items-end text-white dark:text-black bg-black dark:bg-white p-2 rounded-xl">
+          <p className="flex flex-col items-end p-2 text-xl text-white bg-black  dark:text-black dark:bg-white rounded-xl">
             Нийт орлого:
             <div className="">{totalIncome}₮</div>
           </p>
-          <p className=" text-xl flex flex-col items-end text-white dark:text-black bg-black dark:bg-white p-2 rounded-xl">
+          <p className="flex flex-col items-end p-2 text-xl text-white bg-black  dark:text-black dark:bg-white rounded-xl">
             Нийт зарлага:
             <div className="">{totalOutcome}₮</div>
           </p>
@@ -182,22 +182,22 @@ const Page = () => {
         </div>
       </div>
       {loading && (
-        <div className="rounded-2xl mt-4 p-4">
+        <div className="p-4 mt-4 rounded-2xl">
           {[1, 2, 3].map((_, idx) => (
             <div
               key={idx}
-              className="border border-gray-200 rounded-lg p-4 space-y-2"
+              className="p-4 space-y-2 border border-gray-200 rounded-lg"
             >
-              <Skeleton className="h-5 w-24" />
+              <Skeleton className="w-24 h-5" />
               {[1, 2].map((i) => (
-                <div key={i} className="flex justify-between items-center">
+                <div key={i} className="flex items-center justify-between">
                   <div className="space-y-2">
-                    <Skeleton className="h-3 w-20" />
-                    <Skeleton className="h-4 w-40" />
+                    <Skeleton className="w-20 h-3" />
+                    <Skeleton className="w-40 h-4" />
                   </div>
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-12" />
-                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="w-12 h-4" />
+                    <Skeleton className="w-20 h-3" />
                   </div>
                 </div>
               ))}
@@ -211,13 +211,13 @@ const Page = () => {
           {Object.keys(groupedTransactions).map((date) => (
             <div
               key={date}
-              className="mb-4 p-4"
+              className="p-4 mb-4"
             >
               <h3 className="text-xl font-semibold">{date}</h3>
               {groupedTransactions[date].map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="flex justify-between items-center p-4 border-b"
+                  className="flex items-center justify-between p-4 border-b"
                 >
                   <div className="flex flex-col items-start justify-between">
                     <div className="text-sm text-gray-500">
@@ -250,7 +250,7 @@ const Page = () => {
                     <div className="flex items-center">
                       Үлдэгдэл:
                       {isVisible ? (
-                        <div className=" font-medium">
+                        <div className="font-medium ">
                           {account
                             ? account.balance + transaction.runningBalance
                             : "—"}
