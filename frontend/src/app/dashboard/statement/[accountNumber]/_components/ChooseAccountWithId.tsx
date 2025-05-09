@@ -9,7 +9,7 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
-import { CurrentUser } from "@/lib/currentUserContext";
+import { CurrentUser } from "@/context/currentUserContext";
 import { formatNumber } from "@/utils/balanceFormat";
 import { useRouter } from "next/navigation";
 
@@ -30,7 +30,7 @@ const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: Choose
       currentUserData.accounts.length > 0 &&
       !selectedAccountId
     ) {
-        const selectedAccount = currentUserData.accounts.find((acc) => acc.id === selectedAccountId);
+      const selectedAccount = currentUserData.accounts.find((acc) => acc.id === selectedAccountId);
       setSelectedAccountId(selectedAccount ? selectedAccount.id : currentUserData.accounts[0].id);
     }
   }, [currentUserData, selectedAccountId, setSelectedAccountId]);
@@ -66,7 +66,7 @@ const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: Choose
                   Number(accounts.find((acc) => acc.id === selectedAccountId)
                     ?.balance) || 0
                 )}{" "}
- 
+
               </span>
               <span className="text-sm font-semibold text-gray-500 block">
                 {formatNumber(

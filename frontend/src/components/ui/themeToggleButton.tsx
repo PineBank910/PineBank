@@ -10,7 +10,7 @@ import {
   AnimationStart,
   AnimationVariant,
   createAnimation,
-} from "@/components/theme-animations";
+} from "@/components/ThemeAnimations";
 
 interface ThemeToggleAnimationProps {
   variant?: AnimationVariant;

@@ -8,7 +8,7 @@ import {
     SelectLabel,
     SelectTrigger,
 } from "@/components/ui/select";
-import { CurrentUser } from "@/lib/currentUserContext";
+import { CurrentUser } from "@/context/currentUserContext";
 import { formatNumber } from "@/utils/balanceFormat";
 
 type ChooseAccountProps = {

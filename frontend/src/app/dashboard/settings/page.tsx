@@ -13,7 +13,7 @@ import { useUser as useAppUser } from "@/context/userContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "react-toastify";
 import { updateUserProfile } from "@/lib/profileActions";
-import { CurrentUser } from "@/lib/currentUserContext";
+import { CurrentUser } from "@/context/currentUserContext";
 import { getUserProfile } from "@/lib/api";
 
 const ProfilePage = () => {

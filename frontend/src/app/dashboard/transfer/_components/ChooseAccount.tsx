@@ -8,7 +8,7 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
-import { CurrentUser } from "@/lib/currentUserContext";
+import { CurrentUser } from "@/context/currentUserContext";
 import { formatNumber } from "@/utils/balanceFormat";
 type ChooseAccountProps = {
   selectedAccountId: string;
@@ -18,7 +18,7 @@ const ChooseAccount = (props: ChooseAccountProps) => {
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
   const { selectedAccountId, setSelectedAccountId } = props;
-  
+
   useEffect(() => {
     if (
       currentUserData &&

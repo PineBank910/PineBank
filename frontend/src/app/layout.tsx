@@ -1,11 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { UserProvider } from "@/context/userContext";
 
-import { CurrentUserProvider } from "@/lib/currentUserContext";
+import { CurrentUserProvider } from "@/context/currentUserContext";
 import { ToastContainer } from "react-toastify";
 import { SidebarProvider } from "@/context/sidebarContext";
 // Configure fonts
