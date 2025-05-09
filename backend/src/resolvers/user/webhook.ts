@@ -11,7 +11,7 @@ export const Webhook = async (req: Request, res: Response) => {
     }
     if (type === "user.deleted") {
       const { id } = req.body.data;
-      await prisma.user.delete({ where: { id } });
+      await prisma.user.delete({ where: { id: id } });
       res.status(200).json({ message: "User deleted successfully." });
     }
     if (type === "user.created") {

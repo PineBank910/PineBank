@@ -14,11 +14,9 @@ datasource db {
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 model User {
-  id    String @id
-  email String @unique
-
-  username String? @unique
-
+  id                  String @id
+  email               String @unique
+  username            String? @unique
   password            String
   transactionPassword String?
   createdAt           DateTime      @default(now())
@@ -35,7 +33,7 @@ model UserProfile {
   address   String
   phone     String
   image     String
-  user      User   @relation(fields: [userId], references: [id])
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model BankAccount {
@@ -44,7 +42,7 @@ model BankAccount {
   type             AccountEnum   @default(BUSINESS)
   balance          Float         @default(0.0)
   userId           String
-  user             User          @relation(fields: [userId], references: [id])
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactionsFrom Transaction[] @relation("FromAccount")
   transactionsTo   Transaction[] @relation("ToAccount")
   createdAt        DateTime      @default(now())
@@ -58,8 +56,8 @@ model Transaction {
   toAccountId   String
   amount        Float
   timestamp     DateTime              @default(now())
-  fromAccount   BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount     BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
+  fromAccount   BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: Cascade)
+  toAccount     BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: Cascade)
   status        TransactionStatusEnum @default(PENDING)
   reference     String?
 }
@@ -67,9 +65,9 @@ model Transaction {
 model Loan {
   id           String         @id @default(uuid())
   userId       String
-  user         User           @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   accountId    String
-  account      BankAccount    @relation("LoanAccount", fields: [accountId], references: [id])
+  account      BankAccount    @relation("LoanAccount", fields: [accountId], references: [id], onDelete: Cascade)
   amount       Float
   interestRate Float
   termMonths   Int
@@ -86,7 +84,7 @@ model Card {
   expiration    DateTime
   cvv           String      @unique
   bankAccountId String
-  bankAccount   BankAccount @relation("BankAccount", fields: [bankAccountId], references: [id])
+  bankAccount   BankAccount @relation("BankAccount", fields: [bankAccountId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
 }
 
