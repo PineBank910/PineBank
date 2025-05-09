@@ -4,7 +4,7 @@ import { TransactionType } from "../types";
 import { useState, useContext, useEffect } from "react";;
 import { useAuth } from "@clerk/clerk-react";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
-import Transaction from "@/components/dashboard/transaction";
+import Transaction from "@/app/dashboard/_components/Transaction";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
 import AccountSelector from "./_components/AccountSelector";

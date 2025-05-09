@@ -12,7 +12,7 @@ import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import { jsPDF } from "jspdf";
 import { DateRange } from "react-day-picker";
-import { DatePickerWithRange } from "./_components/filterDate";
+import { DatePickerWithRange } from "./_components/FilterDate";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 
 type Account = {

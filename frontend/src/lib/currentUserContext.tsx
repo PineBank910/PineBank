@@ -23,7 +23,8 @@ export const CurrentUser = createContext<CurrentUserProps | null>(null);
 export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
   const [currentUserData, setCurrentUserData] = useState<User | undefined>();
   const [error, setError] = useState<string>("");
-  const { getToken } = useAuth();
+
+  const { getToken, isLoaded, isSignedIn } = useAuth();
 
   const getUserData = async () => {
     const token = await getToken();
@@ -32,6 +33,7 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       console.error("No token available");
       return;
     }
+
     try {
       const response = await axiosInstance.get("/users", {
         headers: { Authorization: `Bearer ${token}` },
@@ -44,9 +46,13 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
+
   useEffect(() => {
-    getUserData();
-  }, []);
+    if (isLoaded && isSignedIn) {
+      getUserData();
+    }
+  }, [isLoaded, isSignedIn]);
+
   return (
     <CurrentUser.Provider
       value={{ error, currentUserData, setCurrentUserData }}
