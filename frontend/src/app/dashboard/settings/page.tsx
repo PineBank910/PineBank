@@ -258,7 +258,7 @@ const ProfilePage = () => {
         return;
       }
       const response = await fetch(
-        "https://pinebank.onrender/users/transaction-password/update",
+        "https://pinebank.onrender.com/users/transaction-password/update",
         {
           method: "PUT",
           headers: {
