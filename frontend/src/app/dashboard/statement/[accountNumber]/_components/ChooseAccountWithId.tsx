@@ -18,7 +18,10 @@ type ChooseAccountProps = {
   setSelectedAccountId: (accountId: string) => void;
 };
 
-const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: ChooseAccountProps) => {
+const ChooseAccountWithId = ({
+  selectedAccountId,
+  setSelectedAccountId,
+}: ChooseAccountProps) => {
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
   const { push } = useRouter();
@@ -30,8 +33,12 @@ const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: Choose
       currentUserData.accounts.length > 0 &&
       !selectedAccountId
     ) {
-        const selectedAccount = currentUserData.accounts.find((acc) => acc.id === selectedAccountId);
-      setSelectedAccountId(selectedAccount ? selectedAccount.id : currentUserData.accounts[0].id);
+      const selectedAccount = currentUserData.accounts.find(
+        (acc) => acc.id === selectedAccountId
+      );
+      setSelectedAccountId(
+        selectedAccount ? selectedAccount.id : currentUserData.accounts[0].id
+      );
     }
   }, [currentUserData, selectedAccountId, setSelectedAccountId]);
 
@@ -57,30 +64,28 @@ const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: Choose
     <Select value={selectedAccountId} onValueChange={handleChange}>
       <SelectTrigger className="w-full flex items-center text-left justify-center min-h-16 border-0 shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
         {selectedAccountId ? (
-          <div className="flex flex-col gap-1">
-            <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
-            <div className="flex justify-between w-[50rem]">
+          <div className="flex justify-between items-center gap-1">
+            <div className="flex flex-col w-[50rem]">
+              <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
               <span className="text-sm font-semibold text-gray-500 block">
-                MN{" "}
-                {formatNumber(
-                  Number(accounts.find((acc) => acc.id === selectedAccountId)
-                    ?.balance) || 0
-                )}{" "}
- 
-              </span>
-              <span className="text-sm font-semibold text-gray-500 block">
-                {formatNumber(
-                  accounts.find((acc) => acc.id === selectedAccountId)?.balance || 0
-                )}{" "}
-                MNT
+                {Number(
+                  accounts.find((acc) => acc.id === selectedAccountId)
+                    ?.accountNumber
+                )}
               </span>
             </div>
+            <span className="text-sm font-semibold text-gray-500 block">
+              {formatNumber(
+                accounts.find((acc) => acc.id === selectedAccountId)?.balance ||
+                  0
+              )}{" "}
+              MNT
+            </span>
           </div>
         ) : (
           <span className="text-gray-400">Данс сонгоно уу</span>
         )}
       </SelectTrigger>
-
       <SelectContent className="max-h-[500px]">
         <SelectGroup>
           <SelectLabel className="ml-5.5 uppercase">Данс</SelectLabel>
@@ -90,16 +95,16 @@ const ChooseAccountWithId = ({ selectedAccountId, setSelectedAccountId }: Choose
               key={account.id}
               value={account.id}
             >
-              <div className="flex flex-col gap-2">
-                <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
-                <div className="flex justify-between w-[650px]">
+              <div className="flex justify-between items-center gap-2">
+                <div className="flex flex-col w-[50rem]">
+                  <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
                   <span className="text-sm font-semibold text-gray-500 block">
                     {account.accountNumber}
                   </span>
-                  <span className="text-sm font-semibold text-gray-500 block">
-                    {formatNumber(Number(account.balance))} MNT
-                  </span>
                 </div>
+                <span className="text-sm font-semibold text-gray-500 block">
+                  {formatNumber(Number(account.balance))} MNT
+                </span>
               </div>
             </SelectItem>
           ))}

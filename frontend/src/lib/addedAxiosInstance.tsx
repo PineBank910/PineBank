@@ -1,3 +1,4 @@
 import axios from "axios";
-export const axiosInstance = axios.create({ baseURL: "https://pinebank.onrender.com" });
+export const axiosInstance = axios.create({ baseURL: "http://localhost:8000" });
 // http://localhost:8000 when testing
+// https://pinebank.onrender.com when deployed
