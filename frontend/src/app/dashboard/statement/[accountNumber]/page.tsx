@@ -9,11 +9,12 @@ import { CurrentUser } from "@/context/currentUserContext";
 import { Button } from "@/components/ui/button";
 import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
-import { jsPDF } from "jspdf";
 import { DateRange } from "react-day-picker";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
-import { DatePickerWithRange } from "./_components/filterDate";
 import ChooseAccountWithId from "./_components/ChooseAccountWithId";
+import { DatePickerWithRange } from "./_components/FilterDate";
+import { downloadPDF } from "./_components/DownloadPDF";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Account = {
   accountNumber: string;
@@ -110,7 +111,6 @@ const Page = () => {
 
   const accounts = currentUserData?.accounts ?? [];
 
-
   if (!accounts || accounts.length === 0) {
     return <div>No accounts available</div>;
   }
@@ -119,82 +119,99 @@ const Page = () => {
     (acc: Account) => acc.accountNumber === accountNumber
   );
 
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-
-    doc.setFontSize(16);
-    doc.text("Transaction Report", 20, 20);
-    doc.setFontSize(12);
-
-    let y = 30; // Starting Y position
-    Object.entries(groupedTransactions).forEach(([date, transactions]) => {
-      doc.text(`Date: ${date}`, 20, y);
-      y += 10;
-
-      transactions.forEach((transaction) => {
-        doc.text(
-          `Reference: ${transaction.reference} | Amount: ${transaction.amount}₮`,
-          20,
-          y
-        );
-        y += 10;
-        doc.text(`Balance: ${transaction.runningBalance}₮`, 20, y);
-        y += 10;
-      });
-      y += 5;
-    });
-
-    doc.save("transaction_report.pdf");
-  };
+  if (!account) {
+    return <div>Account not found</div>;
+  }
   return (
-    <div className="max-w-6xl flex flex-col mx-auto px-6 py-2 border-b">
-      <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
+    <div className="max-w-6xl flex flex-col mx-auto h-full">
+      <div className="flex gap-3 items-center justify-between bg-secondary rounded-2xl p-4 mt-10 w-full">
         <ChooseAccountWithId
           selectedAccountId={selectedAccountId}
           setSelectedAccountId={setSelectedAccountId}
         />
-        <Button onClick={downloadPDF} className="mt-4">
-          Download PDF
+        
+        <Button
+          onClick={() => {
+            if (account) {
+              downloadPDF(filteredTransactions);
+            }
+          }}
+          className="h-16 w-16 rounded-lg"
+        >
+          PDF
         </Button>
       </div>
       <div className="flex items-center justify-between bg-secondary rounded-2xl p-4 mt-4 w-full">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
-        <Button onClick={setYesterday}>Өчигдөр</Button>
-        <Button onClick={setLast7Days}>7 хоног</Button>
-        <Button onClick={setLastMonth}>1 сар</Button>
+        <div className="flex gap-2">
+          <Button onClick={setYesterday}>Өчигдөр</Button>
+          <Button onClick={setLast7Days}>7 хоног</Button>
+          <Button onClick={setLastMonth}>1 сар</Button>
+        </div>
       </div>
       <div className="rounded-2xl flex justify-between items-center p-4 mt-4 w-full bg-secondary">
-        <Button
-          className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
-          onClick={() => setFilter("ALL")}
-        >
-          Бүгд
-        </Button>
-        <Button
-          className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
-          onClick={() => setFilter("CREDIT")}
-        >
-          Орлого
-        </Button>
-        <Button
-          className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
-          onClick={() => setFilter("DEBIT")}
-        >
-          Зарлага
-        </Button>
-        <p className=" text-xl bg-secondary p-2">
-          Total Income: ₮{totalIncome}
-        </p>
-        <p className=" text-xl bg-secondary">Total Outcome: ₮{totalOutcome}</p>
+        <div className="flex gap-2">
+          <p className=" text-xl flex flex-col items-end text-white dark:text-black bg-black dark:bg-white p-2 rounded-xl">
+            Нийт орлого:
+            <div className="">{totalIncome}₮</div>
+          </p>
+          <p className=" text-xl flex flex-col items-end text-white dark:text-black bg-black dark:bg-white p-2 rounded-xl">
+            Нийт зарлага:
+            <div className="">{totalOutcome}₮</div>
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
+            onClick={() => setFilter("ALL")}
+          >
+            Бүгд
+          </Button>
+          <Button
+            className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
+            onClick={() => setFilter("CREDIT")}
+          >
+            Орлого
+          </Button>
+          <Button
+            className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
+            onClick={() => setFilter("DEBIT")}
+          >
+            Зарлага
+          </Button>
+        </div>
       </div>
-      {loading && <p>Loading transactions...</p>}
+      {loading && (
+        <div className="rounded-2xl mt-4 p-4">
+          {[1, 2, 3].map((_, idx) => (
+            <div
+              key={idx}
+              className="border border-gray-200 rounded-lg p-4 space-y-2"
+            >
+              <Skeleton className="h-5 w-24" />
+              {[1, 2].map((i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-4 w-40" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-12" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && Object.keys(groupedTransactions).length > 0 && (
-        <div className="rounded-2xl mt-4 p-4">
+        <div className="rounded-2xl mt-4 w-full h-[700px] overflow-y-auto border">
           {Object.keys(groupedTransactions).map((date) => (
             <div
               key={date}
-              className="mb-4 border border-gray-200 rounded-lg p-4"
+              className="mb-4 p-4"
             >
               <h3 className="text-xl font-semibold">{date}</h3>
               {groupedTransactions[date].map((transaction) => (

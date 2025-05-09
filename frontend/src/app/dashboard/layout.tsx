@@ -49,7 +49,7 @@ export default function DashboardLayout({
     <>
       <InactivityHandler />
       <VisibilityProvider>
-        <section className="relative flex">
+        <section className="relative flex ">
           {isSidebarOpen && (
             <div
               id="SIDEBAR"
