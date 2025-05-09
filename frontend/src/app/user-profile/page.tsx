@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { BackgroundBeams } from "@/components/ui/background-beams";
+import { BackgroundBeams } from "@/components/ui/backgroundBeams";
 import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 import { useAuth } from "@clerk/nextjs";

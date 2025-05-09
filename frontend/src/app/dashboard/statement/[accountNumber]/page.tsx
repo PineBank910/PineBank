@@ -5,7 +5,7 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { CurrentUser } from "@/lib/currentUserContext";
+import { CurrentUser } from "@/context/currentUserContext";
 import { Button } from "@/components/ui/button";
 import { TransactionType } from "@/app/types";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
