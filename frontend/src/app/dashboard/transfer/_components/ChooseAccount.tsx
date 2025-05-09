@@ -59,8 +59,8 @@ const ChooseAccount = (props: ChooseAccountProps) => {
               </span>
               <span className="text-sm font-semibold text-gray-500 block">
                 {formatNumber(
-                  accounts.find((acc) => acc.id === selectedAccountId)
-                    ?.balance || 0
+                  Number(accounts.find((acc) => acc.id === selectedAccountId)
+                    ?.balance) || 0
                 )}{" "}
                 MNT
               </span>
@@ -87,7 +87,7 @@ const ChooseAccount = (props: ChooseAccountProps) => {
                     {account.accountNumber}
                   </span>
                   <span className="text-sm font-semibold text-gray-500 block">
-                    {formatNumber(account?.balance || 0)} MNT
+                    {formatNumber(Number(account?.balance || 0))} MNT
                   </span>
                 </div>
               </div>
