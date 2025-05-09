@@ -1,11 +1,11 @@
 "use client";
-import InactivityHandler from "@/components/dashboard/inactivityHandler";
+import InactivityHandler from "@/app/dashboard/_components/InactivityHandler";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useRef, useEffect, useState } from "react";
-import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
-import ToggleVisibility from "@/components/dashboard/toggleVisibility";
-import NotificationBell from "@/components/dashboard/notificationBell";
+import { ThemeToggleButton } from "@/components/ui/themeToggleButton";
+import ToggleVisibility from "./_components/ToggleVisibility";
+import NotificationBell from "@/app/dashboard/_components/NotificationBell";
 import { Menu, House, Settings, UserRound, Send } from "lucide-react";
 import {
   SignInButton,
@@ -91,11 +91,10 @@ export default function DashboardLayout({
                     router.push("/dashboard");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
-                    selectedSidebar === "Эхлэл"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Эхлэл"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <House /> Эхлэл
                 </div>
@@ -105,11 +104,10 @@ export default function DashboardLayout({
                     router.push("/dashboard/transfer");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
-                    selectedSidebar === "Гүйлгээ"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Гүйлгээ"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <Send /> Гүйлгээ
                 </div>
@@ -119,11 +117,10 @@ export default function DashboardLayout({
                     router.push("/dashboard/accounts");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
-                    selectedSidebar === "Данс"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Данс"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <UserRound /> Данс
                 </div>
@@ -133,11 +130,10 @@ export default function DashboardLayout({
                     router.push("/dashboard/settings");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
-                    selectedSidebar === "Тохиргоо"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Тохиргоо"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <Settings /> Тохиргоо
                 </div>
@@ -165,8 +161,8 @@ export default function DashboardLayout({
                     variant="gif"
                     url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDFhOTA1b3czOW5rbWxxdXMxM2psanlicTlmcTgzanlyOThrcWVnaSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/5KCXDVmBcTL8gpOO5C/giphy.gif"
 
-                    //Circle
-                    //Circle-blur
+                  //Circle
+                  //Circle-blur
                   />
                   <NotificationBell />
                   <SignedOut>

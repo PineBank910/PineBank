@@ -7,7 +7,7 @@ import {
   ReceiptText,
   HandCoins,
 } from "lucide-react";
-import { useCurrent } from "@/lib/currentUserContext";
+import { useCurrent } from "@/context/currentUserContext";
 import { formatNumber } from "@/utils/balanceFormat";
 import { useVisibility } from "@/context/visibilityContext";
 import { useRouter } from "next/navigation";
