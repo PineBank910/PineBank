@@ -81,30 +81,31 @@ const AccountSelector = (props: ChooseAccountProps) => {
                 )}
             </SelectTrigger>
 
-            <SelectContent className="max-h-[500px]">
-                <SelectGroup>
-                    <SelectLabel className="ml-5.5 uppercase">Данс</SelectLabel>
+            <SelectContent className="max-h-[500px] w-full">
+                <SelectGroup className="w-full">
+                    <SelectLabel className="ml-5.5 uppercase ">Данс</SelectLabel>
                     {accounts.map((account) => (
                         <SelectItem
-                            className="h-16 py-4 flex justify-center"
+                            className="w-full p-2 block"
                             key={account.id}
                             value={account.id}
                         >
-                            <div className="flex flex-col gap-2">
-                                <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
-                                <div className="flex justify-between w-[650px]">
+                            <div className="flex justify-between items-center w-full mr-6">
+                                <div className="flex flex-col">
+                                    <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
                                     <span className="text-sm font-semibold text-gray-500 block">
                                         {account.accountNumber}
                                     </span>
-                                    <span className="text-sm font-semibold text-gray-500 block">
-                                        {formatNumber(Number(account?.balance) || 0)} MNT
-                                    </span>
                                 </div>
+                                <span className="text-sm font-semibold text-gray-500 block">
+                                    {formatNumber(Number(account.balance))} MNT
+                                </span>
                             </div>
                         </SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>
+
         </Select>
     );
 };
