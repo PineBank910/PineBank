@@ -12,10 +12,10 @@ import { useUser as useClerkUser } from "@clerk/nextjs";
 import { useUser as useAppUser } from "@/context/userContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "react-toastify";
-//////////
+import { updateUserProfile } from "@/lib/profileActions";
 import { CurrentUser } from "@/lib/currentUserContext";
-// import { EyeOff } from "lucide-react";
-//////////
+import { getUserProfile } from "@/lib/api";
+
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
@@ -38,35 +38,23 @@ const ProfilePage = () => {
     const fetchProfileData = async () => {
       try {
         const token = await getToken();
-
-        const response = await fetch("https://pinebank.onrender.com/users", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setProfileId(data.user.userProfile.id);
-          setFirstName(data.user.userProfile.firstName);
-          setLastName(data.user.userProfile.lastName);
-          setPhone(data.user.userProfile.phone);
-          setAddress(data.user.userProfile.address);
-          setImage(data.user.userProfile.image);
-        } else {
-          setError("Failed to fetch profile data.");
+        if (!token) {
+          throw new Error("Token is null");
         }
+        const profile = await getUserProfile(token);
+        setProfileId(profile.id);
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setPhone(profile.phone);
+        setAddress(profile.address);
+        setImage(profile.image);
+        console.log("profile data", profile);
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        console.error("Error fetching profile data:", error instanceof Error ? error.message : error);
         setError("Failed to fetch profile data.");
       }
     };
-
-    if (userId) {
-      fetchProfileData();
-    }
+    fetchProfileData();
   }, [getToken, userId]);
 
   const handleContinue = () => {
@@ -108,49 +96,31 @@ const ProfilePage = () => {
         return;
       }
 
-      const profileData = { phone, address, image };
-      console.log("Sending profile update data:", profileData);
-
       if (!profileId) {
         setError("Profile ID is missing.");
         return;
       }
 
-      const response = await fetch(
-        `https://pinebank.onrender.com/profile/${profileId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(profileData),
-        }
-      );
+      const result = await updateUserProfile(profileId, token, {
+        phone,
+        address,
+        image,
+      });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         toast("🅿 Амжилттай", {
           position: "bottom-left",
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
         });
         router.push("/dashboard");
       } else {
-        setError(data.message || "An error occurred while updating profile.");
+        setError(result.message || "Update failed");
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
   };
+
   // Transaction password functions from here /////////////////////////////////////////////////////////////
 
   const context = useContext(CurrentUser);
@@ -258,7 +228,7 @@ const ProfilePage = () => {
         return;
       }
       const response = await fetch(
-        "https://pinebank.onrender/users/transaction-password/update",
+        "https://pinebank.onrender.com/users/transaction-password/update",
         {
           method: "PUT",
           headers: {
@@ -305,11 +275,10 @@ const ProfilePage = () => {
                   Гүйлгээний нууц үг өөрчлөх
                 </div>
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
-                    oldPasswordMatchingError
-                      ? "border-[#ef4444] border-opacity-50"
-                      : "border-gray-300"
-                  }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${oldPasswordMatchingError
+                    ? "border-[#ef4444] border-opacity-50"
+                    : "border-gray-300"
+                    }`}>
                   <input
                     type={isPasswordVisible ? "text" : "password"}
                     className={`w-full focus:outline-0 `}
@@ -319,19 +288,15 @@ const ProfilePage = () => {
                       handleTypedCurrentPassword(e);
                     }}
                   />
-                  {/* <button className="hover:cursor-pointer">
-                    <EyeOff className="" />
-                  </button> */}
                 </div>
                 {oldPasswordMatchingError && (
                   <div className="text-red-600">{oldPasswordMatchingError}</div>
                 )}
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
-                    validatingError
-                      ? "border-[#ef4444] border-opacity-50"
-                      : "border-gray-300"
-                  }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${validatingError
+                    ? "border-[#ef4444] border-opacity-50"
+                    : "border-gray-300"
+                    }`}>
                   <input
                     id="password"
                     type={isPasswordVisible ? "text" : "password"}
@@ -344,11 +309,10 @@ const ProfilePage = () => {
                   />
                 </div>
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
-                    validatingError
-                      ? "border-[#ef4444] border-opacity-50"
-                      : "border-gray-300"
-                  }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${validatingError
+                    ? "border-[#ef4444] border-opacity-50"
+                    : "border-gray-300"
+                    }`}>
                   <input
                     id="checkpassword"
                     className={`w-full focus:outline-0 `}

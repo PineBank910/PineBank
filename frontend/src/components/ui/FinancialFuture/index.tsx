@@ -1,7 +1,7 @@
-'use client';
-import Image from 'next/image';
-import future_banner from '../../../../public/images/future_banner.png';
-import future_mobile_banner from '../../../../public/images/future_mobile_banner.png';
+"use client";
+import Image from "next/image";
+import future_banner from "../../../../public/images/future_banner.png";
+import future_mobile_banner from "../../../../public/images/future_mobile_banner.png";
 import {
   Wrapper,
   Inner,
@@ -13,9 +13,9 @@ import {
   Stats,
   Stat,
   Banner,
-} from './styles';
-import MaskText from '@/components/Common/MaskText';
-import { useIsMobile } from '../../../../libs/useIsMobile';
+} from "./styles";
+import MaskText from "@/components/Common/MaskText";
+import { useIsMobile } from "../../../lib/useIsMobile";
 import {
   cardsInfo,
   desktopHeaderPhrase,
@@ -23,7 +23,7 @@ import {
   mobileHeaderPhrase,
   mobileParagraphPhrase,
   stats,
-} from './constants';
+} from "./constants";
 
 const FinancialFuture = () => {
   const isMobile = useIsMobile();

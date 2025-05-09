@@ -55,9 +55,9 @@ export const getTransaction = async (
         toAccountId: true,
       },
     });
-
+    const lastTransactions = transactions.slice(-10);
     let runningBalance = account.balance;
-    const historyWithBalance = transactions.map((tx) => {
+    const historyWithBalance = lastTransactions.map((tx) => {
       const isCredit = tx.toAccountId === account.id;
       const isDebit = tx.fromAccountId === account.id;
 

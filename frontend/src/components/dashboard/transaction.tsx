@@ -32,7 +32,9 @@ const Transaction: React.FC<TransactionProps> = ({ date, balance, amount, refere
             </div>
           ) : (
             <div>
-              <div className="text-[1.5rem]">****</div>
+              <div className={
+                `text-[1.5rem] ${type === "CREDIT" ? "text-green-500" : "text-red-500"}`
+              }>****</div>
               <div>Үлд: **** </div>
             </div>
           )}

@@ -4,7 +4,7 @@ import big_banner from "../../../../public/images/big_banner.png";
 import featured_mobile_banner from "../../../../public/images/featured_mobile_banner.png";
 import { Wrapper, Inner, ImageContainer, Div } from "./styles";
 import RevealCover from "@/components/Common/RevealCover";
-import { useIsMobile } from "../../../../libs/useIsMobile";
+import { useIsMobile } from "../../../lib/useIsMobile";
 export const imageVariants = {
   hidden: {
     scale: 1.6,
@@ -23,15 +23,14 @@ const Featured = () => {
   const isMobile = useIsMobile();
   return (
     <Wrapper>
-      <Inner >
+      <Inner>
         <ImageContainer>
           <RevealCover />
           <Div
             variants={imageVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ amount: 0.25, once: true }}
-          >
+            viewport={{ amount: 0.25, once: true }}>
             {isMobile ? (
               <Image
                 src={featured_mobile_banner}

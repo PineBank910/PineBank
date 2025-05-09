@@ -1,19 +1,17 @@
 "use client";
 import { CurrentUser } from "@/lib/currentUserContext";
-import { useVisibility } from "@/context/visibilityContext";
 import { TransactionType } from "../types";
 import { useState, useContext, useEffect } from "react";;
-import { formatNumber } from "@/utils/balanceFormat";
 import { useAuth } from "@clerk/clerk-react";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import Transaction from "@/components/dashboard/transaction";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
 import AccountSelector from "./_components/AccountSelector";
+import { fetchTransactions } from "@/lib/api";
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const { getToken } = useAuth();
-  const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const { setSelectedSidebar } = useSidebar();
@@ -25,9 +23,7 @@ const Dashboard = () => {
     (account) => account.id === selectedAccountId
   );
   const accountNumber = selectedAccount?.accountNumber;
-  const rawBalance = selectedAccount?.balance;
-  const balance =
-    typeof rawBalance === "number" ? `${formatNumber(rawBalance)} MNT` : "...";
+
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push("/sign-in");
@@ -37,36 +33,18 @@ const Dashboard = () => {
   useEffect(() => {
     if (!accountNumber) return;
 
-    const fetchTransactions = async () => {
+    const loadTransactions = async () => {
       try {
         const token = await getToken();
         if (!token) return;
-
-        const response = await fetch(
-          "https://pinebank.onrender.com/transaction/get",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ accountNumber }),
-          }
-        );
-
-        if (!response.ok) {
-          console.error("Transaction fetch failed:", await response.text());
-          return;
-        }
-        const data = await response.json();
-        setTransactions(data.transactions);
-        console.log("Fetched transactions:", data.transactions);
+        const fetchedTransactions = await fetchTransactions(accountNumber, token);
+        setTransactions(fetchedTransactions);
       } catch (error) {
-        console.error("Error fetching transactions:", error);
+        console.error("Failed to load transactions", error);
       }
     };
 
-    fetchTransactions();
+    loadTransactions();
   }, [accountNumber]);
 
   const handleClickNiit = () => {
@@ -78,7 +56,7 @@ const Dashboard = () => {
   };
   const groupedTransactions = groupTransactionsByDay(transactions.slice(0, 10));
   if (!isLoaded || !isSignedIn) {
-    return <div>Loading...</div>; // Show a loading state while checking auth
+    return <div>Loading...</div>;
   }
   return (
     <>
@@ -136,7 +114,7 @@ const Dashboard = () => {
                 <div className="">
                   {Object.keys(groupedTransactions).map((date) => (
                     <div key={date} className="">
-                      <h3 className="text-l font-semibold bg-[#F8F8F8]">
+                      <h3 className="text-l font-semibold bg-[#F8F8F8] dark:bg-[#171717]">
                         {date}
                       </h3>
                       {groupedTransactions[date].map((transaction) => (
