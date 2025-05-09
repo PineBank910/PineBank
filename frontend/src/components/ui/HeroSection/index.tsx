@@ -4,7 +4,7 @@ import { Wrapper, Inner, Pill, HeroTextContainer } from "./styles";
 import ic_chevron_right from "../../../../public/svgs/ic_chevron_right.svg";
 import { GetStartedButton } from "@/components";
 import MaskText from "@/components/Common/MaskText";
-import { useIsMobile } from "../../../../libs/useIsMobile";
+import { useIsMobile } from "../../../lib/useIsMobile";
 import {
   mobileParagraphPhrases,
   mobilePhrases,
