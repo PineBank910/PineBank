@@ -20,9 +20,9 @@ model User {
   password            String
   transactionPassword String?
   createdAt           DateTime      @default(now())
-  userProfile         UserProfile?
-  accounts            BankAccount[]
-  loans               Loan[]
+  userProfile         UserProfile?  @relation(onDelete: Cascade)
+  accounts            BankAccount[] @relation(onDelete: Cascade)
+  loans               Loan[]        @relation(onDelete: Cascade)
 }
 
 model UserProfile {
@@ -43,11 +43,11 @@ model BankAccount {
   balance          Float         @default(0.0)
   userId           String
   user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactionsFrom Transaction[] @relation("FromAccount")
-  transactionsTo   Transaction[] @relation("ToAccount")
+  transactionsFrom Transaction[] @relation("FromAccount", onDelete: Cascade)
+  transactionsTo   Transaction[] @relation("ToAccount", onDelete: Cascade)
   createdAt        DateTime      @default(now())
-  loans            Loan[]        @relation("LoanAccount")
-  Card             Card[]        @relation("BankAccount")
+  loans            Loan[]        @relation("LoanAccount", onDelete: Cascade)
+  Card             Card[]        @relation("BankAccount", onDelete: Cascade)
 }
 
 model Transaction {

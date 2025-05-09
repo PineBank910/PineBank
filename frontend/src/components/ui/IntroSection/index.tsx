@@ -16,7 +16,7 @@ import {
   RightImage,
 } from "./styles";
 import { MaskText } from "@/components";
-import { useIsMobile } from "../../../../libs/useIsMobile";
+import { useIsMobile } from "../../../lib/useIsMobile";
 import {
   desktopHeaderPhrase,
   desktopParagraphPhrase,

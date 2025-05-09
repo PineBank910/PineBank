@@ -1,6 +1,6 @@
 'use client';
 
-import StyledComponentsRegistry from '../../../libs/registry';
+import StyledComponentsRegistry from '../../lib/registry';
 import { GlobalStyles } from './GlobalStyles';
 import { Footer, Header } from '..';
 

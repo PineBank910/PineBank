@@ -18,7 +18,7 @@ import ic_arrow_left from "../../../../public/svgs/ic_arrow_left.svg";
 import ic_arrow_right from "../../../../public/svgs/ic_arrow_right.svg";
 import Image from "next/image";
 import { MaskText } from "@/components";
-import { useIsMobile } from "../../../../libs/useIsMobile";
+import { useIsMobile } from "../../../lib/useIsMobile";
 import { Props, desktopHeaderPhrase, testimonials } from "./constants";
 
 const JoinSection = () => {
