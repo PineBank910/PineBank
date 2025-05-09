@@ -14,9 +14,11 @@ export type UserContextProps = {
 };
 
 export type Accounts = {
-  id: string;
   accountNumber: string;
-  balance: number;
+  balance: string;
+  type: string;
+  id: string;
+  userId: string;
 };
 
 export type User = {
@@ -25,6 +27,7 @@ export type User = {
   email: string;
   profile?: ProfileDetail;
   accounts?: Accounts[] | null;
+  transactionPassword?: string;
 };
 
 export type TransactionType = {
