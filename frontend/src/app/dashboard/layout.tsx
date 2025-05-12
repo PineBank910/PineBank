@@ -1,4 +1,5 @@
 "use client";
+
 import InactivityHandler from "@/app/dashboard/_components/InactivityHandler";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ import {
 } from "@clerk/nextjs";
 import { VisibilityProvider } from "@/context/visibilityContext";
 import { useSidebar } from "@/context/sidebarContext";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -42,7 +44,7 @@ export default function DashboardLayout({
 
   const handleSidebarClick = () => {
     router.push("/dashboard");
-    setSelectedSidebar("Эхлэл");
+    setSelectedSidebar("");
   };
 
   return (
@@ -87,7 +89,7 @@ export default function DashboardLayout({
               <div className="w-full">
                 <div
                   onClick={() => {
-                    setSelectedSidebar("Эхлэл");
+                    setSelectedSidebar("");
                     router.push("/dashboard");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}

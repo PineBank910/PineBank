@@ -121,8 +121,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Transaction password functions from here /////////////////////////////////////////////////////////////
-
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
   const currentTransactionPassword = currentUserData?.transactionPassword;
@@ -362,7 +360,7 @@ const ProfilePage = () => {
               </div>
 
               <div className="text-black dark:text-white">
-                Welcome, {user?.username}
+                Тавтай морилно уу, {user?.username}
               </div>
 
               <div>

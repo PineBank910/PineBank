@@ -69,7 +69,7 @@ export default function Page() {
 
                   <div className="flex flex-col items-end">
                     <div className="text-sm text-black dark:text-gray-200 mb-1">
-                      Барит хийсэн /Хүлээгдэж буй дүн:{" "}
+                      Баримт хийсэн /Хүлээгдэж буй дүн:{" "}
                     </div>
                     {isVisible ? (
                       <span className="font-semibold text-sm text-black dark:text-white">

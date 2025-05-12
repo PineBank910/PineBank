@@ -62,10 +62,10 @@ const ChooseAccountWithId = ({
 
   return (
     <Select value={selectedAccountId} onValueChange={handleChange}>
-      <SelectTrigger className="w-full flex items-center text-left justify-center min-h-16 border-0 shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
+      <SelectTrigger className="w-full flex items-center text-left justify-between min-h-16 border-0 shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
         {selectedAccountId ? (
-         <div className="flex justify-between items-center gap-1">
-            <div className="flex flex-col w-[50rem]">
+         <div className="flex justify-between items-center w-full">
+            <div className="flex flex-col w-full">
               <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
               <span className="text-sm font-semibold text-gray-500 block">
                 {Number(
