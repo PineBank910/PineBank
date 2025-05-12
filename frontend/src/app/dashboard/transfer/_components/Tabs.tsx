@@ -14,7 +14,7 @@ import GetProfileInput from "./GetProfileInput";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent} from "@/components/ui/tabs";
 import SwitchDemo from "./SwitchSave";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 export function TabsDemo() {
@@ -51,13 +51,11 @@ export function TabsDemo() {
         amount: Number(amount),
         reference,
       };
-
       const res = await axiosInstance.post("/transaction", transaction);
 
       if (res.status === 201) {
         setSuccess("Transaction successful!");
         openDialog();
-
         setTimeout(() => {
           window.location.reload();
         }, 1500);
@@ -77,9 +75,7 @@ export function TabsDemo() {
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-
     value = value.replace(/[^0-9.]/g, "");
-
     if (value !== "") {
       const numericValue = parseFloat(value);
       setAmount(isNaN(numericValue) ? "" : numericValue);
@@ -98,33 +94,32 @@ export function TabsDemo() {
       <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
         Гүйлгээ
       </span>
-      <Tabs defaultValue="account" className="flex flex-row mt-10 gap-12">
-        <TabsList className="flex flex-col w-[305px] h-35 gap-5 p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
-          <TabsTrigger
+      <Tabs
+        defaultValue="account"
+        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12">
+        {/* <TabsList className="flex flex-col w-[305px] h-11  p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
+          {/* <TabsTrigger
             value="account"
             className="flex items-center justify-center h-10 w-full text-sm uppercase
            hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
            data-[state=active]:bg-black data-[state=active]:text-white
-           transition-colors duration-400 shadow-lg"
-          >
+           transition-colors duration-400 shadow-lg">
             банкны данс руу
-          </TabsTrigger>
-          <TabsTrigger
+          </TabsTrigger> 
+          {/* <TabsTrigger
             value="password"
             className="flex items-center justify-center h-16 w-full text-sm uppercase
            hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
            data-[state=active]:bg-black data-[state=active]:text-white
-           transition-colors duration-400 shadow-lg"
-          >
+           transition-colors duration-400 shadow-lg">
             Загварууд
-          </TabsTrigger>
-        </TabsList>
+          </TabsTrigger> 
+        </TabsList> */}
 
         <div className="flex-1 min-w-[947px]">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
-            value="account"
-          >
+            value="account">
             <div className="flex flex-col gap-8 items-center">
               <CardHeader className="bg-black w-full h-[104px] justify-center items-center rounded-t-lg">
                 <CardTitle className="text-white text-xs mt-5">
@@ -139,8 +134,7 @@ export function TabsDemo() {
                 <div className="space-y-2 mb-2">
                   <Label
                     htmlFor="from-account"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Шилжүүлэх дансаа
                     сонгох
                   </Label>
@@ -153,8 +147,7 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="to-account"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  ></Label>
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"></Label>
                   <GetProfileInput setToAccountId={setToAccountId} />
                 </div>
                 <div className="flex gap-4">
@@ -163,8 +156,7 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="amount"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Гүйлгээний дүн
                   </Label>
                   <input
@@ -177,8 +169,7 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="reference"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Гүйлгээний утга
                   </Label>
                   <input
@@ -201,21 +192,19 @@ export function TabsDemo() {
                     setReference("");
                     setToAccountId(null);
                   }}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {loading ? "Шинэчлэл хийгдлээ" : "Шинэчлэх"}
                 </Button>
                 <Button
                   type="submit"
                   className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px]"
                   onClick={createTransaction}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {loading ? "Гүйлгээ хийгдэж байна" : "Гүйлгээ хийх"}
                 </Button>
 
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogContent className="p-8 bg-white rounded-lg shadow-lg w-[400px] flex items-center">
+                  <DialogContent className="p-8 dark:bg-gray-700 bg-white rounded-lg shadow-lg w-[400px] flex items-center">
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
                       {success
                         ? "Гүйлгээ амжилттай"
@@ -240,8 +229,7 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="current"
-                    className="text-xs font-medium text-gray-300"
-                  >
+                    className="text-xs font-medium text-gray-300">
                     Одоогийн нууц үг
                   </Label>
                   <Input
@@ -253,8 +241,7 @@ export function TabsDemo() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="new"
-                    className="text-xs font-medium text-gray-300"
-                  >
+                    className="text-xs font-medium text-gray-300">
                     Шинэ нууц үг
                   </Label>
                   <Input
@@ -269,8 +256,7 @@ export function TabsDemo() {
                 <Button
                   type="submit"
                   className="w-full py-2 text-white bg-blue-600 hover:bg-blue-700 transition rounded font-semibold text-sm"
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {loading ? "Processing..." : "Нууц үг солих"}
                 </Button>
               </CardFooter>

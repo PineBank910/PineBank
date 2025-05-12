@@ -23,7 +23,7 @@ const Cloudinary = ({ image, setImage }: CloudinaryProps) => {
       <CldUploadWidget uploadPreset="ml_default" onSuccess={handleSuccess}>
         {({ open }) => (
           <button type="button" onClick={() => open()}>
-            Зураг оруулах
+            <span className="text-blue-500">Зураг оруулах</span>
           </button>
         )}
       </CldUploadWidget>
