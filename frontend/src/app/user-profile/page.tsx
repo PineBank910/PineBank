@@ -96,7 +96,7 @@ const Page = () => {
       <BackgroundBeams className="absolute inset-0 z-0" />
 
       <div className="relative z-10 w-full max-w-xl shadow-md rounded-lg p-8 backdrop-blur-md bg-white ">
-        <h3 className="text-2xl font-semibold text-center mb-8">
+        <h3 className="text-2xl font-semibold text-center mb-8 text-gray-800 ">
           Хэрэглэгч үүсгэх хэсэг
         </h3>
 
@@ -149,9 +149,8 @@ const Page = () => {
             <label className="block text-sm font-medium mb-1 text-black">
               Хаяг
             </label>
-            <Input
+            <textarea
               className="w-full h-[131px] text-black"
-              type="text"
               placeholder="Хаягаа оруулна уу"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -178,7 +177,7 @@ const Page = () => {
             <input
               type="tel"
               id="floating-phone-number"
-              className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 pl-6 pr-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
