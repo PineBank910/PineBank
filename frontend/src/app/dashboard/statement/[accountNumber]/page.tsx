@@ -13,8 +13,8 @@ import { DateRange } from "react-day-picker";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 import ChooseAccountWithId from "./_components/ChooseAccountWithId";
 import { DatePickerWithRange } from "./_components/filterDate";
-import { downloadPDF } from "./_components/downloadPDF";
 import { Skeleton } from "@/components/ui/skeleton";
+import { downloadPDF } from "./_components/DownloadPDF";
 
 type Account = {
   accountNumber: string;
@@ -36,7 +36,6 @@ const Page = () => {
   const accountNumber = Array.isArray(params?.accountNumber)
     ? params.accountNumber[0]
     : params?.accountNumber;
-  console.log("Account Number:", accountNumber);
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
@@ -136,13 +135,13 @@ const Page = () => {
               downloadPDF(filteredTransactions);
             }
           }}
-          className="w-16 h-16 rounded-lg"
+          className="w-12 h-12 rounded-lg"
         >
           PDF
         </Button>
       </div>
-      <div className="flex items-center justify-between w-full p-4 mt-4 bg-secondary rounded-2xl">
-        <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+      <div className="flex items-center justify-between p-4 mt-4 bg-secondary rounded-2xl">
+        <DatePickerWithRange date={dateRange} setDate={setDateRange}/>
         <div className="flex gap-2">
           <Button onClick={setYesterday}>Өчигдөр</Button>
           <Button onClick={setLast7Days}>7 хоног</Button>

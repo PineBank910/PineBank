@@ -2,14 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ChooseAccount from "./ChooseAccount";
 import GetProfileInput from "./GetProfileInput";
@@ -230,7 +228,7 @@ export function TabsDemo() {
           </TabsContent>
 
           <TabsContent value="password">
-            <Card className="shadow-2xl rounded-lg bg-gray-800 dark:bg-gray-900 text-white">
+            {/* <Card className="shadow-2xl rounded-lg bg-gray-800 dark:bg-gray-900 text-white">
               <CardHeader className="bg-black text-white rounded-t-lg py-6">
                 <CardTitle className="text-xs">Нууц үг солих</CardTitle>
                 <CardDescription className="text-white text-sm mt-1">
@@ -276,7 +274,7 @@ export function TabsDemo() {
                   {loading ? "Processing..." : "Нууц үг солих"}
                 </Button>
               </CardFooter>
-            </Card>
+            </Card> */}
           </TabsContent>
         </div>
       </Tabs>

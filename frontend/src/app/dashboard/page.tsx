@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
 import AccountSelector from "./_components/AccountSelector";
 import { fetchTransactions } from "@/lib/api";
+
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const { getToken } = useAuth();
@@ -54,7 +55,7 @@ const Dashboard = () => {
   const handleClickZagvar = () => {
     router.push("/dashboard");
   };
-  const groupedTransactions = groupTransactionsByDay(transactions.slice(0, 10));
+  const groupedTransactions = groupTransactionsByDay(transactions);
   if (!isLoaded || !isSignedIn) {
     return <div>Loading...</div>;
   }
