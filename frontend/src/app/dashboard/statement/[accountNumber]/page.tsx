@@ -39,6 +39,7 @@ const Page = () => {
   const { isVisible } = useVisibility();
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
+  console.log(currentUserData)
 
   useEffect(() => {
     const getTransactionInfo = async () => {

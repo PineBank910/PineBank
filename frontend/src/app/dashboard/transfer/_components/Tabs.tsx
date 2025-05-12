@@ -17,7 +17,8 @@ import React, { useState } from "react";
 import { Tabs, TabsContent} from "@/components/ui/tabs";
 import SwitchDemo from "./SwitchSave";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-export function TabsDemo() {
+import { TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+export const TabsDemo = () => {
   const [amount, setAmount] = useState<number | "">("");
   const [reference, setReference] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,16 +98,15 @@ export function TabsDemo() {
       <Tabs
         defaultValue="account"
         className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12">
-        {/* <TabsList className="flex flex-col w-[305px] h-11  p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
-          {/* <TabsTrigger
+        <TabsList className="flex flex-col w-[305px] h-11  p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
+           <TabsTrigger
             value="account"
             className="flex items-center justify-center h-10 w-full text-sm uppercase
            hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
            data-[state=active]:bg-black data-[state=active]:text-white
            transition-colors duration-400 shadow-lg">
             банкны данс руу
-          </TabsTrigger> 
-          {/* <TabsTrigger
+          </TabsTrigger>  <TabsTrigger
             value="password"
             className="flex items-center justify-center h-16 w-full text-sm uppercase
            hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
@@ -114,7 +114,7 @@ export function TabsDemo() {
            transition-colors duration-400 shadow-lg">
             Загварууд
           </TabsTrigger> 
-        </TabsList> */}
+        </TabsList>
 
         <div className="flex-1 min-w-[947px]">
           <TabsContent
