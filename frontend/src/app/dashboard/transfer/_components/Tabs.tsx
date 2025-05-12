@@ -53,13 +53,11 @@ export function TabsDemo() {
         amount: Number(amount),
         reference,
       };
-
       const res = await axiosInstance.post("/transaction", transaction);
 
       if (res.status === 201) {
         setSuccess("Transaction successful!");
         openDialog();
-
         setTimeout(() => {
           window.location.reload();
         }, 1500);
@@ -79,9 +77,7 @@ export function TabsDemo() {
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-
     value = value.replace(/[^0-9.]/g, "");
-
     if (value !== "") {
       const numericValue = parseFloat(value);
       setAmount(isNaN(numericValue) ? "" : numericValue);
