@@ -16,7 +16,7 @@ import GetProfileInput from "./GetProfileInput";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent} from "@/components/ui/tabs";
 import SwitchDemo from "./SwitchSave";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 export function TabsDemo() {
