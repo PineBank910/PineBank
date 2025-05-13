@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { useRef, useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/ui/themeToggleButton";
 import ToggleVisibility from "./_components/ToggleVisibility";
-import NotificationBell from "@/app/dashboard/_components/NotificationBell";
+// import NotificationBell from "@/app/dashboard/_components/NotificationBell";
 import { Menu, House, Settings, UserRound, Send } from "lucide-react";
 import {
   SignInButton,
@@ -147,11 +147,11 @@ export default function DashboardLayout({
                 aria-label="Toggle sidebar">
                 <Menu size={50} />
               </button>
-              <div className="flex flex-col items-center justify-between w-full sm:flex-row">
-                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A] font-bold">
+              <div className="flex flex-col items-center justify-between w-full sm:flex-row ">
+                <div className="hidden sm:block sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A] font-bold">
                   {selectedSidebar}
                 </div>
-                <div className="flex items-center gap-4 sm:gap-7 sm:mr-8">
+                <div className="flex ml-auto mr-8 items-center gap-6 sm:gap-7 sm:mr-10">
                   <ToggleVisibility />
                   <ThemeToggleButton
                     start="top-right"
@@ -162,7 +162,7 @@ export default function DashboardLayout({
                     //Circle
                     //Circle-blur
                   />
-                  <NotificationBell />
+                  {/* <NotificationBell /> */}
                   <SignedOut>
                     <button className="px-4 py-2 text-white transition bg-blue-600 rounded hover:bg-blue-700">
                       <SignInButton />
