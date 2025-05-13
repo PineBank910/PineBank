@@ -47,9 +47,9 @@ const ChooseAccount = (props: ChooseAccountProps) => {
     <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
       <SelectTrigger className="w-full flex items-center text-left justify-center min-h-16  border-0 shadow-[0_10px_25px_rgba(0,0,0,0.1)] rounded-lg">
         {selectedAccountId ? (
-          <div className="flex flex-col gap-1 ">
-            <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
-            <div className="flex justify-between w-[650px]">
+          <div className="flex justify-between items-center w-full">
+            <div className="flex flex-col justify-between w-full">
+              <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
               <span className="text-sm font-semibold text-gray-500 block">
                 MN{" "}
                 {
@@ -57,14 +57,15 @@ const ChooseAccount = (props: ChooseAccountProps) => {
                     ?.accountNumber
                 }
               </span>
-              <span className="text-sm font-semibold text-gray-500 block">
-                {formatNumber(
-                  Number(accounts.find((acc) => acc.id === selectedAccountId)
-                    ?.balance) || 0
-                )}{" "}
-                MNT
-              </span>
             </div>
+            <span className="text-sm font-semibold text-gray-500 block">
+              {formatNumber(
+                Number(
+                  accounts.find((acc) => acc.id === selectedAccountId)?.balance
+                ) || 0
+              )}{" "}
+              MNT
+            </span>
           </div>
         ) : (
           <span className="text-gray-400">Данс сонгоно уу</span>
@@ -78,8 +79,7 @@ const ChooseAccount = (props: ChooseAccountProps) => {
             <SelectItem
               className="h-16 py-4 flex justify-center"
               key={account.id}
-              value={account.id}
-            >
+              value={account.id}>
               <div className="flex flex-col gap-2">
                 <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
                 <div className="flex justify-between w-[650px]">
