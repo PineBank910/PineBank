@@ -52,7 +52,6 @@ const Page = () => {
           transactions: TransactionType[];
         }>(`transaction/all/${accountNumber}`, { dateRange });
         setTransactionInfo(response.data.transactions);
-        console.log("Fetched transactions:", response.data.transactions);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           setError(err.response?.data?.message || "Axios error");
@@ -122,62 +121,74 @@ const Page = () => {
     return <div>Account not found</div>;
   }
   return (
-    <div className="flex flex-col h-full max-w-6xl mx-auto">
-      <div className="flex items-center justify-between w-full gap-3 p-4 mt-10 bg-secondary rounded-2xl">
+    <div className="flex flex-col h-full max-w-6xl mx-auto px-2 sm:px-4 md:px-8">
+      {/* Top bar: account selector and PDF */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full gap-2 sm:gap-3 p-2 sm:p-4 mt-6 sm:mt-10 bg-secondary rounded-2xl">
         <ChooseAccountWithId
           selectedAccountId={selectedAccountId}
           setSelectedAccountId={setSelectedAccountId}
         />
-
         <Button
           onClick={() => {
             if (account) {
               downloadPDF(filteredTransactions);
             }
           }}
-          className="w-12 h-12 rounded-lg">
+          className="w-full sm:w-12 h-12 rounded-lg mt-2 sm:mt-0">
           PDF
         </Button>
       </div>
-      <div className="flex items-center justify-between p-4 mt-4 bg-secondary rounded-2xl">
+      {/* Date picker and quick filters */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between p-2 sm:p-4 mt-4 bg-secondary rounded-2xl gap-2 sm:gap-0">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
-        <div className="flex gap-2">
-          <Button onClick={setYesterday}>Өчигдөр</Button>
-          <Button onClick={setLast7Days}>7 хоног</Button>
-          <Button onClick={setLastMonth}>1 сар</Button>
+        <div className="flex gap-2 mt-2 md:mt-0 flex-wrap">
+          <Button onClick={setYesterday} size="sm">
+            Өчигдөр
+          </Button>
+          <Button onClick={setLast7Days} size="sm">
+            7 хоног
+          </Button>
+          <Button onClick={setLastMonth} size="sm">
+            1 сар
+          </Button>
         </div>
       </div>
-      <div className="flex items-center justify-between w-full p-4 mt-4 rounded-2xl bg-secondary">
-        <div className="flex gap-2">
-          <div className="flex flex-col items-end p-2 text-xl text-white bg-black  dark:text-black dark:bg-white rounded-xl">
+      {/* Income/Outcome and filter buttons */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between w-full p-2 sm:p-4 mt-4 rounded-2xl bg-secondary gap-2 sm:gap-0">
+        <div className="flex gap-2 mb-2 md:mb-0">
+          <div className="flex flex-col items-end p-2 text-base sm:text-xl text-white bg-black dark:text-black dark:bg-white rounded-xl">
             Нийт орлого:
-            <div className="">{totalIncome}₮</div>
+            <div>{totalIncome}₮</div>
           </div>
-          <div className="flex flex-col items-end p-2 text-xl text-white bg-black  dark:text-black dark:bg-white rounded-xl">
+          <div className="flex flex-col items-end p-2 text-base sm:text-xl text-white bg-black dark:text-black dark:bg-white rounded-xl">
             Нийт зарлага:
-            <div className="">{totalOutcome}₮</div>
+            <div>{totalOutcome}₮</div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button
             className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
+            size="sm"
             onClick={() => setFilter("ALL")}>
             Бүгд
           </Button>
           <Button
             className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
+            size="sm"
             onClick={() => setFilter("CREDIT")}>
             Орлого
           </Button>
           <Button
             className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
+            size="sm"
             onClick={() => setFilter("DEBIT")}>
             Зарлага
           </Button>
         </div>
       </div>
+      {/* Loading skeleton */}
       {loading && (
-        <div className="p-4 mt-4 rounded-2xl">
+        <div className="p-2 sm:p-4 mt-4 rounded-2xl">
           {[1, 2, 3].map((_, idx) => (
             <div
               key={idx}
@@ -199,26 +210,27 @@ const Page = () => {
           ))}
         </div>
       )}
+      {/* Error message */}
       {error && <p className="text-red-500">{error}</p>}
+      {/* Transactions */}
       {!loading && Object.keys(groupedTransactions).length > 0 && (
-        <div className="rounded-2xl mt-4 w-full h-[700px] overflow-y-auto border">
+        <div className="rounded-2xl mt-4 w-full h-[60vh] sm:h-[700px] overflow-y-auto border bg-white dark:bg-gray-800">
           {Object.keys(groupedTransactions).map((date) => (
-            <div key={date} className="p-4 mb-4">
-              <h3 className="text-xl font-semibold">{date}</h3>
+            <div key={date} className="p-2 sm:p-4 mb-4">
+              <h3 className="text-base sm:text-xl font-semibold">{date}</h3>
               {groupedTransactions[date].map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 border-b">
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-2 sm:p-4 border-b gap-2">
                   <div className="flex flex-col items-start justify-between">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-xs sm:text-sm text-gray-500">
                       {new Date(transaction.timestamp).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: false,
                       })}
                     </div>
-                    <div>{transaction.reference}</div>
-                    <div className="text-1xl"></div>
+                    <div className="text-sm">{transaction.reference}</div>
                   </div>
                   <div className="flex flex-col items-end">
                     <div
@@ -236,16 +248,16 @@ const Page = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center text-xs sm:text-sm">
                       Үлдэгдэл:
                       {isVisible ? (
-                        <div className="font-medium ">
+                        <div className="font-medium ml-1">
                           {account
                             ? account.balance + transaction.runningBalance
                             : "—"}
                         </div>
                       ) : (
-                        <div className="text-lg tracking-widest select-none">
+                        <div className="text-lg tracking-widest select-none ml-1">
                           •••••
                         </div>
                       )}
