@@ -1,5 +1,7 @@
 import { Label } from "@/components/ui/label";
-export function ExtraContent() {
+import { DesignProps } from "./SwitchSave";
+export const ExtraContent = (props:DesignProps) => {
+  const {design, setDesign} = props
   return (
     <div className="mt-4">
       <Label
@@ -10,8 +12,8 @@ export function ExtraContent() {
       </Label>
       <input
         id="amount"
-        //   value={formatAmount(amount)}
-        //   onChange={handleAmountChange}
+          value={design}
+          onChange={(e)=>setDesign(e.target.value)}
         className="border-0 border-b w-full mt-2 border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
       />
     </div>

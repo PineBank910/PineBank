@@ -33,7 +33,6 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       console.error("No token available");
       return;
     }
-
     try {
       const response = await axiosInstance.get("/users", {
         headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +51,6 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       getUserData();
     }
   }, [isLoaded, isSignedIn]);
-
   return (
     <CurrentUser.Provider
       value={{ error, currentUserData, setCurrentUserData }}

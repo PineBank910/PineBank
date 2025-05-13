@@ -10,7 +10,6 @@ export const createProfile = async (
     const { userId } = getAuth(req);
     
     if (!userId) {
-      console.log("User ID is missing");
       res.status(400).json({ message: "User ID is missing from the token" });
       return
     }

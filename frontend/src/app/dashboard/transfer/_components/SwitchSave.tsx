@@ -2,9 +2,13 @@ import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { ExtraContent } from "./Extracontent";
 
-export default function SwitchDemo() {
+export type DesignProps = {
+  design:string,
+  setDesign:(value:string)=>void
+}
+export const SwitchDemo = (props:DesignProps) => {
   const [isSwitchChecked, setIsSwitchChecked] = useState(false);
-
+  const {design, setDesign} = props
   const handleSwitchChange = () => {
     setIsSwitchChecked(!isSwitchChecked);
   };
@@ -21,7 +25,7 @@ export default function SwitchDemo() {
         </span>
       </label>
 
-      {isSwitchChecked && <ExtraContent />}
+      {isSwitchChecked && <ExtraContent design={design} setDesign={setDesign}/>}
     </div>
   );
 }

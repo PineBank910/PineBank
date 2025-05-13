@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 
 export const getUser = async (req: Request, res: Response): Promise<any> => {
   try {
-    console.log(req.headers);
 
     const { userId } = getAuth(req);
 
@@ -16,13 +15,12 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       return
     }
 
-    console.log("User ID from request:", userId);
-
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
         userProfile: true,
         accounts: true,
+        designs:true
       },
     });
 

@@ -7,22 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 model User {
-  id                  String @id
-  email               String @unique
-  username            String? @unique
+  id                  String        @id
+  email               String        @unique
+  username            String?       @unique
   password            String
   transactionPassword String?
   createdAt           DateTime      @default(now())
-  userProfile         UserProfile?  
-  accounts            BankAccount[] 
-  loans               Loan[]        
+  accounts            BankAccount[]
+  designs             Design[]
+  userProfile         UserProfile?
 }
 
 model UserProfile {
@@ -42,50 +36,34 @@ model BankAccount {
   type             AccountEnum   @default(BUSINESS)
   balance          Float         @default(0.0)
   userId           String
+  createdAt        DateTime      @default(now())
   user             User          @relation(fields: [userId], references: [id])
   transactionsFrom Transaction[] @relation("FromAccount")
   transactionsTo   Transaction[] @relation("ToAccount")
-  createdAt        DateTime      @default(now())
-  loans            Loan[]        @relation("LoanAccount")
-  Card             Card[]        @relation("BankAccount")
+  quickTransfersTo Design[]      @relation("QuickTransferTo")
 }
 
 model Transaction {
-  id            String                @id @default(uuid())
-  fromAccountId String
-  toAccountId   String
-  amount        Float
-  timestamp     DateTime              @default(now())
-  fromAccount   BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount     BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
-  status        TransactionStatusEnum @default(PENDING)
-  reference     String?
+  id                      String                @id @default(uuid())
+  fromAccountId           String
+  toAccountId             String
+  amount                  Float
+  timestamp               DateTime              @default(now())
+  status                  TransactionStatusEnum @default(PENDING)
+  reference               String?
+  balanceAfterTransaction Float?
+  fromAccount             BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount               BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
 }
 
-model Loan {
-  id           String         @id @default(uuid())
-  userId       String
-  user         User           @relation(fields: [userId], references: [id])
-  accountId    String
-  account      BankAccount    @relation("LoanAccount", fields: [accountId], references: [id])
-  amount       Float
-  interestRate Float
-  termMonths   Int
-  startDate    DateTime
-  endDate      DateTime
-  status       LoanStatusEnum @default(PENDING)
-  createdAt    DateTime       @default(now())
-}
-
-model Card {
-  id            String      @id @default(uuid())
-  cardNumber    String      @unique
-  cardType      CardEnum
-  expiration    DateTime
-  cvv           String      @unique
-  bankAccountId String
-  bankAccount   BankAccount @relation("BankAccount", fields: [bankAccountId], references: [id])
-  createdAt     DateTime    @default(now())
+model Design {
+  id          String      @id @default(uuid())
+  designName  String
+  toAccountId String
+  userId      String
+  timestamp   DateTime    @default(now())
+  user        User        @relation(fields: [userId], references: [id])
+  toAccount   BankAccount @relation("QuickTransferTo", fields: [toAccountId], references: [id])
 }
 
 enum AccountEnum {
@@ -97,18 +75,4 @@ enum TransactionStatusEnum {
   PENDING
   COMPLETED
   FAILED
-}
-
-enum LoanStatusEnum {
-  PENDING
-  APPROVED
-  REJECTED
-  ACTIVE
-  CLOSED
-  DEFAULTED
-}
-
-enum CardEnum {
-  DEBIT
-  CREDIT
 }

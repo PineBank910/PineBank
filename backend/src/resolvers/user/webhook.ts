@@ -16,7 +16,6 @@ export const Webhook = async (req: Request, res: Response) => {
         include: {
           userProfile: true,
           accounts: true,
-          loans: true,
         },
       });
       res.status(200).json({ message: "User deleted successfully." });
