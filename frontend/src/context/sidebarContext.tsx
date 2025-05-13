@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { usePathname } from "next/navigation";
+
 type SidebarContextType = {
   selectedSidebar: string;
   setSelectedSidebar: (value: string) => void;
@@ -9,7 +11,20 @@ type SidebarContextType = {
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export const SidebarProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedSidebar, setSelectedSidebar] = useState("Эхлэл");
+  const pathname = usePathname();
+  // Set initial value based on path
+  let initialSidebar = "";
+  if (pathname?.includes("/transfer")) {
+    initialSidebar = "Гүйлгээ";
+  } else if (pathname?.includes("/accounts")) {
+    initialSidebar = "Данс";
+  } else if (pathname?.includes("/settings")) {
+    initialSidebar = "Тохиргоо";
+  } else {
+    initialSidebar = "Эхлэл";
+  }
+
+  const [selectedSidebar, setSelectedSidebar] = useState(initialSidebar);
 
   return (
     <SidebarContext.Provider value={{ selectedSidebar, setSelectedSidebar }}>

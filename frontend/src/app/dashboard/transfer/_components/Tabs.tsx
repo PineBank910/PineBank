@@ -156,7 +156,7 @@ export function TabsDemo() {
                 </CardDescription>
               </CardHeader>
               {/* ////////////////////////////////////////////////// */}
-              <CardContent className="space-y-6 px-6 pb-2 w-3/4">
+              <CardContent className="space-y-6 px-6 pb-2 w-full">
                 <div className="space-y-2 mb-2">
                   <Label
                     htmlFor="from-account"

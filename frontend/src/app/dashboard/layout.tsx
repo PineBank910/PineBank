@@ -148,7 +148,7 @@ export default function DashboardLayout({
                 <Menu size={50} />
               </button>
               <div className="flex flex-col items-center justify-between w-full sm:flex-row">
-                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A]">
+                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A] font-bold">
                   {selectedSidebar}
                 </div>
                 <div className="flex items-center gap-4 sm:gap-7 sm:mr-8">
