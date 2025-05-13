@@ -13,30 +13,55 @@ import ChooseAccount from "./ChooseAccount";
 import GetProfileInput from "./GetProfileInput";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
-import React, { useState } from "react";
-import { Tabs, TabsContent} from "@/components/ui/tabs";
+import React, { useState, useContext } from "react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import SwitchDemo from "./SwitchSave";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { CurrentUser } from "@/context/currentUserContext";
 export function TabsDemo() {
   const [amount, setAmount] = useState<number | "">("");
   const [reference, setReference] = useState("");
   const [loading, setLoading] = useState(false);
-  const [, setError] = useState("");
+  const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const [, setAccountNumber] = useState("");
   const [success, setSuccess] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const [transactionPassword, setTransactionPassword] = useState("");
+  const context = useContext(CurrentUser);
+  const currentUserData = context?.currentUserData;
+  const userTransactionPassword = currentUserData?.transactionPassword;
   const createTransaction = async () => {
-    if (!selectedAccountId) {
-      setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+    // if (!selectedAccountId || !transactionPassword) {
+    //   setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+    //   openDialog();
+    //   return;
+    // }
+
+    // if (!toAccountId || !amount || !reference) {
+    //   setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+    //   openDialog();
+    //   return;
+    // }
+    if (!toAccountId) {
+      setError("Хүлээн авагчийн данс хоосон байна.");
+      openDialog();
+      return;
+    }
+    if (!amount) {
+      setError("Гүйлгээний дүн хоосон байна.");
+      openDialog();
+      return;
+    }
+    if (!reference) {
+      setError("Гүйлгээний утга хоосон байна.");
       openDialog();
       return;
     }
 
-    if (!toAccountId || !amount || !reference) {
-      setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
+    if (transactionPassword !== userTransactionPassword) {
+      setError("Гүйлгээний нууц үг буруу байна.");
       openDialog();
       return;
     }
@@ -50,6 +75,7 @@ export function TabsDemo() {
         toAccountId,
         amount: Number(amount),
         reference,
+        transactionPassword,
       };
       const res = await axiosInstance.post("/transaction", transaction);
 
@@ -90,7 +116,7 @@ export function TabsDemo() {
   };
 
   return (
-    <div className="h-screen mt-10">
+    <div className="min-h-screen h-auto mt-10 mb-10">
       <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
         Гүйлгээ
       </span>
@@ -116,21 +142,21 @@ export function TabsDemo() {
           </TabsTrigger> 
         </TabsList> */}
 
-        <div className="flex-1 min-w-[947px]">
+        <div className="flex-1 w-auto">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
             value="account">
             <div className="flex flex-col gap-8 items-center">
-              <CardHeader className="bg-black w-full h-[104px] justify-center items-center rounded-t-lg">
+              <CardHeader className="bg-black w-full h-[104px]  rounded-t-lg">
                 <CardTitle className="text-white text-xs mt-5">
                   Гүйлгээний төрөл
                 </CardTitle>
-                <CardDescription className="text-black dark:text-white text-[12px] justify-center min-w-[740px] h-11 border rounded-lg flex items-center mb-5 bg-white dark:bg-gray-700 font-bold text-center">
+                <CardDescription className="text-black dark:text-white text-[12px] justify-center min-w-full w-full h-11 border rounded-lg flex items-center mb-5 bg-white dark:bg-gray-700 font-bold text-center">
                   PINE БАНКНЫ ДАНС РУУ
                 </CardDescription>
               </CardHeader>
-
-              <CardContent className="space-y-6 px-6 pb-2 w-[788px]">
+              {/* ////////////////////////////////////////////////// */}
+              <CardContent className="space-y-6 px-6 pb-2 w-full">
                 <div className="space-y-2 mb-2">
                   <Label
                     htmlFor="from-account"
@@ -177,7 +203,21 @@ export function TabsDemo() {
                     type="text"
                     value={reference}
                     onChange={(e) => setReference(e.target.value)}
-                    className="border-0 w-full border-b border-gray-300 dark:border-white rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
+                    className="border-0 w-full border-b border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="transaction-password"
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
+                    <span className="text-red-600">*</span> Гүйлгээний нууц үг
+                  </Label>
+                  <input
+                    id="transaction-password"
+                    type="password"
+                    value={transactionPassword}
+                    onChange={(e) => setTransactionPassword(e.target.value)}
+                    className="border-0 border-b w-full border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
                 </div>
               </CardContent>
@@ -206,9 +246,7 @@ export function TabsDemo() {
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogContent className="p-8 dark:bg-gray-700 bg-white rounded-lg shadow-lg w-[400px] flex items-center">
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
-                      {success
-                        ? "Гүйлгээ амжилттай"
-                        : "Хүлээн авагчийн мэдээлэл оруулна уу!"}
+                      {success ? "Гүйлгээ амжилттай" : `${error}`}
                     </DialogTitle>
                   </DialogContent>
                 </Dialog>

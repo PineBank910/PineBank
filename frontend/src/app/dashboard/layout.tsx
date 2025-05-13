@@ -44,7 +44,7 @@ export default function DashboardLayout({
 
   const handleSidebarClick = () => {
     router.push("/dashboard");
-    setSelectedSidebar("");
+    setSelectedSidebar("Эхлэл");
   };
 
   return (
@@ -56,9 +56,7 @@ export default function DashboardLayout({
             <div
               id="SIDEBAR"
               ref={sidebarRef}
-              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r"
-            >
-
+              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
               <div className="flex items-center justify-center w-full mt-4 text-2xl font-bold h-21 sm:text-3xl lg:text-4xl">
                 <div
                   onClick={handleSidebarClick}
@@ -67,8 +65,7 @@ export default function DashboardLayout({
                     position: "relative",
                     width: "50px",
                     aspectRatio: "1/1",
-                  }}
-                >
+                  }}>
                   <Image
                     src="/images/Pinebank_Printstream.png"
                     alt="Example"
@@ -78,8 +75,7 @@ export default function DashboardLayout({
                 </div>
                 <span
                   onClick={handleSidebarClick}
-                  className="hidden cursor-pointer dark:block"
-                >
+                  className="hidden cursor-pointer dark:block">
                   P
                 </span>
                 <p className="cursor-pointer" onClick={handleSidebarClick}>
@@ -89,15 +85,15 @@ export default function DashboardLayout({
               <div className="w-full">
                 <div
                   onClick={() => {
-                    setSelectedSidebar("");
+                    setSelectedSidebar("Эхлэл");
                     router.push("/dashboard");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Эхлэл"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
+                    selectedSidebar === "Эхлэл"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                    }`}
-                >
+                  }`}>
                   <House /> Эхлэл
                 </div>
                 <div
@@ -106,11 +102,11 @@ export default function DashboardLayout({
                     router.push("/dashboard/transfer");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Гүйлгээ"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
+                    selectedSidebar === "Гүйлгээ"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                    }`}
-                >
+                  }`}>
                   <Send /> Гүйлгээ
                 </div>
                 <div
@@ -119,11 +115,11 @@ export default function DashboardLayout({
                     router.push("/dashboard/accounts");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Данс"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
+                    selectedSidebar === "Данс"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                    }`}
-                >
+                  }`}>
                   <UserRound /> Данс
                 </div>
                 <div
@@ -132,11 +128,11 @@ export default function DashboardLayout({
                     router.push("/dashboard/settings");
                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                   }}
-                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${selectedSidebar === "Тохиргоо"
+                  className={`flex h-15 items-center pl-4 gap-4 rounded-3xl cursor-pointer transition ${
+                    selectedSidebar === "Тохиргоо"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                    }`}
-                >
+                  }`}>
                   <Settings /> Тохиргоо
                 </div>
               </div>
@@ -148,12 +144,11 @@ export default function DashboardLayout({
               <button
                 onClick={() => setIsSidebarOpen((prev) => !prev)}
                 className="ml-4 focus:outline-none md:hidden"
-                aria-label="Toggle sidebar"
-              >
+                aria-label="Toggle sidebar">
                 <Menu size={50} />
               </button>
               <div className="flex flex-col items-center justify-between w-full sm:flex-row">
-                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A]">
+                <div className="sm:text-4xl text-3xl sm:ml-4 lg:ml-8 xl:ml-10 text-[#343C6A] font-bold">
                   {selectedSidebar}
                 </div>
                 <div className="flex items-center gap-4 sm:gap-7 sm:mr-8">
@@ -161,10 +156,11 @@ export default function DashboardLayout({
                   <ThemeToggleButton
                     start="top-right"
                     variant="gif"
-                    url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDFhOTA1b3czOW5rbWxxdXMxM2psanlicTlmcTgzanlyOThrcWVnaSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/5KCXDVmBcTL8gpOO5C/giphy.gif"
-
-                  //Circle
-                  //Circle-blur
+                    url="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA1dGJueTVpaGlyenJlbTJpNDZ3bTlubGNuenp5bzdtOWplZzBlZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ZE5DmCqNMr3yDXq1Zu/giphy.gif"
+                    //Huuchin gif  https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDFhOTA1b3czOW5rbWxxdXMxM2psanlicTlmcTgzanlyOThrcWVnaSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/5KCXDVmBcTL8gpOO5C/giphy.gif
+                    //RICK ROLL    https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA1dGJueTVpaGlyenJlbTJpNDZ3bTlubGNuenp5bzdtOWplZzBlZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ZE5DmCqNMr3yDXq1Zu/giphy.gif
+                    //Circle
+                    //Circle-blur
                   />
                   <NotificationBell />
                   <SignedOut>

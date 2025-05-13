@@ -50,7 +50,10 @@ const ProfilePage = () => {
         setImage(profile.image);
         console.log("profile data", profile);
       } catch (error) {
-        console.error("Error fetching profile data:", error instanceof Error ? error.message : error);
+        console.error(
+          "Error fetching profile data:",
+          error instanceof Error ? error.message : error
+        );
         setError("Failed to fetch profile data.");
       }
     };
@@ -128,9 +131,7 @@ const ProfilePage = () => {
   const [typedCurrentPassword, setTypedCurrentPassword] = useState("");
   const [oldPasswordMatchingError, setOldPasswordMatchingError] = useState("");
   const [allPasswordValid, setAllPasswordValid] = useState(false);
-  const [validatingError, setValidatingError] = useState(
-    "Password must contain at least one number and one symbol."
-  );
+  const [validatingError, setValidatingError] = useState("");
   const [matchingError, setMatchingError] = useState(
     "Нууц үгнүүд хоорондоо таарахгүй байна."
   );
@@ -247,6 +248,9 @@ const ProfilePage = () => {
           progress: undefined,
           theme: "light",
         });
+        setPassword("");
+        setTypedCurrentPassword("");
+        setConfirmPassword("");
       } else {
         const data = await response.json();
         console.log(data.message || "Нууц үг шинэчлэхэд алдаа гарлаа.");
@@ -273,10 +277,11 @@ const ProfilePage = () => {
                   Гүйлгээний нууц үг өөрчлөх
                 </div>
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${oldPasswordMatchingError
-                    ? "border-[#ef4444] border-opacity-50"
-                    : "border-gray-300"
-                    }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
+                    oldPasswordMatchingError
+                      ? "border-[#ef4444] border-opacity-50"
+                      : "border-gray-300"
+                  }`}>
                   <input
                     type={isPasswordVisible ? "text" : "password"}
                     className={`w-full focus:outline-0 `}
@@ -291,10 +296,11 @@ const ProfilePage = () => {
                   <div className="text-red-600">{oldPasswordMatchingError}</div>
                 )}
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${validatingError
-                    ? "border-[#ef4444] border-opacity-50"
-                    : "border-gray-300"
-                    }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
+                    validatingError
+                      ? "border-[#ef4444] border-opacity-50"
+                      : "border-gray-300"
+                  }`}>
                   <input
                     id="password"
                     type={isPasswordVisible ? "text" : "password"}
@@ -307,10 +313,11 @@ const ProfilePage = () => {
                   />
                 </div>
                 <div
-                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${validatingError
-                    ? "border-[#ef4444] border-opacity-50"
-                    : "border-gray-300"
-                    }`}>
+                  className={`flex justify-between items-center rounded-md w-1/2 min-w-[240px] border h-[2.25rem] px-2 ${
+                    validatingError
+                      ? "border-[#ef4444] border-opacity-50"
+                      : "border-gray-300"
+                  }`}>
                   <input
                     id="checkpassword"
                     className={`w-full focus:outline-0 `}
