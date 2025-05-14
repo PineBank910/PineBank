@@ -89,9 +89,9 @@ export const TabsDemo = () => {
         const response = res.data.transaction;
         setSuccess("Transaction successful!");
         openDialog();
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1500);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
         setDataResponse(response);
       }
     } catch (err) {
@@ -130,7 +130,7 @@ export const TabsDemo = () => {
       });
 
       if (res.status === 201) {
-        console.log(res)
+        console.log(res);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -254,6 +254,7 @@ export const TabsDemo = () => {
                     type="text"
                     value={reference}
                     onChange={(e) => setReference(e.target.value)}
+                    autoComplete="off"
                     className="border-0 w-full border-b border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
                 </div>
@@ -268,6 +269,7 @@ export const TabsDemo = () => {
                     id="transaction-password"
                     type="password"
                     value={transactionPassword}
+                    autoComplete="off"
                     onChange={(e) => setTransactionPassword(e.target.value)}
                     className="border-0 border-b w-full border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
@@ -283,6 +285,7 @@ export const TabsDemo = () => {
                     setAmount("");
                     setReference("");
                     setToAccountId(null);
+                    setTransactionPassword("");
                   }}
                   disabled={loading}
                 >
@@ -304,7 +307,6 @@ export const TabsDemo = () => {
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
                     </DialogTitle>
-
                   </DialogContent>
                 </Dialog>
               </CardFooter>
