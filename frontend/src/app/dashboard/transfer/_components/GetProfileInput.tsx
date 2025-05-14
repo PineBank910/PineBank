@@ -3,6 +3,7 @@
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const GetProfileInput = ({
   setToAccountId,
@@ -41,13 +42,17 @@ const GetProfileInput = ({
   };
 
   useEffect(() => {
-    if (accountNumber.length === 11) {
+    if (accountNumber.length === 10) {
       getProfile();
     }
   }, [accountNumber]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    <div className="space-y-2 w-full">
+      <Skeleton className="h-6 w-1/3" />
+      <Skeleton className="h-4 w-1/4" />
+      <Skeleton className="h-16 w-full rounded-lg" />
+    </div>;
   }
 
   return (
@@ -63,7 +68,7 @@ const GetProfileInput = ({
         id="accountNumber"
         type="text"
         value={accountNumber}
-        maxLength={12}
+        maxLength={10}
         onChange={(e) => {
           const value = e.target.value;
           if (/^\d*$/.test(value)) {
