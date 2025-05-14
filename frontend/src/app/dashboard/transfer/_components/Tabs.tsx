@@ -13,12 +13,13 @@ import ChooseAccount from "./ChooseAccount";
 import GetProfileInput from "./GetProfileInput";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { CurrentUser } from "@/context/currentUserContext";
 import { SwitchDemo } from "./SwitchSave";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const TabsDemo = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -28,7 +29,7 @@ export const TabsDemo = () => {
   const [error, setError] = useState("");
   const [toAccountId, setToAccountId] = useState<string | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
-  const [, setAccountNumber] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
   const [success, setSuccess] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [transactionPassword, setTransactionPassword] = useState("");
@@ -37,19 +38,20 @@ export const TabsDemo = () => {
   const userTransactionPassword = currentUserData?.transactionPassword;
   const { getToken } = useAuth();
   const [dataResponse, setDataResponse] = useState({});
+  const searchParams = useSearchParams();
+  const designId = searchParams.get("designId") || "";
+  const { push } = useRouter();
+  const selectedDesign = currentUserData?.designs.find(
+    (design) => design.id === designId
+  );
+
+  useEffect(() => {
+    if (selectedDesign) {
+      setAccountNumber(selectedDesign.toAccountNumber);
+    }
+  }, [selectedDesign]);
 
   const createTransaction = async () => {
-    // if (!selectedAccountId || !transactionPassword) {
-    //   setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
-    //   openDialog();
-    //   return;
-    // }
-
-    // if (!toAccountId || !amount || !reference) {
-    //   setError("Хэрэглэгчийн мэдээлэл хоосон байна.");
-    //   openDialog();
-    //   return;
-    // }
     if (!toAccountId) {
       setError("Хүлээн авагчийн данс хоосон байна.");
       openDialog();
@@ -87,11 +89,9 @@ export const TabsDemo = () => {
 
       if (res.status === 201) {
         const response = res.data.transaction;
+        console.log(response, "response transaction")
         setSuccess("Transaction successful!");
         openDialog();
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1500);
         setDataResponse(response);
       }
     } catch (err) {
@@ -105,7 +105,6 @@ export const TabsDemo = () => {
       setLoading(false);
     }
   };
-  console.log(dataResponse, "data");
   const createDesign = async () => {
     const token = await getToken();
     if (!toAccountId) {
@@ -130,7 +129,8 @@ export const TabsDemo = () => {
       });
 
       if (res.status === 201) {
-        console.log(res)
+        const designAccount = res.data.accountNumber;
+        console.log(designAccount, "designAccount");
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -161,34 +161,15 @@ export const TabsDemo = () => {
     return amount.toLocaleString();
   };
   return (
-    <div className="min-h-screen h-auto mt-10 mb-10">
+    <div className="min-h-screen h-auto mt-10 mb-10 w-full max-w-5xl">
       <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
         Гүйлгээ
       </span>
       <Tabs
         defaultValue="account"
-        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12"
+        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 "
       >
-        {/* <TabsList className="flex flex-col w-[305px] h-11  p-0 bg-white dark:bg-gray-800 rounded-lg border-none">
-          {/* <TabsTrigger
-            value="account"
-            className="flex items-center justify-center h-10 w-full text-sm uppercase
-           hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
-           data-[state=active]:bg-black data-[state=active]:text-white
-           transition-colors duration-400 shadow-lg">
-            банкны данс руу
-          </TabsTrigger> 
-          {/* <TabsTrigger
-            value="password"
-            className="flex items-center justify-center h-16 w-full text-sm uppercase
-           hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white
-           data-[state=active]:bg-black data-[state=active]:text-white
-           transition-colors duration-400 shadow-lg">
-            Загварууд
-          </TabsTrigger> 
-        </TabsList> */}
-
-        <div className="flex-1 w-auto">
+        <div className="flex-1 w-auto max-md:w-[350px]">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
             value="account"
@@ -223,10 +204,16 @@ export const TabsDemo = () => {
                     htmlFor="to-account"
                     className="font-medium text-gray-700 dark:text-gray-300 text-xs"
                   ></Label>
-                  <GetProfileInput setToAccountId={setToAccountId} />
+                  <GetProfileInput
+                    setToAccountId={setToAccountId}
+                    accountNumber={accountNumber}
+                    setAccountNumber={setAccountNumber}
+                  />
                 </div>
                 <div className="flex gap-4">
-                  <SwitchDemo design={design} setDesign={setDesign} />
+                  {!selectedDesign && (
+                    <SwitchDemo design={design} setDesign={setDesign} />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -299,74 +286,36 @@ export const TabsDemo = () => {
                 >
                   {loading ? "Гүйлгээ хийгдэж байна" : "Гүйлгээ хийх"}
                 </Button>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <Dialog
+                  open={isDialogOpen}
+                  onOpenChange={(open) => {
+                    setIsDialogOpen(open);
+                    if (!open && success) {
+                      push("/dashboard")
+                    }
+                  }}
+                >
                   <DialogContent className="p-8 dark:bg-gray-700 bg-white rounded-lg shadow-lg w-[400px] flex flex-col items-center">
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
+                      {/* <div className="">{dataResponse.transaction.amount}</div> */}
                     </DialogTitle>
+                    {/* <div className="">
+                      <p className="">Reference</p>
+                      {dataResponse.reference}
+                    </div> */}
                     <div className="">
                       <p className="">Reference</p>
                       {dataResponse.reference}
                     </div>
                     <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div>
-                    <div className="">
-                      <p className="">Reference</p>
+                      <p className="">Гүйлгээний утга</p>
                       {dataResponse.reference}
                     </div>
                   </DialogContent>
                 </Dialog>
               </CardFooter>
             </div>
-          </TabsContent>
-
-          <TabsContent value="password">
-            {/* <Card className="shadow-2xl rounded-lg bg-gray-800 dark:bg-gray-900 text-white">
-              <CardHeader className="bg-black text-white rounded-t-lg py-6">
-                <CardTitle className="text-xs">Нууц үг солих</CardTitle>
-                <CardDescription className="text-white text-sm mt-1">
-                  Нууц үгээ шинэчилсний дараа та системээс гарна.
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="space-y-6 px-6 pt-4 pb-2">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="current"
-                    className="text-xs font-medium text-gray-300">
-                    Одоогийн нууц үг
-                  </Label>
-                  <Input
-                    id="current"
-                    type="password"
-                    className="bg-transparent text-white"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="new"
-                    className="text-xs font-medium text-gray-300">
-                    Шинэ нууц үг
-                  </Label>
-                  <Input
-                    id="new"
-                    type="password"
-                    className="bg-transparent text-white"
-                  />
-                </div>
-              </CardContent>
-
-              <CardFooter className="px-6 pb-6">
-                <Button
-                  type="submit"
-                  className="w-full py-2 text-white bg-blue-600 hover:bg-blue-700 transition rounded font-semibold text-sm"
-                  disabled={loading}>
-                  {loading ? "Processing..." : "Нууц үг солих"}
-                </Button>
-              </CardFooter>
-            </Card> */}
           </TabsContent>
         </div>
       </Tabs>

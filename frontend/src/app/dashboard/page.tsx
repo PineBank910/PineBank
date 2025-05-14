@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSidebar } from "@/context/sidebarContext";
 import AccountSelector from "./_components/AccountSelector";
 import { fetchTransactions } from "@/lib/api";
+import Image from "next/image";
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const router = useRouter();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
+  const {push} = useRouter()
 
   const selectedAccount = currentUserData?.accounts?.find(
     (account) => account.id === selectedAccountId
@@ -59,6 +61,8 @@ const Dashboard = () => {
   if (!isLoaded || !isSignedIn) {
     return <div>Loading...</div>;
   }
+  const designs = currentUserData?.designs
+  
   return (
     <>
       <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] h-screen">
@@ -105,6 +109,20 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="">
+            {designs && designs.length && designs.map((design)=>
+              <div className="" key={design.id} onClick={()=>{
+                push(`/dashboard/transfer?designId=${design.id}`)
+              }}>
+                <Image
+                src={"/favicon.ico"}
+                alt="pinebank"
+                width={70}
+                height={70}/>
+                <p className="">{design.designName}</p>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">

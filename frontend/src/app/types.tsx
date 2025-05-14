@@ -21,12 +21,20 @@ export type Accounts = {
   userId: string;
 };
 
+export type Designs = {
+id:string,
+designName:string,
+toAccountNumber:string
+toAccountId:string
+}
+
 export type User = {
   id: number;
   username: string;
   email: string;
   profile?: ProfileDetail;
   accounts?: Accounts[] | [];
+  designs: Designs[]
   transactionPassword?: string;
 };
 

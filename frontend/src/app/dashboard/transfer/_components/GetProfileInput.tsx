@@ -4,12 +4,14 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const GetProfileInput = ({
-  setToAccountId,
-}: {
+type GetProfileInputProps = {
+  accountNumber: string;
+  setAccountNumber: (accountNumber: string) => void;
   setToAccountId: (toAccountId: string) => void;
-}) => {
-  const [accountNumber, setAccountNumber] = useState("");
+};
+
+const GetProfileInput = (props: GetProfileInputProps) => {
+  const { accountNumber, setAccountNumber, setToAccountId } = props;
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,7 +43,7 @@ const GetProfileInput = ({
   };
 
   useEffect(() => {
-    if (accountNumber.length === 11) {
+    if (accountNumber.length >= 10) {
       getProfile();
     }
   }, [accountNumber]);
