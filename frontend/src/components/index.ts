@@ -5,7 +5,6 @@ export { default as Featured } from './ui/Featured';
 export { default as OffersSection } from './ui/OffersSection';
 export { default as FinancilaFreedom } from './ui/FinancialFreedom';
 export { default as FinancialFuture } from './ui/FinancialFuture';
-export { default as IntroSection } from './ui/IntroSection';
 export { default as JoinSection } from './ui/JoinSection';
 export { default as FAQ } from './ui/FAQ';
 export { default as Footer } from './ui/Footer';

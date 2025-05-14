@@ -16,31 +16,45 @@ import { GetStartedButton } from "@/components";
 import AnimatedLink from "@/components/Common/AnimatedLink";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { links, menu } from "./constants";
+import { menu } from "./constants";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Wrapper>
       <Inner>
         <LogoContainer>
           <Image src={raft_logo} alt="raft_logo" priority />
-          <BurgerMenu onClick={() => setIsOpen(!isOpen)}>
+          <BurgerMenu
+            className="flex flex-col"
+            onClick={() => setIsOpen(!isOpen)}
+          >
             <motion.div
+              className="flex items-center justify-center"
               variants={menu}
               animate={isOpen ? "open" : "closed"}
               initial="closed"
-            ></motion.div>
+            >
+              <CallToActions
+                className={`${isOpen ? "active" : ""} flex flex-col  `}
+              >
+                <Link className="font-bold uppercase" href="sign-in">
+                  Нэвтрэх
+                </Link>
+
+                <Link className="font-bold uppercase" href="sign-up">
+                  Бүртгүүлэх
+                </Link>
+              </CallToActions>
+            </motion.div>
+
             <Image src={ic_bars} alt="bars" />
           </BurgerMenu>
         </LogoContainer>
-        <Nav className={isOpen ? "active" : ""}>
-          {links.map((link, i) => (
-            <AnimatedLink key={i} title={link.linkTo} />
-          ))}
-        </Nav>
-        <CallToActions className={isOpen ? "active" : ""}>
-          <Link href="/sign-in" passHref>
+        <Nav className={isOpen ? "active" : ""}></Nav>
+        <CallToActions className={`${isOpen ? "active" : ""} flex `}>
+          <Link href="/sign-in" passHref className="max-md:hidden">
             <AnimatedLink title="Нэвтрэх" />
           </Link>
           <GetStartedButton padding="0.5rem 0.75rem" />

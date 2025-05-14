@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import Layout from '@/components/Layout'; // Import the Layout component
+import Layout from "@/components/Layout"; // Import the Layout component
 import {
   FAQ,
   Featured,
   FinancialFuture,
   FinancilaFreedom,
   HeroSection,
-  IntroSection,
   JoinSection,
   OffersSection,
-} from '@/components';
+} from "@/components";
 
 export default function Home() {
   return (
@@ -21,7 +20,6 @@ export default function Home() {
         <OffersSection />
         <FinancilaFreedom />
         <FinancialFuture />
-        <IntroSection />
         <JoinSection />
         <FAQ />
       </main>
