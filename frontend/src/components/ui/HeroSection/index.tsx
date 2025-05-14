@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
-import { Wrapper, Inner, Pill, HeroTextContainer } from "./styles";
-import ic_chevron_right from "../../../../public/svgs/ic_chevron_right.svg";
+
+import { Wrapper, Inner, HeroTextContainer } from "./styles";
+
 import { GetStartedButton } from "@/components";
 import MaskText from "@/components/Common/MaskText";
 import { useIsMobile } from "../../../lib/useIsMobile";
@@ -11,19 +11,12 @@ import {
   paragraphPhrases,
   phrases,
 } from "./constants";
-import Link from "next/link";
 
 const HeroSection = () => {
   const isMobile = useIsMobile();
   return (
     <Wrapper>
       <Inner>
-        <Link href="#cardsec">
-          <Pill>
-            <span>PineCard Танилцуулга</span>
-            <Image src={ic_chevron_right} alt="chevron-right" />
-          </Pill>
-        </Link>
         <HeroTextContainer>
           {isMobile ? (
             <>

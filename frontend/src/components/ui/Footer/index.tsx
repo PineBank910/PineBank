@@ -3,7 +3,6 @@ import raft_footer_logo from "../../../../public/svgs/raft_footer_logo.svg";
 import qr_code from "../../../../public/svgs/qr_code.svg";
 import ic_google_playstore from "../../../../public/svgs/ic_google_playstore.svg";
 import ic_baseline_apple from "../../../../public/svgs/ic_baseline_apple.svg";
-import ic_chevron_down from "../../../../public/svgs/ic_chevron_down.svg";
 
 const linksArr = [
   {
@@ -34,7 +33,6 @@ import {
   GridColumn,
   LinksContainer,
   FooterBottom,
-  Translator,
   CopyRight,
 } from "./styles";
 
@@ -73,11 +71,7 @@ const Footer = () => {
             </FooterNavigation>
           </FooterMiddle>
           <FooterBottom>
-            <Translator>
-              <h3>Mongolia (Монгол хэл)</h3>
-              <Image src={ic_chevron_down} alt="chevron down" />
-            </Translator>
-            <CopyRight>
+            <CopyRight className="flex justify-end">
               Бүх эрх хуулиар хамгаалагдсан © 2025. Pine банк
             </CopyRight>
           </FooterBottom>

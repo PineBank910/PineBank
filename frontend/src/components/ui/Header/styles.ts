@@ -100,6 +100,8 @@ export const CallToActions = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  
+
 
   div {
     span {
