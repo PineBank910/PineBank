@@ -188,7 +188,7 @@ export const TabsDemo = () => {
           </TabsTrigger> 
         </TabsList> */}
 
-        <div className="flex-1 w-auto">
+        <div className="flex-1 w-auto max-md:w-[350px]">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
             value="account"
@@ -277,7 +277,7 @@ export const TabsDemo = () => {
               <CardFooter className="px-6 pb-6 gap-5 justify-center">
                 <Button
                   type="submit"
-                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     setAccountNumber("");
                     setAmount("");
@@ -290,7 +290,7 @@ export const TabsDemo = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     createTransaction();
                     createDesign();
@@ -304,7 +304,7 @@ export const TabsDemo = () => {
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
                     </DialogTitle>
-                    
+
                   </DialogContent>
                 </Dialog>
               </CardFooter>
