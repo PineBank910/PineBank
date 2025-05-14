@@ -29,7 +29,7 @@ const Page = () => {
   const router = useRouter();
   const { getToken } = useAuth();
   const { userId } = useUser();
-  console.log("backend user id", userId);
+
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
     }

@@ -29,29 +29,27 @@ export function ThemeToggleButton({
 
   const styleId = "theme-transition-styles";
 
-  const updateStyles = React.useCallback((css: string, name: string) => {
-    if (typeof window === "undefined") return;
+  const updateStyles = React.useCallback(
+    (css: string) => {
+      if (typeof window === "undefined") return;
 
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+      let styleElement = document.getElementById(styleId) as HTMLStyleElement;
 
-    console.log("style ELement", styleElement);
-    console.log("name", name);
+      if (!styleElement) {
+        styleElement = document.createElement("style");
+        styleElement.id = styleId;
+        document.head.appendChild(styleElement);
+      }
 
-    if (!styleElement) {
-      styleElement = document.createElement("style");
-      styleElement.id = styleId;
-      document.head.appendChild(styleElement);
-    }
-
-    styleElement.textContent = css;
-
-    console.log("content updated");
-  }, []);
+      styleElement.textContent = css;
+    },
+    [styleId]
+  );
 
   const toggleTheme = React.useCallback(() => {
     const animation = createAnimation(variant, start, url);
 
-    updateStyles(animation.css, animation.name);
+    updateStyles(animation.css);
 
     if (typeof window === "undefined") return;
 
@@ -73,8 +71,7 @@ export function ThemeToggleButton({
       variant="ghost"
       size="icon"
       className="hover:shadow-lg hover:shadow-blue-500/50 transition duration-300 w-10 h-10 flex justify-center items-center rounded-2xl bg-gray-200 dark:bg-gray-800 text-black dark:text-white hover:cursor-pointer"
-      name="Theme Toggle Button"
-    >
+      name="Theme Toggle Button">
       <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <MoonIcon className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Theme Toggle </span>
