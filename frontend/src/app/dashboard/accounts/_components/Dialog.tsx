@@ -122,19 +122,17 @@ export function DialogDemo() {
               ) : (
                 <div className="flex flex-col items-center justify-center gap-5">
                   <button
-                    className="flex items-center justify-center border-t shadow-xl text-gray-800 dark:border-gray-200 dark:text-gray-200 px-4 py-2 rounded-md hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 w-[262px]"
+                    className="bg-blue-950 text-white flex items-center justify-center border-t shadow-xl dark:text-gray-200 dark:border-gray-200  px-4 py-2 rounded-md hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 w-[262px]"
                     onClick={() => handleCreateAccount("BUSINESS")}
-                    disabled={loading}
-                  >
+                    disabled={loading}>
                     Харилцах данс
                   </button>
-                  <button
+                  {/* <button
                     className="flex items-center justify-center border-t shadow-xl text-gray-800 dark:border-gray-200 dark:text-gray-200 px-4 py-2 rounded-md hover:bg-gray-800 hover:text-white dark:hover:bg-gray-200 dark:hover:text-gray-900 transition duration-500 w-[262px]"
                     onClick={() => handleCreateAccount("SAVINGS")}
-                    disabled={loading}
-                  >
+                    disabled={loading}>
                     Хугацаагүй хадгаламж
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
