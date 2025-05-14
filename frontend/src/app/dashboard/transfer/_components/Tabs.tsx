@@ -304,18 +304,7 @@ export const TabsDemo = () => {
                     <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
                     </DialogTitle>
-                    <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div>
-                    <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div>
-                    <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div>
+                    
                   </DialogContent>
                 </Dialog>
               </CardFooter>
