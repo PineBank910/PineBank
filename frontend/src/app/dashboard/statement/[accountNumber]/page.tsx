@@ -22,6 +22,7 @@ type Account = {
 };
 
 const Page = () => {
+  const [dateButtonOn, setDateButtonOn] = useState("Өчигдөр");
   const [transactionInfo, setTransactionInfo] = useState<TransactionType[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const Page = () => {
   const [filter, setFilter] = useState<"ALL" | "CREDIT" | "DEBIT">("ALL");
   const today = new Date();
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: startOfDay(subDays(today, 0)),
+    from: startOfDay(subDays(today, 1)),
     to: addDays(new Date(today), 0),
   });
   const params = useParams();
@@ -77,6 +78,7 @@ const Page = () => {
       from: startOfDay(yesterday),
       to: endOfDay(new Date()),
     });
+    setDateButtonOn("Өчигдөр");
   };
 
   const setLast7Days = () => {
@@ -85,6 +87,7 @@ const Page = () => {
       from: startOfDay(subDays(today, 6)),
       to: endOfDay(today),
     });
+    setDateButtonOn("ДолооХоног");
   };
 
   const setLastMonth = () => {
@@ -93,6 +96,7 @@ const Page = () => {
       from: startOfDay(subDays(today, 29)),
       to: endOfDay(today),
     });
+    setDateButtonOn("Сар");
   };
 
   const groupedTransactions = groupTransactionsByDay(filteredTransactions);
@@ -134,7 +138,7 @@ const Page = () => {
               downloadPDF(filteredTransactions);
             }
           }}
-          className="w-full sm:w-12 h-12 rounded-lg mt-2 sm:mt-0">
+          className="w-full sm:w-12 h-12 rounded-lg mt-2 sm:mt-0 cursor-pointer">
           PDF
         </Button>
       </div>
@@ -142,13 +146,34 @@ const Page = () => {
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between p-2 sm:p-4 mt-4 bg-secondary rounded-2xl gap-2 sm:gap-0">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
         <div className="flex gap-2 mt-2 md:mt-0 flex-wrap">
-          <Button onClick={setYesterday} size="sm">
+          <Button
+            onClick={setYesterday}
+            size="sm"
+            className={
+              dateButtonOn === "Өчигдөр"
+                ? "bg-green-500 flex cursor-pointer"
+                : "flex cursor-pointer"
+            }>
             Өчигдөр
           </Button>
-          <Button onClick={setLast7Days} size="sm">
+          <Button
+            onClick={setLast7Days}
+            size="sm"
+            className={
+              dateButtonOn === "ДолооХоног"
+                ? "bg-green-500 flex cursor-pointer"
+                : "flex cursor-pointer"
+            }>
             7 хоног
           </Button>
-          <Button onClick={setLastMonth} size="sm">
+          <Button
+            onClick={setLastMonth}
+            size="sm"
+            className={
+              dateButtonOn === "Сар"
+                ? "bg-green-500 flex cursor-pointer"
+                : "flex cursor-pointer"
+            }>
             1 сар
           </Button>
         </div>
@@ -167,19 +192,31 @@ const Page = () => {
         </div>
         <div className="flex gap-2 flex-wrap">
           <Button
-            className={filter === "ALL" ? "bg-green-500 flex" : " flex"}
+            className={
+              filter === "ALL"
+                ? "bg-green-500 flex cursor-pointer"
+                : " flex cursor-pointer"
+            }
             size="sm"
             onClick={() => setFilter("ALL")}>
             Бүгд
           </Button>
           <Button
-            className={filter === "CREDIT" ? "bg-green-500 flex" : " flex"}
+            className={
+              filter === "CREDIT"
+                ? "bg-green-500 flex cursor-pointer"
+                : " flex cursor-pointer"
+            }
             size="sm"
             onClick={() => setFilter("CREDIT")}>
             Орлого
           </Button>
           <Button
-            className={filter === "DEBIT" ? "bg-green-500 flex" : " flex"}
+            className={
+              filter === "DEBIT"
+                ? "bg-green-500 flex cursor-pointer"
+                : " flex cursor-pointer"
+            }
             size="sm"
             onClick={() => setFilter("DEBIT")}>
             Зарлага
