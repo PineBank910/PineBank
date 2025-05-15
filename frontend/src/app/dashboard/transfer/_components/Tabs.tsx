@@ -309,7 +309,7 @@ export const TabsDemo = () => {
                     }
                   }}
                 >
-                  <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
+                  <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col">
                     <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
                       {success ?<Check className="bg-green-500 w-10 h-10 rounded" />:<X className="bg-red-500 w-10 h-10 rounded-lg shadow-accent"/>}
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
