@@ -11,6 +11,7 @@ import AccountSelector from "./_components/AccountSelector";
 import { fetchTransactions } from "@/lib/api";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import ExchangeRateTable from "./_components/ExchangeRateTable";
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -21,7 +22,7 @@ const Dashboard = () => {
   const router = useRouter();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const currentUserData = context?.currentUserData;
-  const {push} = useRouter()
+  const { push } = useRouter();
 
   const selectedAccount = currentUserData?.accounts?.find(
     (account) => account.id === selectedAccountId
@@ -86,8 +87,8 @@ const Dashboard = () => {
       </div>
     );
   }
-  const designs = currentUserData?.designs
-  
+  const designs = currentUserData?.designs;
+
   return (
     <>
       <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] h-screen">
@@ -107,6 +108,9 @@ const Dashboard = () => {
             selectedAccountId={selectedAccountId}
             setSelectedAccountId={setSelectedAccountId}
           />
+          <div>
+            <ExchangeRateTable />
+          </div>
           <div className="w-full mt-6">
             <div className="flex justify-between">
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
@@ -117,6 +121,7 @@ const Dashboard = () => {
                 нийт
               </div>
             </div>
+
             <div className="flex gap-6 mt-6">
               <button className="cursor-pointer  w-[96px] h-[96px] rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
                 <div className="text-orange-400 text-2xl">+</div>
@@ -138,18 +143,25 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="">
-            {designs && designs.length && designs.map((design)=>
-              <div className="" key={design.id} onClick={()=>{
-                push(`/dashboard/transfer?designId=${design.id}`)
-              }}>
-                <Image
-                src={"/favicon.ico"}
-                alt="pinebank"
-                width={70}
-                height={70}/>
-                <p className="">{design.designName}</p>
-              </div>
-            )}
+            {designs &&
+              designs.length &&
+              designs.map((design) => (
+                <div
+                  className=""
+                  key={design.id}
+                  onClick={() => {
+                    push(`/dashboard/transfer?designId=${design.id}`);
+                  }}
+                >
+                  <Image
+                    src={"/favicon.ico"}
+                    alt="pinebank"
+                    width={70}
+                    height={70}
+                  />
+                  <p className="">{design.designName}</p>
+                </div>
+              ))}
           </div>
         </div>
         <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
