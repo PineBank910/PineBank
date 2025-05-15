@@ -28,6 +28,7 @@ export type User = {
   profile?: ProfileDetail;
   accounts?: Accounts[] | [];
   transactionPassword?: string;
+  userProfile: string;
 };
 
 export type TransactionType = {
