@@ -15,8 +15,9 @@ import { toast } from "react-toastify";
 import { updateUserProfile } from "@/lib/profileActions";
 import { CurrentUser } from "@/context/currentUserContext";
 import { getUserProfile } from "@/lib/api";
-
+import { useSidebar } from "@/context/sidebarContext";
 const ProfilePage = () => {
+  const { setSelectedSidebar } = useSidebar();
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastName, setLastName] = useState("");
@@ -48,7 +49,6 @@ const ProfilePage = () => {
         setPhone(profile.phone);
         setAddress(profile.address);
         setImage(profile.image);
-        console.log("profile data", profile);
       } catch (error) {
         console.error(
           "Error fetching profile data:",
@@ -116,6 +116,7 @@ const ProfilePage = () => {
           autoClose: 5000,
         });
         router.push("/dashboard");
+        setSelectedSidebar("Эхлэл");
       } else {
         setError(result.message || "Update failed");
       }
@@ -221,7 +222,7 @@ const ProfilePage = () => {
   const handlePasswordUpdate = async () => {
     try {
       const token = await getToken();
-      console.log(token);
+
       if (!token) {
         console.log("No token available");
         return;
@@ -366,7 +367,7 @@ const ProfilePage = () => {
                 <CloudinaryUploader image={image} setImage={setImage} />
               </div>
 
-              <div className="text-black dark:text-white">
+              <div className="text-black dark:text-white text-xl font-medium">
                 Тавтай морилно уу, {user?.username}
               </div>
 
@@ -375,7 +376,6 @@ const ProfilePage = () => {
                   Овог
                 </label>
                 <Input
-                  disabled
                   className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Овог оруулна уу"
@@ -395,7 +395,6 @@ const ProfilePage = () => {
                   Нэр
                 </label>
                 <Input
-                  disabled
                   className="w-full text-black dark:text-white bg-transparent border dark:border-gray-700"
                   type="text"
                   placeholder="Нэр оруулна уу"

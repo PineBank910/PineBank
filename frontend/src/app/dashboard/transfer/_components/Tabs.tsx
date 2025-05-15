@@ -130,7 +130,6 @@ export const TabsDemo = () => {
 
       if (res.status === 201) {
         const designAccount = res.data.accountNumber;
-        console.log(designAccount, "designAccount");
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -241,6 +240,7 @@ export const TabsDemo = () => {
                     type="text"
                     value={reference}
                     onChange={(e) => setReference(e.target.value)}
+                    autoComplete="off"
                     className="border-0 w-full border-b border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
                 </div>
@@ -255,6 +255,7 @@ export const TabsDemo = () => {
                     id="transaction-password"
                     type="password"
                     value={transactionPassword}
+                    autoComplete="off"
                     onChange={(e) => setTransactionPassword(e.target.value)}
                     className="border-0 border-b w-full border-gray-300 dark:border-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black hover:border-black bg-transparent text-gray-900 dark:text-white duration-500"
                   />
@@ -264,12 +265,13 @@ export const TabsDemo = () => {
               <CardFooter className="px-6 pb-6 gap-5 justify-center">
                 <Button
                   type="submit"
-                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     setAccountNumber("");
                     setAmount("");
                     setReference("");
                     setToAccountId(null);
+                    setTransactionPassword("");
                   }}
                   disabled={loading}
                 >
@@ -277,7 +279,7 @@ export const TabsDemo = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px]"
+                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     createTransaction();
                     createDesign();
@@ -300,10 +302,6 @@ export const TabsDemo = () => {
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
                       {/* <div className="">{dataResponse.transaction.amount}</div> */}
                     </DialogTitle>
-                    {/* <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div> */}
                     <div className="">
                       <p className="">Reference</p>
                       {dataResponse.reference}

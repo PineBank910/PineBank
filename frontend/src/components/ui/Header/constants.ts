@@ -1,9 +1,11 @@
 export const menu = {
   open: {
-    width: '250px',
-    height: '300px',
+    width: '200px',
+    height: '150px',
     top: '-25px',
     right: '-25px',
+    marginTop: '25px',
+    display: 'flex',
     transition: { duration: 0.75, type: 'tween', ease: [0.76, 0, 0.24, 1] },
   },
 
@@ -20,17 +22,4 @@ export const menu = {
     },
   },
 };
-export const links = [
-  {
-    url: '/',
-    linkTo: 'Танд',
-  },
-  {
-    url: '/',
-    linkTo: 'Таны бизнесд',
-  },
-  {
-    url: '/',
-    linkTo: 'Таны хөрөнгө оруулалт',
-  },
-];
+

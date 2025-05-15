@@ -27,9 +27,9 @@ export default function Page() {
         <h1 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4 text-gray-800 dark:text-gray-100 text-left">
           Дансны жагсаалт
         </h1>
-        <h2 className="text-xs sm:text-sm font-medium text-green mb-2 sm:mb-4 dark:text-blue-400">
+        {/* <h2 className="text-xs sm:text-sm font-medium text-green mb-2 sm:mb-4 dark:text-blue-400">
           ДЕПОЗИТ ДАНС
-        </h2>
+        </h2> */}
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-2 sm:p-4 w-full max-w-[1252px] shadow-2xl">

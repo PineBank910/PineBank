@@ -1,7 +1,7 @@
 "use client";
 import { CurrentUser } from "@/context/currentUserContext";
 import { TransactionType } from "../types";
-import { useState, useContext, useEffect } from "react";;
+import { useState, useContext, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { groupTransactionsByDay } from "@/utils/filterByDay";
 import Transaction from "./_components/Transaction";
@@ -10,6 +10,7 @@ import { useSidebar } from "@/context/sidebarContext";
 import AccountSelector from "./_components/AccountSelector";
 import { fetchTransactions } from "@/lib/api";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -26,7 +27,18 @@ const Dashboard = () => {
     (account) => account.id === selectedAccountId
   );
   const accountNumber = selectedAccount?.accountNumber;
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      const hasRefreshed = localStorage.getItem("hasRefreshed");
 
+      if (!hasRefreshed) {
+        localStorage.setItem("hasRefreshed", "true");
+        window.location.reload();
+      } else {
+        localStorage.removeItem("hasRefreshed");
+      }
+    }
+  }, [isLoaded, isSignedIn]);
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push("/sign-in");
@@ -40,7 +52,10 @@ const Dashboard = () => {
       try {
         const token = await getToken();
         if (!token) return;
-        const fetchedTransactions = await fetchTransactions(accountNumber, token);
+        const fetchedTransactions = await fetchTransactions(
+          accountNumber,
+          token
+        );
         setTransactions(fetchedTransactions);
       } catch (error) {
         console.error("Failed to load transactions", error);
@@ -59,7 +74,17 @@ const Dashboard = () => {
   };
   const groupedTransactions = groupTransactionsByDay(transactions);
   if (!isLoaded || !isSignedIn) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-6 space-y-4">
+        <Skeleton className="h-8 w-1/3" />
+        <Skeleton className="h-6 w-1/4" />
+        <div className="grid grid-cols-2 gap-4">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+        <Skeleton className="h-48 w-full rounded-xl" />
+      </div>
+    );
   }
   const designs = currentUserData?.designs
   
@@ -73,7 +98,8 @@ const Dashboard = () => {
             </div>
             <div
               onClick={handleClickNiit}
-              className="text-[orange] hover:underline cursor-pointer">
+              className="text-[orange] hover:underline cursor-pointer"
+            >
               нийт
             </div>
           </div>
@@ -86,7 +112,8 @@ const Dashboard = () => {
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
               <div
                 onClick={handleClickZagvar}
-                className="text-[orange] hover:underline cursor-pointer">
+                className="text-[orange] hover:underline cursor-pointer"
+              >
                 нийт
               </div>
             </div>
