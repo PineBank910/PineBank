@@ -94,6 +94,7 @@ const ChooseAccount = (props: ChooseAccountProps) => {
                     ХАРИЛЦАХ / PINE / MNT
                   </div>
                   <span className="text-[10px] sm:text-sm font-semibold text-gray-500 block">
+
                     {account.accountNumber}
                   </span>
                 </div>
