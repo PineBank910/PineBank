@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import {
   Wrapper,
   Inner,
@@ -23,6 +24,16 @@ import { Props, desktopHeaderPhrase, testimonials } from "./constants";
 
 const JoinSection = () => {
   const [testimonialsArr, setTestimonialsArr] = useState<Props[]>(testimonials);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  const isMobile = useIsMobile(); // ✅ called unconditionally
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  // ✅ Only render on client to avoid hydration mismatch
+  if (!hasMounted) return null;
 
   const next = () => {
     const newArr = [...testimonialsArr.slice(1), testimonialsArr[0]];
@@ -37,11 +48,10 @@ const JoinSection = () => {
     setTestimonialsArr(newArr);
   };
 
-  const isMobile = useIsMobile();
-
   const mappedTestimonials = isMobile
     ? testimonialsArr.slice(0, 1)
     : testimonialsArr.slice(0, 3);
+
   return (
     <Wrapper>
       <Inner>
@@ -54,8 +64,8 @@ const JoinSection = () => {
               <Testimony>{t.testimony}</Testimony>
               <UserInfo>
                 <Name>
-                  <MaskText phrases={new Array(t.person)} tag="h3" />
-                  <MaskText phrases={new Array("PineBank Хэрэглэгч")} tag="p" />
+                  <MaskText phrases={[t.person]} tag="h3" />
+                  <MaskText phrases={["PineBank Хэрэглэгч"]} tag="p" />
                 </Name>
                 <Avatar>
                   <Image src={t.avatar} alt="user avatar" />

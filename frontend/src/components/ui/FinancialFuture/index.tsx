@@ -24,10 +24,15 @@ import {
   mobileParagraphPhrase,
   stats,
 } from "./constants";
+import { useHasMounted } from "@/lib/useHasMounted";
 
 const FinancialFuture = () => {
   const isMobile = useIsMobile();
+  const hasMounted = useHasMounted();
 
+  if (!hasMounted) {
+    return null; // Or a skeleton loader/spinner
+  }
   return (
     <Wrapper>
       <Inner>
@@ -68,7 +73,7 @@ const FinancialFuture = () => {
       </Inner>
       <Banner>
         {isMobile ? (
-          <Image src={future_mobile_banner} alt="future_banner" fill />
+          <Image src={future_mobile_banner} alt="future_mobile_banner" fill />
         ) : (
           <Image src={future_banner} alt="future_banner" fill />
         )}

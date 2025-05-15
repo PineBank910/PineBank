@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,12 +15,33 @@ import raft_logo from "../../../../public/svgs/raft_logo.svg";
 import ic_bars from "../../../../public/svgs/ic_bars.svg";
 import { GetStartedButton } from "@/components";
 import AnimatedLink from "@/components/Common/AnimatedLink";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { menu } from "./constants";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const callToActionsRef = useRef<HTMLDivElement | null>(null);
+  const burgerMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        burgerMenuRef.current &&
+        !burgerMenuRef.current.contains(event.target as Node) &&
+        callToActionsRef.current &&
+        !callToActionsRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -27,7 +49,8 @@ const Header = () => {
         <LogoContainer>
           <Image src={raft_logo} alt="raft_logo" priority />
           <BurgerMenu
-            className="flex flex-col"
+            ref={burgerMenuRef}
+            className="flex "
             onClick={() => setIsOpen(!isOpen)}
           >
             <motion.div
@@ -37,7 +60,8 @@ const Header = () => {
               initial="closed"
             >
               <CallToActions
-                className={`${isOpen ? "active" : ""} flex flex-col  `}
+                ref={callToActionsRef}
+                className={`${isOpen ? "active" : ""} flex flex-col`}
               >
                 <Link className="font-bold uppercase" href="sign-in">
                   Нэвтрэх

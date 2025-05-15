@@ -33,6 +33,7 @@ export const BurgerMenu = styled.div`
   display: none;
   position: relative;
 
+
   @media (max-width: 768px) {
     display: block;
     padding: 0.5rem;
