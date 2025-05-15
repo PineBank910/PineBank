@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import CloudinaryUploader from "@/components/ui/cloudninaryUploader";
+// import CloudinaryUploader from "@/components/ui/cloudninaryUploader";
 import { profileSchema } from "@/validation/profileSchema";
 import { useAuth } from "@clerk/nextjs";
 import { useUser as useClerkUser } from "@clerk/nextjs";
@@ -26,7 +26,7 @@ const ProfilePage = () => {
   const [phoneError, setPhoneError] = useState("");
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { getToken } = useAuth();
@@ -48,7 +48,7 @@ const ProfilePage = () => {
         setLastName(profile.lastName);
         setPhone(profile.phone);
         setAddress(profile.address);
-        setImage(profile.image);
+        // setImage(profile.image);
       } catch (error) {
         console.error(
           "Error fetching profile data:",
@@ -66,7 +66,7 @@ const ProfilePage = () => {
       lastName,
       phone,
       address,
-      image,
+      // image,
     });
 
     if (!result.success) {
@@ -107,7 +107,7 @@ const ProfilePage = () => {
       const result = await updateUserProfile(profileId, token, {
         phone,
         address,
-        image,
+        // image,
       });
 
       if (result.success) {
@@ -139,7 +139,7 @@ const ProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const validatePassword = (password: string): boolean => {
-    // Regex to check for at least one number and one capital letter and 8-16 characters
+    // Regex to check for at least one number and one letter and 8-20 characters
     const regex: RegExp =
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,20}$/;
     if (!regex.test(password)) {
@@ -363,9 +363,9 @@ const ProfilePage = () => {
           </TabsContent>
           <TabsContent value="profile">
             <form onSubmit={handleProfileUpdate} className="space-y-6">
-              <div className="flex justify-start gap-5 mb-6">
+              {/* <div className="flex justify-start gap-5 mb-6">
                 <CloudinaryUploader image={image} setImage={setImage} />
-              </div>
+              </div> */}
 
               <div className="text-black dark:text-white text-xl font-medium">
                 Тавтай морилно уу, {user?.username}

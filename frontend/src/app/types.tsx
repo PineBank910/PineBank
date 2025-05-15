@@ -36,6 +36,7 @@ export type User = {
   accounts?: Accounts[] | [];
   designs: Designs[]
   transactionPassword?: string;
+  userProfile: string;
 };
 
 export type TransactionType = {

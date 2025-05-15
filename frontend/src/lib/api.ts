@@ -1,13 +1,19 @@
-export const fetchTransactions = async (accountNumber: string, token: string) => {
+export const fetchTransactions = async (
+  accountNumber: string,
+  token: string
+) => {
   try {
-    const response = await fetch("https://pinebank.onrender.com/transaction/get", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ accountNumber }),
-    });
+    const response = await fetch(
+      "https://pinebank.onrender.com/transaction/get",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ accountNumber }),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -25,21 +31,21 @@ export const fetchTransactions = async (accountNumber: string, token: string) =>
 
 export const getUserProfile = async (token: string) => {
   try {
-  const response = await fetch("https://pinebank.onrender.com/users", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+    const response = await fetch("https://pinebank.onrender.com/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error(await response.text());
-  }
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
 
-  const data = await response.json();
-  return data.user.userProfile;  
-} catch (error) {
+    const data = await response.json();
+    return data.user.userProfile;
+  } catch (error) {
     console.error("Error fetching transactions:", error);
     throw error;
   }
@@ -48,7 +54,7 @@ export const getUserProfile = async (token: string) => {
 export const createProfile = async (
   token: string,
   userProfile: {
-    image: string;
+    image?: string;
     firstName: string;
     lastName: string;
     phone: string;

@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { BackgroundBeams } from "@/components/ui/backgroundBeams";
-import Cloudinary from "@/components/ui/cloudinaryWidget";
+// import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@/context/userContext";
 import { createBankAccount, createProfile } from "@/lib/api";
-
+import { useCurrent } from "@/context/currentUserContext";
 const Page = () => {
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const { isLoaded, isSignedIn } = useAuth();
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
@@ -22,26 +23,90 @@ const Page = () => {
   const [phoneError, setPhoneError] = useState("");
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const [password, setPassword] = useState("");
+  const [validatingError, setValidatingError] = useState("");
   const router = useRouter();
   const { getToken } = useAuth();
   const { userId } = useUser();
-
+  const { currentUserData } = useCurrent();
+  useEffect(() => {
+    // If user is signed in and already has a profile, redirect
+    if (userId == currentUserData?.userProfile) {
+      router.replace("/dashboard");
+    }
+    console.log("CUrrent user data:", currentUserData);
+  }, [userId, currentUserData, router]);
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
     }
   }, [isLoaded, isSignedIn, router]);
+  useEffect(() => {
+    validatePassword(password);
+  }, [password]);
+  const validatePassword = (password: string): boolean => {
+    const regex: RegExp =
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,20}$/;
+    if (!regex.test(password)) {
+      setValidatingError(
+        "Нууц үг дор хаяж нэг тоо, нэг үсэг болон 8-20 тэмдэгттэй байх ёстой."
+      );
+      setIsPasswordValid(false);
+      return false;
+    }
+    setValidatingError("");
+    setIsPasswordValid(true);
+    return true;
+  };
+  const handlePasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const value = (e.target as HTMLInputElement).value;
+    setPassword(value);
+    if (value) {
+      validatePassword(value);
+    } else {
+      setValidatingError("");
+    }
+  };
+  const handlePasswordUpdate = async () => {
+    try {
+      const token = await getToken();
 
+      if (!token) {
+        console.log("No token available");
+        return;
+      }
+      await fetch(
+        "https://pinebank.onrender.com/users/transaction-password/update",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: userId, password }),
+        }
+      );
+      // if (response.ok) {
+      //   setPassword("");
+      // } else {
+      //   const data = await response.json();
+      //   console.log(data.message || "Нууц үг шинэчлэхэд алдаа гарлаа.");
+      // }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
   const handleContinue = () => {
     const result = profileSchema.safeParse({
       firstName,
       lastName,
       phone,
       address,
-      image,
+      // image,
     });
 
     if (!result.success) {
@@ -71,7 +136,7 @@ const Page = () => {
       if (!token) throw new Error("Token not found");
 
       await createProfile(token, {
-        image,
+        // image,
         firstName,
         lastName,
         phone,
@@ -100,11 +165,11 @@ const Page = () => {
           Хэрэглэгч үүсгэх хэсэг
         </h3>
 
-        <div className="flex justify-center mb-8">
+        {/** <div className="flex justify-center mb-8">
           <div className="flex justify-center items-center w-40 h-40 rounded-full bg-white mt-6 border-2 border-gray-400 border-dotted relative">
             <Cloudinary image={image} setImage={setImage} />
           </div>
-        </div>
+        </div>*/}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -149,8 +214,8 @@ const Page = () => {
             <label className="block text-sm font-medium mb-1 text-black">
               Хаяг
             </label>
-            <textarea
-              className="w-full h-[131px] text-black"
+            <Input
+              className="w-full text-black "
               placeholder="Хаягаа оруулна уу"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -160,6 +225,21 @@ const Page = () => {
                 <X className="mr-1 h-4 w-4" />
                 {addressError}
               </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-black">
+              Гүйлгээний нууц үг
+            </label>
+            <Input
+              onChange={(e) => {
+                handlePasswordChange(e);
+              }}
+              value={password}
+              placeholder="Гүйлгээний нууц үг оруулна уу"
+              className="w-full text-black"></Input>
+            {validatingError && (
+              <p className="text-red-600">{validatingError}</p>
             )}
           </div>
           <div className="relative">
@@ -199,9 +279,12 @@ const Page = () => {
 
           <div className="flex justify-center">
             <Button
+              onClick={() => {
+                handlePasswordUpdate();
+              }}
               className="w-[246px] h-[40px] mt-2"
               type="submit"
-              disabled={loading}>
+              disabled={loading || !isPasswordValid}>
               Continue
             </Button>
           </div>
