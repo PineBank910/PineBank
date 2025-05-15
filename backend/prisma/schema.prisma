@@ -57,13 +57,14 @@ model Transaction {
 }
 
 model Design {
-  id          String      @id @default(uuid())
-  designName  String
-  toAccountId String
-  userId      String
-  timestamp   DateTime    @default(now())
-  user        User        @relation(fields: [userId], references: [id])
-  toAccount   BankAccount @relation("QuickTransferTo", fields: [toAccountId], references: [id])
+  id              String      @id @default(uuid())
+  designName      String
+  toAccountNumber String
+  toAccountId     String
+  userId          String
+  timestamp       DateTime    @default(now())
+  user            User        @relation(fields: [userId], references: [id])
+  toAccount       BankAccount @relation("QuickTransferTo", fields: [toAccountId], references: [id])
 }
 
 enum AccountEnum {
