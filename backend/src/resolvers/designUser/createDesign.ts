@@ -41,6 +41,7 @@ export const createDesign = async (req: Request, res: Response): Promise<void> =
       data: {
         toAccountId,
         designName,
+        toAccountNumber:toAccount.accountNumber,
         userId
       },
     });
