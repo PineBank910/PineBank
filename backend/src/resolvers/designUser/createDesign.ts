@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const createDesign = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { toAccountId, designName } = req.body
+    const { toAccountNumber, designName } = req.body;
     const { userId } = getAuth(req);
 
     if (!userId) {
@@ -14,8 +14,8 @@ export const createDesign = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    if (!toAccountId || !designName) {
-      res.status(400).json({ message: "Missing required fields: toAccountId and/or designName" });
+    if (!toAccountNumber || !designName) {
+      res.status(400).json({ message: "Missing required fields: toAccountNumber and/or designName" });
       return;
     }
 
@@ -28,21 +28,22 @@ export const createDesign = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    // 🔍 Find bank account by account number
     const toAccount = await prisma.bankAccount.findUnique({
-      where: { id: toAccountId },
+      where: { accountNumber: toAccountNumber },
     });
 
     if (!toAccount) {
-      res.status(404).json({ message: "Account not found" });
+      res.status(404).json({ message: "Account with this number not found" });
       return;
     }
 
     const createdDesign = await prisma.design.create({
       data: {
-        toAccountId,
+        toAccountId: toAccount.id,
+        toAccountNumber: toAccount.accountNumber,
         designName,
-        toAccountNumber:toAccount.accountNumber,
-        userId
+        userId,
       },
     });
 
@@ -55,3 +56,5 @@ export const createDesign = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ message: "Design creation failed" });
   }
 };
+
+

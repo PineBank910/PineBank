@@ -12,7 +12,7 @@ import { fetchTransactions } from "@/lib/api";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import ExchangeRateTable from "./_components/ExchangeRateTable";
-import { Button } from "@/components/ui/button";
+import { CreateDesign } from "./_components/CreateDesign";
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -124,18 +124,12 @@ const Dashboard = () => {
                 нийт
               </div>
             </div>
-            <div className="flex gap-6 mt-6">
-              <Button className="cursor-pointer rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
-                <div className="text-orange-400 text-2xl">+</div>
-                <div>
-                  <div className="text-sm">Загвар</div>
-                  <div className="text-sm">нэмэх</div>
-                </div>
-              </Button>
+            <div className="flex h-[8rem] gap-6 mt-6 overflow-x-auto">
+              <CreateDesign/>
               {designs && designs.length ? (
                 designs.map((design) => (
                   <div
-                    className="bg-secondary p-3 rounded-lg"
+                    className="bg-secondary p-3 rounded-lg cursor-pointer"
                     key={design.id}
                     onClick={() => {
                       push(`/dashboard/transfer?designId=${design.id}`);
@@ -147,11 +141,11 @@ const Dashboard = () => {
                       width={70}
                       height={70}
                     />
-                    <p className="text-black text-xl">{design.designName}</p>
+                    <p className="text-black text-xl rounded-md w-[4rem]">{design.designName}</p>
                   </div>
                 ))
               ) : (
-                <div className="w-full  border rounded-2xl py-3 px-6 shadow-2xl">
+                <div className="w-full border rounded-2xl py-3 px-6 shadow-2xl">
                   <div className="text-3xl font-semibold pb-2 dark:text-zinc-100 ">
                     Амархан гүйлгээ
                   </div>
