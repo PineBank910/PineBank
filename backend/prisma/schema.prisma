@@ -26,8 +26,8 @@ model UserProfile {
   lastName  String
   address   String
   phone     String
-  image     String
-  user      User   @relation(fields: [userId], references: [id])
+  image     String?
+  user      User   @relation(fields: [userId], references: [id], onDelete:Cascade)
 }
 
 model BankAccount {
@@ -37,7 +37,7 @@ model BankAccount {
   balance          Float         @default(0.0)
   userId           String
   createdAt        DateTime      @default(now())
-  user             User          @relation(fields: [userId], references: [id])
+  user             User          @relation(fields: [userId], references: [id], onDelete:Cascade)
   transactionsFrom Transaction[] @relation("FromAccount")
   transactionsTo   Transaction[] @relation("ToAccount")
   quickTransfersTo Design[]      @relation("QuickTransferTo")
@@ -52,8 +52,8 @@ model Transaction {
   status                  TransactionStatusEnum @default(PENDING)
   reference               String?
   balanceAfterTransaction Float?
-  fromAccount             BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount               BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id])
+  fromAccount             BankAccount           @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete:Cascade)
+  toAccount               BankAccount           @relation("ToAccount", fields: [toAccountId], references: [id], onDelete:Cascade)
 }
 
 model Design {
@@ -63,8 +63,8 @@ model Design {
   toAccountId     String
   userId          String
   timestamp       DateTime    @default(now())
-  user            User        @relation(fields: [userId], references: [id])
-  toAccount       BankAccount @relation("QuickTransferTo", fields: [toAccountId], references: [id])
+  user            User        @relation(fields: [userId], references: [id], onDelete:Cascade)
+  toAccount       BankAccount @relation("QuickTransferTo", fields: [toAccountId], references: [id], onDelete:Cascade)
 }
 
 enum AccountEnum {
