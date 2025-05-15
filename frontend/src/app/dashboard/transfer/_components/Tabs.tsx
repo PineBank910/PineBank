@@ -15,11 +15,20 @@ import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { CurrentUser } from "@/context/currentUserContext";
 import { SwitchDemo } from "./SwitchSave";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Check, X } from "lucide-react";
+import { formatNumber } from "@/utils/balanceFormat";
+import Image from "next/image";
 
 export const TabsDemo = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -33,6 +42,8 @@ export const TabsDemo = () => {
   const [success, setSuccess] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [transactionPassword, setTransactionPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+
   const context = useContext(CurrentUser);
   const currentUserData = context?.currentUserData;
   const userTransactionPassword = currentUserData?.transactionPassword;
@@ -89,7 +100,7 @@ export const TabsDemo = () => {
 
       if (res.status === 201) {
         const response = res.data.transaction;
-        console.log(response, "response transaction")
+        console.log(response, "response transaction");
         setSuccess("Transaction successful!");
         openDialog();
         setDataResponse(response);
@@ -129,7 +140,7 @@ export const TabsDemo = () => {
       });
 
       if (res.status === 201) {
-        const designAccount = res.data.accountNumber;
+        // const designAccount = res.data.accountNumber;
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -207,6 +218,8 @@ export const TabsDemo = () => {
                     setToAccountId={setToAccountId}
                     accountNumber={accountNumber}
                     setAccountNumber={setAccountNumber}
+                    fullName={fullName}
+                    setFullName={setFullName}
                   />
                 </div>
                 <div className="flex gap-4">
@@ -261,7 +274,6 @@ export const TabsDemo = () => {
                   />
                 </div>
               </CardContent>
-
               <CardFooter className="px-6 pb-6 gap-5 justify-center">
                 <Button
                   type="submit"
@@ -293,23 +305,68 @@ export const TabsDemo = () => {
                   onOpenChange={(open) => {
                     setIsDialogOpen(open);
                     if (!open && success) {
-                      push("/dashboard")
+                      push("/dashboard");
                     }
                   }}
                 >
-                  <DialogContent className="p-8 dark:bg-gray-700 bg-white rounded-lg shadow-lg w-[400px] flex flex-col items-center">
-                    <DialogTitle className="w-full flex justify-center items-center ext-xl font-semibold text-center">
+                  <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
+                    <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
+                      {success ?<Check className="bg-green-500 w-10 h-10 rounded" />:<X className="bg-red-500 w-10 h-10 rounded-lg shadow-accent"/>}
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
-                      {/* <div className="">{dataResponse.transaction.amount}</div> */}
+                      {success && <div className="text-4xl">
+                        {formatNumber(dataResponse.amount)} MNT
+                      </div>}
+                      {success && <div className="">
+                        {new Date(dataResponse.timestamp).toLocaleTimeString(
+                          [],
+                          {
+                            year: "2-digit",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          }
+                        )}
+                      </div>}
+                      {!success && (
+                        <DialogClose asChild>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            className="w-full bg-secondary hover:bg-gray-300"
+                          >
+                            хаах
+                          </Button>
+                        </DialogClose>
+                      )}
                     </DialogTitle>
-                    <div className="">
-                      <p className="">Reference</p>
-                      {dataResponse.reference}
-                    </div>
-                    <div className="">
-                      <p className="">Гүйлгээний утга</p>
-                      {dataResponse.reference}
-                    </div>
+                    {success && (
+                      <div className="w-full flex flex-col gap-3">
+                        <div className="bg-white w-full p-3 rounded-xl">
+                          <div className="text-gray-300">Хүлээн авагч</div>
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-col ">
+                              <div className=""> {fullName}</div>
+                              <div className="">
+                                {dataResponse.toAccountNumber}
+                              </div>
+                            </div>
+                            <Image
+                              src={"/favicon.ico"}
+                              alt="pinebank"
+                              width={30}
+                              height={10}
+                              className="rounded-md mr-3"
+                            />
+                          </div>
+                        </div>
+                        <div className="bg-white w-full p-3 rounded-xl">
+                          <p className="text-gray-300">Гүйлгээний утга</p>
+                          {dataResponse.reference}
+                        </div>
+                      </div>
+                    )}
                   </DialogContent>
                 </Dialog>
               </CardFooter>

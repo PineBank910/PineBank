@@ -9,11 +9,12 @@ type GetProfileInputProps = {
   accountNumber: string;
   setAccountNumber: (accountNumber: string) => void;
   setToAccountId: (toAccountId: string) => void;
+  fullName:string;
+  setFullName:(fullName: string) => void;
 };
 
 const GetProfileInput = (props: GetProfileInputProps) => {
-  const { accountNumber, setAccountNumber, setToAccountId } = props;
-  const [fullName, setFullName] = useState("");
+  const {fullName, setFullName, accountNumber, setAccountNumber, setToAccountId } = props;
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
