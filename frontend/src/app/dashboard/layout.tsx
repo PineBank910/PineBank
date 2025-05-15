@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import React, { useRef, useEffect, useState } from "react";
 import { ThemeToggleButton } from "@/components/ui/themeToggleButton";
 import ToggleVisibility from "./_components/ToggleVisibility";
-// import NotificationBell from "@/app/dashboard/_components/NotificationBell";
 import { Menu, House, Settings, UserRound, Send } from "lucide-react";
 import {
   SignInButton,
@@ -56,7 +55,8 @@ export default function DashboardLayout({
             <div
               id="SIDEBAR"
               ref={sidebarRef}
-              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r">
+              className="absolute md:relative z-50  w-[10rem] min-w-[10rem] lg:w-[15rem] lg:min-w-[15rem] min-h-screen bg-white dark:bg-gray-800 border-r"
+            >
               <div className="flex items-center justify-center w-full mt-4 text-2xl font-bold h-21 sm:text-3xl lg:text-4xl">
                 <div
                   onClick={handleSidebarClick}
@@ -65,7 +65,8 @@ export default function DashboardLayout({
                     position: "relative",
                     width: "50px",
                     aspectRatio: "1/1",
-                  }}>
+                  }}
+                >
                   <Image
                     src="/images/Pinebank_Printstream.png"
                     alt="Example"
@@ -75,7 +76,8 @@ export default function DashboardLayout({
                 </div>
                 <span
                   onClick={handleSidebarClick}
-                  className="hidden cursor-pointer dark:block">
+                  className="hidden cursor-pointer dark:block"
+                >
                   P
                 </span>
                 <p className="cursor-pointer" onClick={handleSidebarClick}>
@@ -93,7 +95,8 @@ export default function DashboardLayout({
                     selectedSidebar === "Эхлэл"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}>
+                  }`}
+                >
                   <House /> Эхлэл
                 </div>
                 <div
@@ -106,7 +109,8 @@ export default function DashboardLayout({
                     selectedSidebar === "Гүйлгээ"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}>
+                  }`}
+                >
                   <Send /> Гүйлгээ
                 </div>
                 <div
@@ -119,7 +123,8 @@ export default function DashboardLayout({
                     selectedSidebar === "Данс"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}>
+                  }`}
+                >
                   <UserRound /> Данс
                 </div>
                 <div
@@ -132,7 +137,8 @@ export default function DashboardLayout({
                     selectedSidebar === "Тохиргоо"
                       ? "text-blue-600 dark:hover:bg-gray-700 hover:bg-gray-100"
                       : "dark:hover:bg-gray-700 hover:bg-gray-100"
-                  }`}>
+                  }`}
+                >
                   <Settings /> Тохиргоо
                 </div>
               </div>
@@ -144,7 +150,8 @@ export default function DashboardLayout({
               <button
                 onClick={() => setIsSidebarOpen((prev) => !prev)}
                 className="ml-4 focus:outline-none md:hidden"
-                aria-label="Toggle sidebar">
+                aria-label="Toggle sidebar"
+              >
                 <Menu size={50} />
               </button>
               <div className="flex flex-col items-center justify-between w-full sm:flex-row ">
@@ -154,15 +161,10 @@ export default function DashboardLayout({
                 <div className="flex ml-auto mr-8 items-center gap-6 sm:gap-7 sm:mr-10">
                   <ToggleVisibility />
                   <ThemeToggleButton
+                    showLabel
+                    variant="circle"
                     start="top-right"
-                    variant="gif"
-                    url="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA1dGJueTVpaGlyenJlbTJpNDZ3bTlubGNuenp5bzdtOWplZzBlZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ZE5DmCqNMr3yDXq1Zu/giphy.gif"
-                    //Huuchin gif  https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDFhOTA1b3czOW5rbWxxdXMxM2psanlicTlmcTgzanlyOThrcWVnaSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/5KCXDVmBcTL8gpOO5C/giphy.gif
-                    //RICK ROLL    https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA1dGJueTVpaGlyenJlbTJpNDZ3bTlubGNuenp5bzdtOWplZzBlZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ZE5DmCqNMr3yDXq1Zu/giphy.gif
-                    //Circle
-                    //Circle-blur
                   />
-                  {/* <NotificationBell /> */}
                   <SignedOut>
                     <button className="px-4 py-2 text-white transition bg-blue-600 rounded hover:bg-blue-700">
                       <SignInButton />

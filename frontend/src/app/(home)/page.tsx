@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "@/components/Layout"; // Import the Layout component
+import Layout from "@/components/Layout";
 import {
   FAQ,
   Featured,

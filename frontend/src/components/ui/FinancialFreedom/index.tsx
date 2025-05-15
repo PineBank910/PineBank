@@ -15,6 +15,8 @@ import RevealCover from "@/components/Common/RevealCover";
 import { Div } from "../Featured/styles";
 import { imageVariants } from "../Featured";
 import { useIsMobile } from "../../../lib/useIsMobile";
+import { useHasMounted } from "../../../lib/useHasMounted";
+
 import financial_freedom_banner from "../../../../public/images/financial_freedom_banner.png";
 import freedom_mobile_banner from "../../../../public/images/freedom_mobile_banner.png";
 import {
@@ -28,7 +30,11 @@ import {
 } from "./constants";
 
 const FinancialFreedom = () => {
+  const hasMounted = useHasMounted();
   const isMobile = useIsMobile();
+
+  // Prevent SSR/CSR mismatch
+  if (!hasMounted) return null;
 
   return (
     <Wrapper>
@@ -52,12 +58,13 @@ const FinancialFreedom = () => {
             variants={imageVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ amount: 0.25, once: true }}>
-            {isMobile ? (
-              <Image src={freedom_mobile_banner} alt="banner_img" fill />
-            ) : (
-              <Image src={financial_freedom_banner} alt="banner_img" fill />
-            )}
+            viewport={{ amount: 0.25, once: true }}
+          >
+            <Image
+              src={isMobile ? freedom_mobile_banner : financial_freedom_banner}
+              alt="banner_img"
+              fill
+            />
           </Div>
         </BannerCtn>
         <Edges>
@@ -65,19 +72,18 @@ const FinancialFreedom = () => {
             <Edge key={i}>
               <Title>
                 <Image src={edge.icon} alt="icon" />
-                <MaskText phrases={new Array(edge.point)} tag="h3" />
+                <MaskText phrases={[edge.point]} tag="h3" />
               </Title>
-              <MaskText phrases={new Array(edge.details)} tag="p" />
+              <MaskText phrases={[edge.details]} tag="p" />
             </Edge>
           ))}
         </Edges>
       </Inner>
       <BriefNote className="flex items-center justify-center text-center text-xl">
-        {isMobile ? (
-          <MaskText phrases={mobileBriefNotePhrase} tag="p" />
-        ) : (
-          <MaskText phrases={desktopBriefNotePhrase} tag="p" />
-        )}
+        <MaskText
+          phrases={isMobile ? mobileBriefNotePhrase : desktopBriefNotePhrase}
+          tag="p"
+        />
       </BriefNote>
     </Wrapper>
   );
