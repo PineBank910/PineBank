@@ -12,6 +12,7 @@ import { fetchTransactions } from "@/lib/api";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import ExchangeRateTable from "./_components/ExchangeRateTable";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn } = useAuth();
@@ -111,7 +112,9 @@ const Dashboard = () => {
           <div>
             <ExchangeRateTable />
           </div>
-          <div className="w-full mt-6">
+        </div>
+        <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2 flex-col">
+          <div className="w-full">
             <div className="flex justify-between">
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
               <div
@@ -121,50 +124,46 @@ const Dashboard = () => {
                 нийт
               </div>
             </div>
-
             <div className="flex gap-6 mt-6">
-              <button className="cursor-pointer  w-[96px] h-[96px] rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
+              <Button className="cursor-pointer rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
                 <div className="text-orange-400 text-2xl">+</div>
                 <div>
                   <div className="text-sm">Загвар</div>
                   <div className="text-sm">нэмэх</div>
                 </div>
-              </button>
-              <div className="w-full  border rounded-2xl py-3 px-6 shadow-2xl">
-                <div className="text-3xl font-semibold pb-2 dark:text-zinc-100 ">
-                  Амархан гүйлгээ
+              </Button>
+              {designs && designs.length ? (
+                designs.map((design) => (
+                  <div
+                    className="bg-secondary p-3 rounded-lg"
+                    key={design.id}
+                    onClick={() => {
+                      push(`/dashboard/transfer?designId=${design.id}`);
+                    }}
+                  >
+                    <Image
+                      src={"/favicon.ico"}
+                      alt="pinebank"
+                      width={70}
+                      height={70}
+                    />
+                    <p className="text-black text-xl">{design.designName}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="w-full  border rounded-2xl py-3 px-6 shadow-2xl">
+                  <div className="text-3xl font-semibold pb-2 dark:text-zinc-100 ">
+                    Амархан гүйлгээ
+                  </div>
+                  <hr></hr>
+                  <div className="pt-2 dark:text-gray-200 ">
+                    Тогтмол харьцдаг дансны загвараа хадгалаад гүйлгээгээ
+                    амарханаар хийгээрэй.
+                  </div>
                 </div>
-                <hr></hr>
-                <div className="pt-2 dark:text-gray-200 ">
-                  Тогтмол харьцдаг дансны загвараа хадгалаад гүйлгээгээ
-                  амарханаар хийгээрэй.
-                </div>
-              </div>
+              )}
             </div>
           </div>
-          <div className="">
-            {designs &&
-              designs.length &&
-              designs.map((design) => (
-                <div
-                  className=""
-                  key={design.id}
-                  onClick={() => {
-                    push(`/dashboard/transfer?designId=${design.id}`);
-                  }}
-                >
-                  <Image
-                    src={"/favicon.ico"}
-                    alt="pinebank"
-                    width={70}
-                    height={70}
-                  />
-                  <p className="">{design.designName}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
           <div className="w-full">
             <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
             <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">

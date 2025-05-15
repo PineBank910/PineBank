@@ -177,7 +177,7 @@ export const TabsDemo = () => {
       </span>
       <Tabs
         defaultValue="account"
-        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 "
+        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 items-center"
       >
         <div className="flex-1 w-auto max-md:w-[350px]">
           <TabsContent

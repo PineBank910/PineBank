@@ -71,18 +71,17 @@ const ChooseAccount = (props: ChooseAccountProps) => {
           <span className="text-gray-400">Данс сонгоно уу</span>
         )}
       </SelectTrigger>
-
-      <SelectContent className="max-h-[500px]">
+      <SelectContent className="max-h-[500px] w-full">
         <SelectGroup>
           <SelectLabel className="ml-5.5 uppercase">Данс</SelectLabel>
           {accounts.map((account) => (
             <SelectItem
-              className="h-16 py-4 flex justify-center"
+              className="h-16 py-4 flex justify-center w-full"
               key={account.id}
               value={account.id}>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col justify-between">
                 <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
-                <div className="flex justify-between w-[650px]">
+                <div className="flex justify-between w-full">
                   <span className="text-sm font-semibold text-gray-500 block">
                     {account.accountNumber}
                   </span>
