@@ -100,8 +100,7 @@ const Dashboard = () => {
             </div>
             <div
               onClick={handleClickNiit}
-              className="text-[orange] hover:underline cursor-pointer"
-            >
+              className="text-[orange] hover:underline cursor-pointer">
               нийт
             </div>
           </div>
@@ -119,8 +118,7 @@ const Dashboard = () => {
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
               <div
                 onClick={handleClickZagvar}
-                className="text-[orange] hover:underline cursor-pointer"
-              >
+                className="text-[orange] hover:underline cursor-pointer">
                 нийт
               </div>
             </div>
@@ -158,6 +156,32 @@ const Dashboard = () => {
               )}
             </div>
           </div>
+          // CONFLICT?
+
+          <div className="">
+            {designs &&
+              designs.length &&
+              designs.map((design) => (
+                <div
+                  className=""
+                  key={design.id}
+                  onClick={() => {
+                    push(`/dashboard/transfer?designId=${design.id}`);
+                  }}>
+                  <Image
+                    src={"/favicon.ico"}
+                    alt="pinebank"
+                    width={70}
+                    height={70}
+                  />
+                  <p className="">{design.designName}</p>
+                </div>
+              ))}
+          </div>
+        </div>
+        <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
+
+            //CONFLICT?
           <div className="w-full">
             <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
             <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">

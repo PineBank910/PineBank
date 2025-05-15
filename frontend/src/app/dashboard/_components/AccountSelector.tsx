@@ -64,9 +64,7 @@ const AccountSelector = (props: ChooseAccountProps) => {
         {selectedAccountId ? (
           <div className="flex justify-between items-center gap-1 w-full">
             <div className="flex flex-col">
-              <div className="text-sm font-semibold">
-                ХАРИЛЦАХ / ИРГЭД / MNT
-              </div>
+              <div className="text-sm font-semibold">ХАРИЛЦАХ / PINE / MNT</div>
               <span className="text-sm font-semibold text-gray-500 block">
                 MN{" "}
                 {
@@ -101,18 +99,25 @@ const AccountSelector = (props: ChooseAccountProps) => {
             <SelectItem
               className="w-full p-2 block"
               key={account.id}
-              value={account.id}
-            >
+              value={account.id}>
               <div className="flex justify-between items-center w-full mr-6">
                 <div className="flex flex-col">
-                  <div className="text-sm font-semibold">ХАРИЛЦАХ/PINE</div>
+                  <div className="text-sm font-semibold">
+                    ХАРИЛЦАХ / PINE / MNT
+                  </div>
                   <span className="text-sm font-semibold text-gray-500 block">
                     {account.accountNumber}
                   </span>
                 </div>
-                <span className="text-sm font-semibold text-gray-500 block">
-                  {formatNumber(Number(account.balance))} MNT
-                </span>
+                {isVisible ? (
+                  <span className="text-sm font-semibold text-gray-500 block">
+                    {formatNumber(Number(account.balance))} MNT
+                  </span>
+                ) : (
+                  <div className="text-lg tracking-widest select-none">
+                    ******
+                  </div>
+                )}
               </div>
             </SelectItem>
           ))}

@@ -58,7 +58,7 @@ export default function Page() {
                       </div>
                       <div className="flex flex-col">
                         <span className="font-semibold text-xs sm:text-sm text-black dark:text-gray-100 mb-1 sm:mb-2">
-                          ХАРИЛЦАХ/ ИРГЭД / MNT
+                          ХАРИЛЦАХ/ PINE / MNT
                         </span>
                         <span className="text-xs">
                           MN
