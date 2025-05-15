@@ -32,9 +32,15 @@ const Page = () => {
   const { getToken } = useAuth();
   const { userId } = useUser();
   const { currentUserData } = useCurrent();
+
+  console.log("CUrrent user data:", currentUserData);
   useEffect(() => {
     // If user is signed in and already has a profile, redirect
-    if (userId == currentUserData?.userProfile) {
+    const parsedUserData =
+      typeof currentUserData === "string"
+        ? JSON.parse(currentUserData)
+        : currentUserData;
+    if (parsedUserData?.id == parsedUserData?.userProfile?.userId) {
       router.replace("/dashboard");
     }
     console.log("CUrrent user data:", currentUserData);

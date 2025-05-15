@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import ChooseAccount from "./ChooseAccount";
 import GetProfileInput from "./GetProfileInput";
 import { axiosInstance } from "@/lib/addedAxiosInstance";
 import axios from "axios";
@@ -20,7 +19,6 @@ import {
   DialogContent,
   DialogTitle,
   DialogClose,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { CurrentUser } from "@/context/currentUserContext";
 import { SwitchDemo } from "./SwitchSave";
@@ -29,6 +27,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Check, X } from "lucide-react";
 import { formatNumber } from "@/utils/balanceFormat";
 import Image from "next/image";
+//import AccountSelector from "../../_components/AccountSelector";
+import ChooseAccount from "./ChooseAccount";
 
 export const TabsDemo = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -48,7 +48,14 @@ export const TabsDemo = () => {
   const currentUserData = context?.currentUserData;
   const userTransactionPassword = currentUserData?.transactionPassword;
   const { getToken } = useAuth();
-  const [dataResponse, setDataResponse] = useState({});
+  interface TransactionResponse {
+    amount?: number;
+    timestamp?: string;
+    toAccountNumber?: string;
+    reference?: string;
+  }
+
+  const [dataResponse, setDataResponse] = useState<TransactionResponse>({});
   const searchParams = useSearchParams();
   const designId = searchParams.get("designId") || "";
   const { push } = useRouter();
@@ -140,7 +147,7 @@ export const TabsDemo = () => {
       });
 
       if (res.status === 201) {
-        // const designAccount = res.data.accountNumber;
+        console.log(res.data.message);
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -171,19 +178,17 @@ export const TabsDemo = () => {
     return amount.toLocaleString();
   };
   return (
-    <div className="min-h-screen h-auto mt-10 mb-10 w-full max-w-5xl">
-      <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
+    <div className="min-h-screen h-auto mb-10 w-full max-w-5xl flex flex-col items-center mx-auto">
+      {/* <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
         Гүйлгээ
-      </span>
+      </span> */}
       <Tabs
         defaultValue="account"
-        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 "
-      >
-        <div className="flex-1 w-auto max-md:w-[350px]">
+        className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 w-full justify-center items-center">
+        <div className="flex-1 w-auto max-md:w-[320px]">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
-            value="account"
-          >
+            value="account">
             <div className="flex flex-col gap-8 items-center">
               <CardHeader className="bg-black w-full h-[104px]  rounded-t-lg">
                 <CardTitle className="text-white text-xs mt-5">
@@ -198,8 +203,7 @@ export const TabsDemo = () => {
                 <div className="space-y-2 mb-2">
                   <Label
                     htmlFor="from-account"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Шилжүүлэх дансаа
                     сонгох
                   </Label>
@@ -212,8 +216,7 @@ export const TabsDemo = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="to-account"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  ></Label>
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"></Label>
                   <GetProfileInput
                     setToAccountId={setToAccountId}
                     accountNumber={accountNumber}
@@ -230,8 +233,7 @@ export const TabsDemo = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="amount"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Гүйлгээний дүн
                   </Label>
                   <input
@@ -244,8 +246,7 @@ export const TabsDemo = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="reference"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Гүйлгээний утга
                   </Label>
                   <input
@@ -260,8 +261,7 @@ export const TabsDemo = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="transaction-password"
-                    className="font-medium text-gray-700 dark:text-gray-300 text-xs"
-                  >
+                    className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     <span className="text-red-600">*</span> Гүйлгээний нууц үг
                   </Label>
                   <input
@@ -274,10 +274,10 @@ export const TabsDemo = () => {
                   />
                 </div>
               </CardContent>
-              <CardFooter className="px-6 pb-6 gap-5 justify-center">
+              <CardFooter className="px-4 sm:px-6 pb-6 gap-4 flex flex-row items-center justify-center">
                 <Button
                   type="submit"
-                  className="py-2 text-gray-900 dark:text-white border w-[280px] h-[50px] bg-white dark:bg-gray-700 duration-400 hover:bg-black hover:text-white transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
+                  className="sm:py-2 text-gray-900 dark:text-white border w-[100px] h-[30px] sm:w-[280px] sm:h-[50px] bg-white dark:bg-gray-700 duration-400 dark:hover:opacity-75 cursor-pointer hover:bg-black hover:text-white transition rounded-sm sm:rounded-2xl font-semibold sm:text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     setAccountNumber("");
                     setAmount("");
@@ -285,19 +285,17 @@ export const TabsDemo = () => {
                     setToAccountId(null);
                     setTransactionPassword("");
                   }}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {loading ? "Шинэчлэл хийгдлээ" : "Шинэчлэх"}
                 </Button>
                 <Button
                   type="submit"
-                  className="py-2 text-white bg-black dark:bg-green-700 w-[280px] h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 hover:text-[var(--background)] transition rounded-2xl font-semibold text-[16px] max-md:w-[150px]"
+                  className="sm:py-2 text-white bg-black dark:bg-green-700 w-[100px] h-[30px] sm:w-[280px] sm:h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 dark:hover:opacity-75 cursor-pointer transition sm:rounded-2xl rounded-sm font-semibold sm:text-[16px] max-md:w-[150px]"
                   onClick={() => {
                     createTransaction();
                     createDesign();
                   }}
-                  disabled={loading}
-                >
+                  disabled={loading}>
                   {loading ? "Гүйлгээ хийгдэж байна" : "Гүйлгээ хийх"}
                 </Button>
                 <Dialog
@@ -307,35 +305,42 @@ export const TabsDemo = () => {
                     if (!open && success) {
                       push("/dashboard");
                     }
-                  }}
-                >
+                  }}>
                   <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
                     <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
-                      {success ?<Check className="bg-green-500 w-10 h-10 rounded" />:<X className="bg-red-500 w-10 h-10 rounded-lg shadow-accent"/>}
+                      {success ? (
+                        <Check className="bg-green-500 w-10 h-10 rounded" />
+                      ) : (
+                        <X className="bg-red-500 w-10 h-10 rounded-lg shadow-accent" />
+                      )}
                       {success ? "Гүйлгээ амжилттай" : `${error}`}
-                      {success && <div className="text-4xl">
-                        {formatNumber(dataResponse.amount)} MNT
-                      </div>}
-                      {success && <div className="">
-                        {new Date(dataResponse.timestamp).toLocaleTimeString(
-                          [],
-                          {
-                            year: "2-digit",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                          }
-                        )}
-                      </div>}
+                      {success && (
+                        <div className="text-4xl">
+                          {formatNumber(dataResponse.amount)} MNT
+                        </div>
+                      )}
+                      {success && (
+                        <div className="">
+                          {dataResponse.timestamp
+                            ? new Date(
+                                dataResponse.timestamp
+                              ).toLocaleTimeString([], {
+                                year: "2-digit",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              })
+                            : "N/A"}
+                        </div>
+                      )}
                       {!success && (
                         <DialogClose asChild>
                           <Button
                             type="button"
                             variant="secondary"
-                            className="w-full bg-secondary hover:bg-gray-300"
-                          >
+                            className="w-full bg-secondary hover:bg-gray-300">
                             хаах
                           </Button>
                         </DialogClose>
@@ -343,7 +348,7 @@ export const TabsDemo = () => {
                     </DialogTitle>
                     {success && (
                       <div className="w-full flex flex-col gap-3">
-                        <div className="bg-white w-full p-3 rounded-xl">
+                        <div className="dark:bg-amber-300 bg-white w-full p-3 rounded-xl">
                           <div className="text-gray-300">Хүлээн авагч</div>
                           <div className="flex justify-between items-center">
                             <div className="flex flex-col ">

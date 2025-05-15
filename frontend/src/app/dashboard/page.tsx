@@ -99,8 +99,7 @@ const Dashboard = () => {
             </div>
             <div
               onClick={handleClickNiit}
-              className="text-[orange] hover:underline cursor-pointer"
-            >
+              className="text-[orange] hover:underline cursor-pointer">
               нийт
             </div>
           </div>
@@ -116,8 +115,7 @@ const Dashboard = () => {
               <div className="text-xl font-semibold">Хадгалсан загварууд</div>
               <div
                 onClick={handleClickZagvar}
-                className="text-[orange] hover:underline cursor-pointer"
-              >
+                className="text-[orange] hover:underline cursor-pointer">
                 нийт
               </div>
             </div>
@@ -151,8 +149,7 @@ const Dashboard = () => {
                   key={design.id}
                   onClick={() => {
                     push(`/dashboard/transfer?designId=${design.id}`);
-                  }}
-                >
+                  }}>
                   <Image
                     src={"/favicon.ico"}
                     alt="pinebank"
