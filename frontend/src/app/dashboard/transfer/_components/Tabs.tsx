@@ -306,10 +306,8 @@ export const TabsDemo = () => {
                       push("/dashboard");
                     }
                   }}>
-
                   <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
-                    <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
-
+                    <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white dark:bg-gray-600 p-4 rounded-xl">
                       {success ? (
                         <Check className="bg-green-500 text-white w-10 h-10 rounded-full shadow-lg" />
                       ) : (
@@ -353,16 +351,16 @@ export const TabsDemo = () => {
                     {success && (
                       <div className="w-full flex flex-col gap-3 mt-4">
                         {/* Recipient Card */}
-                        <div className="bg-white dark:bg-gradient-to-br dark:from-amber-300/60 dark:to-yellow-100/10 w-full p-4 rounded-xl shadow border border-gray-200 dark:border-amber-200/40">
-                          <div className="text-gray-500 dark:text-gray-700 text-xs mb-1 font-medium">
+                        <div className="bg-white dark:bg-gray-600 w-full p-4 rounded-xl shadow  ">
+                          <div className="text-gray-500 dark:text-gray-400 text-xs mb-1 font-medium">
                             Хүлээн авагч
                           </div>
                           <div className="flex justify-between items-center">
                             <div className="flex flex-col">
-                              <div className="font-semibold text-gray-900 dark:text-gray-800">
+                              <div className="font-semibold text-gray-900 dark:text-white">
                                 {fullName}
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-700">
+                              <div className="text-sm text-gray-500 dark:text-white">
                                 {dataResponse.toAccountNumber}
                               </div>
                             </div>
@@ -376,7 +374,7 @@ export const TabsDemo = () => {
                           </div>
                         </div>
                         {/* Reference Card */}
-                        <div className="bg-[#f1f5f9] dark:bg-[#18181b] w-full p-4 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <div className="bg-white dark:bg-gray-600 w-full p-4 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                           <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 font-medium">
                             Гүйлгээний утга
                           </p>
