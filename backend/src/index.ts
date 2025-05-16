@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "https://pine-bank.vercel.app", 
+    origin: "https://pine-bank.vercel.app", //add
     credentials: true,
   })
 );
