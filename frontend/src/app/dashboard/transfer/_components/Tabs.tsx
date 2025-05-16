@@ -305,11 +305,10 @@ export const TabsDemo = () => {
                     if (!open && success) {
                       push("/dashboard");
                     }
-
                   }}>
 
-                  <DialogContent className="p-8 dark:bg-[#23272e] bg-[#f8fafc] rounded-2xl shadow-xl w-[400px] flex flex-col items-center border border-gray-200 dark:border-gray-700">
-                    <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center text-xl font-semibold text-center bg-white dark:bg-[#23272e] p-4 rounded-xl shadow border border-gray-100 dark:border-gray-700">
+                  <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
+                    <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
 
                       {success ? (
                         <Check className="bg-green-500 text-white w-10 h-10 rounded-full shadow-lg" />

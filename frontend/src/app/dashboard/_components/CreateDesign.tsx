@@ -74,7 +74,7 @@ export const CreateDesign = () => {
       <DialogTrigger asChild>
         <Button className="h-full cursor-pointer rounded-2xl border flex flex-col items-center justify-center dark:bg-[#343434] bg-[rgb(243,243,243)] dark:hover:bg-blue-950 hover:bg-[#85bb65] hover:text-white transition duration-400 ease-in-out">
           <div className="text-orange-400 text-2xl">+</div>
-          <div>
+          <div className="text-blue-950 dark:text-white">
             <div className="text-sm">Загвар</div>
             <div className="text-sm">нэмэх</div>
           </div>
@@ -87,7 +87,7 @@ export const CreateDesign = () => {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-1 items-center gap-4">
             <Label htmlFor="design" className="text-right">
-              Design Name
+              Загварын нэр
             </Label>
             <Input
               id="design"
@@ -98,7 +98,7 @@ export const CreateDesign = () => {
           </div>
           <div className="grid grid-cols-1 items-center gap-4">
             <Label htmlFor="account" className="text-right">
-              To Account number
+              Дансны дугаар
             </Label>
             <Input
               id="account"
@@ -111,7 +111,7 @@ export const CreateDesign = () => {
         </div>
         <DialogFooter>
           <Button type="button" onClick={createDesign} disabled={loading}>
-            {loading ? "Saving..." : "Save changes"}
+            {loading ? "Хадгалж байна..." : "Хадгалах"}
           </Button>
         </DialogFooter>
       </DialogContent>
