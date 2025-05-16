@@ -156,7 +156,7 @@ const Dashboard = () => {
               )}
             </div>
           </div>
-          // CONFLICT?
+         
 
           <div className="">
             {designs &&
@@ -181,7 +181,7 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
 
-            //CONFLICT?
+            
           <div className="w-full">
             <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
             <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">
