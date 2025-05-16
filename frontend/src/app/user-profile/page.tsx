@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { BackgroundBeams } from "@/components/ui/backgroundBeams";
-// import Cloudinary from "@/components/ui/cloudinaryWidget";
 import { profileSchema } from "@/validation/profileSchema";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@/context/userContext";
 import { createBankAccount, createProfile } from "@/lib/api";
-import { useCurrent } from "@/context/currentUserContext";
+
 const Page = () => {
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const { isLoaded, isSignedIn } = useAuth();
@@ -31,20 +30,7 @@ const Page = () => {
   const router = useRouter();
   const { getToken } = useAuth();
   const { userId } = useUser();
-  const { currentUserData } = useCurrent();
 
-  console.log("CUrrent user data:", currentUserData);
-  useEffect(() => {
-    // If user is signed in and already has a profile, redirect
-    const parsedUserData =
-      typeof currentUserData === "string"
-        ? JSON.parse(currentUserData)
-        : currentUserData;
-    if (parsedUserData?.id == parsedUserData?.userProfile?.userId) {
-      router.replace("/dashboard");
-    }
-    console.log("CUrrent user data:", currentUserData);
-  }, [userId, currentUserData, router]);
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
     }
