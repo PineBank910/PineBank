@@ -71,9 +71,7 @@ const Dashboard = () => {
     router.push("/dashboard/accounts");
     setSelectedSidebar("Данс");
   };
-  const handleClickZagvar = () => {
-    router.push("/dashboard");
-  };
+
   const groupedTransactions = groupTransactionsByDay(transactions);
   if (!isLoaded || !isSignedIn) {
     return (
@@ -93,7 +91,7 @@ const Dashboard = () => {
   return (
     <>
       <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] h-screen">
-        <div className="w-full  sm:w-1/2">
+        <div className="w-full  sm:w-1/2 mb-8">
           <div className="flex justify-between mb-4">
             <div className="flex text-xl font-semibold">
               <div className="w-[100px] mb-2">Данс</div>
@@ -114,16 +112,10 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2 flex-col">
           <div className="w-full">
-            <div className="flex justify-between">
-              <div className="text-xl font-semibold">Хадгалсан загварууд</div>
-              <div
-                onClick={handleClickZagvar}
-                className="text-[orange] hover:underline cursor-pointer">
-                нийт
-              </div>
-            </div>
-            <div className="flex h-[8rem] gap-6 mt-6 overflow-x-auto">
-              <CreateDesign/>
+            <div className="text-xl font-semibold">Хадгалсан загварууд</div>
+
+            <div className="flex h-[8rem] gap-6 mt-6 overflow-x-auto mb-8">
+              <CreateDesign />
               {designs && designs.length ? (
                 designs.map((design) => (
                   <div
@@ -131,15 +123,17 @@ const Dashboard = () => {
                     key={design.id}
                     onClick={() => {
                       push(`/dashboard/transfer?designId=${design.id}`);
-                    }}
-                  >
+                      setSelectedSidebar("Гүйлгээ");
+                    }}>
                     <Image
                       src={"/favicon.ico"}
                       alt="pinebank"
                       width={70}
                       height={70}
                     />
-                    <p className="text-black text-xl rounded-md w-[4rem]">{design.designName}</p>
+                    <p className="text-black dark:text-gray-100 text-xl rounded-md w-[4rem]">
+                      {design.designName}
+                    </p>
                   </div>
                 ))
               ) : (
@@ -155,65 +149,41 @@ const Dashboard = () => {
                 </div>
               )}
             </div>
-          </div>
-          // CONFLICT?
-
-          <div className="">
-            {designs &&
-              designs.length &&
-              designs.map((design) => (
-                <div
-                  className=""
-                  key={design.id}
-                  onClick={() => {
-                    push(`/dashboard/transfer?designId=${design.id}`);
-                  }}>
-                  <Image
-                    src={"/favicon.ico"}
-                    alt="pinebank"
-                    width={70}
-                    height={70}
-                  />
-                  <p className="">{design.designName}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap sm:w-1/2">
-
-            //CONFLICT?
-          <div className="w-full">
-            <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
-            <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">
-              {Object.keys(groupedTransactions).length > 0 && (
-                <div className="">
-                  {Object.keys(groupedTransactions).map((date) => (
-                    <div key={date} className="">
-                      <h3 className="text-l font-semibold bg-[#F8F8F8] dark:bg-[#171717]">
-                        {date}
-                      </h3>
-                      {groupedTransactions[date].map((transaction) => (
-                        <Transaction
-                          key={transaction.id}
-                          date={new Date(
-                            transaction.timestamp
-                          ).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                          })}
-                          amount={String(transaction.amount)}
-                          balance={String(transaction.runningBalance)}
-                          type={transaction.type}
-                          reference={transaction.reference}
-                          fromAccountId={transaction.fromAccountId}
-                          toAccountId={transaction.toAccountId}
-                        />
+            <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap ">
+              <div className="w-full">
+                <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
+                <div className="w-full mt-2 overflow-y-auto border sm:mt-6 rounded-2xl p-4 max-h-[900px] shadow-2xl">
+                  {Object.keys(groupedTransactions).length > 0 && (
+                    <div className="">
+                      {Object.keys(groupedTransactions).map((date) => (
+                        <div key={date} className="">
+                          <h3 className="text-l font-semibold bg-[#F8F8F8] dark:bg-[#171717]">
+                            {date}
+                          </h3>
+                          {groupedTransactions[date].map((transaction) => (
+                            <Transaction
+                              key={transaction.id}
+                              date={new Date(
+                                transaction.timestamp
+                              ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              })}
+                              amount={String(transaction.amount)}
+                              balance={String(transaction.runningBalance)}
+                              type={transaction.type}
+                              reference={transaction.reference}
+                              fromAccountId={transaction.fromAccountId}
+                              toAccountId={transaction.toAccountId}
+                            />
+                          ))}
+                        </div>
                       ))}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
