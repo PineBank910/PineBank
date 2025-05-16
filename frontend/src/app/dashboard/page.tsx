@@ -90,7 +90,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] h-screen">
+      <div className="w-full pl-[25px] pr-[25px] lg:pr-[40px] lg:pl-[40px] pt-6 text-[#343C6A] dark:text-[white] block md:flex gap-14 max-w-[1500px] min-h-screen">
         <div className="w-full  sm:w-1/2 mb-8">
           <div className="flex justify-between mb-4">
             <div className="flex text-xl font-semibold">
@@ -180,7 +180,6 @@ const Dashboard = () => {
                             />
                           ))}
                         </div>
-
                       ))}
                     </div>
                   )}
