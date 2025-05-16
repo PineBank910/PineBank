@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_KEY = "1987c24eea9977d103a1d125";
+const API_KEY = "bc681a7b9fead6fa4597ec00";
 
 const currencyList = [
   { code: "USD", name: "АМЕРИК ДОЛЛАР" },
