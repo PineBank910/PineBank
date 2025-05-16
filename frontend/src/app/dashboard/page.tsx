@@ -149,6 +149,7 @@ const Dashboard = () => {
                 </div>
               )}
             </div>
+
             <div className="flex flex-wrap w-full gap-10 xl:flex-nowrap ">
               <div className="w-full">
                 <div className="text-lg font-semibold ">Сүүлийн гүйлгээ</div>
@@ -179,6 +180,7 @@ const Dashboard = () => {
                             />
                           ))}
                         </div>
+
                       ))}
                     </div>
                   )}

@@ -178,14 +178,14 @@ export const TabsDemo = () => {
     return amount.toLocaleString();
   };
   return (
-    <div className="min-h-screen h-auto mb-10 w-full max-w-5xl flex flex-col items-center mx-auto">
+    <div className="min-h-screen h-auto mb-10 w-full max-w-5xl  ">
       {/* <span className="font-bold text-gray-900 dark:text-white hover:text-green-600">
         Гүйлгээ
       </span> */}
       <Tabs
         defaultValue="account"
         className="flex xl:flex-col mt-1 lg:gap-6 2xl:gap-12 w-full justify-center items-center">
-        <div className="flex-1 w-auto max-md:w-[320px]">
+        <div className="flex-1 w-4/5 mx-5 max-md:w-[320px]">
           <TabsContent
             className="shadow-2xl rounded-lg bg-white dark:bg-gray-900"
             value="account">
@@ -274,10 +274,10 @@ export const TabsDemo = () => {
                   />
                 </div>
               </CardContent>
-              <CardFooter className="px-4 sm:px-6 pb-6 gap-4 flex flex-row items-center justify-center">
+              <CardFooter className="px-4 sm:px-6 pb-6 gap-3 flex flex-col sm:flex-row items-center justify-center w-full">
                 <Button
-                  type="submit"
-                  className="sm:py-2 text-gray-900 dark:text-white border w-[100px] h-[30px] sm:w-[280px] sm:h-[50px] bg-white dark:bg-gray-700 duration-400 dark:hover:opacity-75 cursor-pointer hover:bg-black hover:text-white transition rounded-sm sm:rounded-2xl font-semibold sm:text-[16px] max-md:w-[150px]"
+                  type="button"
+                  className="w-full sm:w-1/2 xs:w-auto xs:flex-1 h-10 text-[15px] text-gray-900 dark:text-white border bg-white dark:bg-gray-700 duration-400 dark:hover:opacity-75 cursor-pointer hover:bg-black hover:text-white transition rounded-md sm:rounded-2xl font-semibold"
                   onClick={() => {
                     setAccountNumber("");
                     setAmount("");
@@ -289,8 +289,8 @@ export const TabsDemo = () => {
                   {loading ? "Шинэчлэл хийгдлээ" : "Шинэчлэх"}
                 </Button>
                 <Button
-                  type="submit"
-                  className="sm:py-2 text-white bg-black dark:bg-green-700 w-[100px] h-[30px] sm:w-[280px] sm:h-[50px] shadow duration-400 hover:bg-[var(--foreground)]/60 dark:hover:opacity-75 cursor-pointer transition sm:rounded-2xl rounded-sm font-semibold sm:text-[16px] max-md:w-[150px]"
+                  type="button"
+                  className="w-full sm:w-1/2 xs:w-auto xs:flex-1 h-10 text-[15px] text-white bg-black dark:bg-green-700 shadow duration-400 hover:bg-[var(--foreground)]/60 dark:hover:opacity-75 cursor-pointer transition rounded-md sm:rounded-2xl font-semibold"
                   onClick={() => {
                     createTransaction();
                     createDesign();
@@ -306,21 +306,25 @@ export const TabsDemo = () => {
                       push("/dashboard");
                     }
                   }}>
+
                   <DialogContent className="p-8 dark:bg-gray-700 bg-secondary rounded-lg shadow-lg w-[400px] flex flex-col items-center">
                     <DialogTitle className="w-full flex flex-col gap-3 justify-center items-center ext-xl font-semibold text-center bg-white p-4 rounded-xl">
+
                       {success ? (
-                        <Check className="bg-green-500 w-10 h-10 rounded" />
+                        <Check className="bg-green-500 text-white w-10 h-10 rounded-full shadow-lg" />
                       ) : (
-                        <X className="bg-red-500 w-10 h-10 rounded-lg shadow-accent" />
+                        <X className="bg-red-500 text-white w-10 h-10 rounded-full shadow-lg" />
                       )}
-                      {success ? "Гүйлгээ амжилттай" : `${error}`}
+                      <span className="text-gray-900 dark:text-white">
+                        {success ? "Гүйлгээ амжилттай" : `${error}`}
+                      </span>
                       {success && (
-                        <div className="text-4xl">
+                        <div className="text-4xl text-green-600 dark:text-amber-400 font-bold">
                           {formatNumber(dataResponse.amount)} MNT
                         </div>
                       )}
                       {success && (
-                        <div className="">
+                        <div className="text-gray-500 dark:text-gray-300 text-base">
                           {dataResponse.timestamp
                             ? new Date(
                                 dataResponse.timestamp
@@ -340,35 +344,45 @@ export const TabsDemo = () => {
                           <Button
                             type="button"
                             variant="secondary"
-                            className="w-full bg-secondary hover:bg-gray-300">
+                            className="w-full bg-secondary hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 mt-2">
                             хаах
                           </Button>
                         </DialogClose>
                       )}
                     </DialogTitle>
                     {success && (
-                      <div className="w-full flex flex-col gap-3">
-                        <div className="dark:bg-amber-300 bg-white w-full p-3 rounded-xl">
-                          <div className="text-gray-300">Хүлээн авагч</div>
+                      <div className="w-full flex flex-col gap-3 mt-4">
+                        {/* Recipient Card */}
+                        <div className="bg-white dark:bg-gradient-to-br dark:from-amber-300/60 dark:to-yellow-100/10 w-full p-4 rounded-xl shadow border border-gray-200 dark:border-amber-200/40">
+                          <div className="text-gray-500 dark:text-gray-700 text-xs mb-1 font-medium">
+                            Хүлээн авагч
+                          </div>
                           <div className="flex justify-between items-center">
-                            <div className="flex flex-col ">
-                              <div className=""> {fullName}</div>
-                              <div className="">
+                            <div className="flex flex-col">
+                              <div className="font-semibold text-gray-900 dark:text-gray-800">
+                                {fullName}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-700">
                                 {dataResponse.toAccountNumber}
                               </div>
                             </div>
                             <Image
                               src={"/favicon.ico"}
                               alt="pinebank"
-                              width={30}
-                              height={10}
-                              className="rounded-md mr-3"
+                              width={36}
+                              height={36}
+                              className="rounded-md mr-3 border border-gray-200 dark:border-amber-200/40 shadow"
                             />
                           </div>
                         </div>
-                        <div className="bg-white w-full p-3 rounded-xl">
-                          <p className="text-gray-300">Гүйлгээний утга</p>
-                          {dataResponse.reference}
+                        {/* Reference Card */}
+                        <div className="bg-[#f1f5f9] dark:bg-[#18181b] w-full p-4 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                          <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 font-medium">
+                            Гүйлгээний утга
+                          </p>
+                          <span className="text-gray-900 dark:text-white">
+                            {dataResponse.reference}
+                          </span>
                         </div>
                       </div>
                     )}
