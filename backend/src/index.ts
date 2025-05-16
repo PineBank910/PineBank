@@ -10,7 +10,12 @@ import { designRouter } from "./routers/designRouter";
 
 dotenv.config();
 const app = express();
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    origin: "https://pine-bank.vercel.app", //add
+    credentials: true,
+  })
+);
 app.use(express.json());
 const port = process.env.PORT;
 
